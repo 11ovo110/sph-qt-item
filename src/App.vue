@@ -2,7 +2,7 @@
   <div>
     <Header></Header>
     <router-view></router-view>
-    <Footer v-show="$route.meta.flag"></Footer>
+    <Footer></Footer>
   </div>
 </template>
 

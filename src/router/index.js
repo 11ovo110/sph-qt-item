@@ -1,39 +1,39 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
-import Home from '@/pages/home/Home.vue';
-import Login from '@/pages/login/Login.vue';
-import Register from '@/pages/register/Register.vue';
-import Search from '@/pages/search/Search.vue';
+import Vue from "vue";
+import VueRouter from "vue-router";
+import Home from "@/pages/Home/Home.vue";
+import Login from "@/pages/Login/Login.vue";
+import Register from "@/pages/Register/Register.vue";
+import Search from "@/pages/Search/Search.vue";
 
 Vue.use(VueRouter);
 
 export default new VueRouter({
-  mode: 'hash',
+  mode: "hash",
   routes: [
     {
-      path: '/home',
+      path: "/home",
       component: Home,
-      meta: {flag: true}
+      meta: { flag: true },
     },
     {
-      path: '/login',
+      path: "/login",
       component: Login,
-      meta: {flag: false}
+      meta: { flag: false },
     },
     {
-      path: '/register',
+      path: "/register",
       component: Register,
-      meta: {flag: false}
+      meta: { flag: false },
     },
     {
-      path: '/search/:keyword?',
+      path: "/search/:keyword?",
       component: Search,
-      meta: {flag: true},
+      meta: { flag: true },
       name: 'search'
     },
     {
       path: '/',
       redirect: '/home'
     }
-  ]
-})
+  ],
+});

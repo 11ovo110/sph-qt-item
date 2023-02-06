@@ -27,7 +27,7 @@
     <!--头部第二行 搜索区域-->
     <div class="bottom">
       <h1 class="logoArea">
-        <router-link to="/home" class="logo" title="尚品汇">
+        <router-link class="logo" title="尚品汇" to="/home">
           <img src="./images/logo.png" alt="" />
         </router-link>
       </h1>
