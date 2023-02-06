@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>我是Login内容</h1>
+    <h1>我是登录页面</h1>
   </div>
 </template>
 
