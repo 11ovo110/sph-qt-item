@@ -5,24 +5,24 @@
     <recommend></recommend>
     <rank></rank>
     <like></like>
-    <floor></floor>
-    <floor></floor>
+    <floor v-for="v in 2"></floor>
     <brand></brand>
   </div>
 </template>
 
 <script>
-import Brand from './Brand/Brand.vue';
-import Floor from './Floor/Floor.vue';
-import Like from "./Like/Like.vue";
-import List from "./List/List.vue";
-import Rank from "./Rank/Rank.vue";
-import Recommend from "./Recommend/Recommend.vue";
+import Brand from '../home/brand/Brand.vue'
+import Floor from '../home/floor/Floor.vue'
+import Like from '../home/like/Like.vue'
+import List from '../home/list/List.vue'
+import Rank from '../home/rank/Rank.vue'
+import Recommend from '../home/recommend/Recommend.vue'
 export default {
   components: { List, Recommend, Rank, Like, Floor, Brand },
-  name: "Home",
-};
+  name: 'Home'
+}
 </script>
 
 <style scoped>
+
 </style>
