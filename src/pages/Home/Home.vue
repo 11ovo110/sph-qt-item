@@ -1,14 +1,12 @@
 <template>
   <div>
-    <Header></Header>
-    <router-view></router-view>
-    <Footer></Footer>
+    <h1>我是Home内容</h1>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'App'
+  name: 'Home'
 }
 </script>
 
