@@ -1,6 +1,8 @@
 <template>
   <div>
-    <h1>App组件</h1>
+    <Header></Header>
+    <h1>中间的内容</h1>
+    <Footer></Footer>
   </div>
 </template>
 
