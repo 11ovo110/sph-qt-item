@@ -2,23 +2,23 @@
   <!-- 商品分类导航 -->
   <div class="type-nav">
     <div class="container">
-      <div @mouseleave="leaveHandler">
+      <div>
         <h2 class="all">全部商品分类</h2>
       <div class="sort">
-        <div class="all-sort-list2" @click="handler">
-          <div class="item" v-for="(t1, index) in typeArr" :key="t1.categoryId">
-            <h3 @mouseenter="enterHandler(index)" :class="{active: index===current}" >
-              <a :data-category1Id="t1.categoryId" :data-categoryName="t1.categoryName">{{t1.categoryName}}</a>
+        <div class="all-sort-list2">
+          <div class="item" v-for="(t1, index) in typeArr" :key="t1.categoryId" @click="handler">
+            <h3 :class="{active: index===current}" @mouseenter="enterHandler(index)">
+              <a :data-categoryName="t1.categoryName" :data-category1Id="t1.categoryId">{{t1.categoryName}}</a>
             </h3>
             <div class="item-list clearfix" :style="{display: index===current ? 'block' : 'none'}">
               <div class="subitem">
                 <dl class="fore" v-for="t2 in t1.categoryChild" :key="t2.categoryId">
                   <dt>
-                    <a :data-category2Id="t2.categoryId" :data-categoryName="t2.categoryName">{{t2.categoryName}}</a>
+                    <a :data-categoryName="t2.categoryName" :data-category2Id="t2.categoryId">{{t2.categoryName}}</a>
                   </dt>
                   <dd>
                     <em v-for="t3 in t2.categoryChild" :key="t3.categoryId">
-                      <a :data-category3Id="t3.categoryId" :data-categoryName="t3.categoryName">{{t3.categoryName}}</a>
+                      <a :data-categoryName="t3.categoryName" :data-category3Id="t3.categoryId">{{t3.categoryName}}</a>
                     </em>
                   </dd>
                 </dl>
@@ -38,6 +38,7 @@
         <a href="###">有趣</a>
         <a href="###">秒杀</a>
       </nav>
+      
     </div>
   </div>
 </template>
@@ -76,7 +77,7 @@ export default {
     ...mapState({
       typeArr: state => state.home.typeArr
     })
-  },
+  }
 };
 </script>
 
@@ -135,6 +136,9 @@ export default {
               color: #333;
             }
           }
+          .active {
+            background-color: skyblue;
+          }
 
           .item-list {
             display: none;
@@ -188,9 +192,6 @@ export default {
                 }
               }
             }
-          }
-          .active {
-            background-color: skyblue;
           }
         }
       }

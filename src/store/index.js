@@ -6,15 +6,17 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    typeArr: []
+
   },
   mutations: {
-    TYPENAV(state, data) {
-      state.typeArr = data;
-    }
+
   },
-  actions: {},
-  getters: {},
+  actions: {
+
+  },
+  getters: {
+
+  },
   modules: {
     home
   }
