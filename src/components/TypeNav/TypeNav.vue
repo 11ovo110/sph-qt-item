@@ -6,19 +6,19 @@
         <h2 class="all">全部商品分类</h2>
       <div class="sort">
         <div class="all-sort-list2">
-          <div class="item" v-for="(t1, index) in typeArr" :key="t1.categoryId" >
+          <div class="item" v-for="(t1, index) in typeArr" :key="t1.categoryId" @click="handler">
             <h3 :class="{active: index===current}" @mouseenter="enterHandler(index)">
-              <a @click="handler(t1.categoryId, t1.categoryName)">{{t1.categoryName}}</a>
+              <a :data-categoryName="t1.categoryName" :data-category1Id="t1.categoryId">{{t1.categoryName}}</a>
             </h3>
             <div class="item-list clearfix" :style="{display: index===current ? 'block' : 'none'}">
               <div class="subitem">
                 <dl class="fore" v-for="t2 in t1.categoryChild" :key="t2.categoryId">
                   <dt>
-                    <a @click="handler1(t2.categoryId, t2.categoryName)">{{t2.categoryName}}</a>
+                    <a :data-categoryName="t2.categoryName" :data-category2Id="t2.categoryId">{{t2.categoryName}}</a>
                   </dt>
                   <dd>
                     <em v-for="t3 in t2.categoryChild" :key="t3.categoryId">
-                      <a @click="handler2(t3.categoryId, t3.categoryName)">{{t3.categoryName}}</a>
+                      <a :data-categoryName="t3.categoryName" :data-category3Id="t3.categoryId">{{t3.categoryName}}</a>
                     </em>
                   </dd>
                 </dl>
@@ -66,33 +66,17 @@ export default {
     leaveHandler() {
       this.current = -1;
     },
-    handler(category1Id, categoryName) {
-      this.$router.push({
-        name: 'search',
-        query: {
-          category1Id,
-          categoryName
-        }
-      })
+    handler(e) {
+      let {categoryname, category1id, category2id, category3id} = e.target.dataset;
+      console.log(e.target.dataset);
+      if(categoryname) {
+        let obj = {name: 'search', query: { categoryname } };
+        if(category1id) {obj.query.category1Id = category1id}
+        else if(category2id) {obj.query.category2Id = category2id}
+        else obj.query.category3id = category3id;
+        this.$router.push(obj);
+      }
     },
-    handler1(category2Id, categoryName) {
-      this.$router.push({
-        name: 'search',
-        query: {
-          category2Id,
-          categoryName
-        }
-      })
-    },
-    handler2(category3Id, categoryName) {
-      this.$router.push({
-        name: 'search',
-        query: {
-          category3Id,
-          categoryName
-        }
-      })
-    }
   },
 };
 </script>
