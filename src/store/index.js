@@ -23,4 +23,3 @@ export default new Vuex.Store({
     search
   }
 })
-
