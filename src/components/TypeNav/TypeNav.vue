@@ -1693,8 +1693,18 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
   name: "TypeNav",
+  mounted() {
+    this.$store.dispatch('TypeNav');
+  },
+  computed: {
+    ...mapState({
+      typeArr: state => state.home.typeArr
+    })
+  },
 };
 </script>
 

@@ -1,5 +1,5 @@
 import request from "@/utils/request";
 
-export const getBaseCategoryList = () => {
+export const reqTypeNav = () => {
   return request.get("/product/getBaseCategoryList");
 };

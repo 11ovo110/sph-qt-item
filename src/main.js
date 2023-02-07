@@ -5,7 +5,7 @@ import App from "./App.vue";
 import Footer from "@/components/Footer/Footer.vue";
 import Header from "@/components/Header/Header.vue";
 import TypeNav from "@/components/TypeNav/TypeNav.vue";
-
+import store from "./store";
 // 注册全局组件
 Vue.component(Footer.name, Footer);
 Vue.component(Header.name, Header);
@@ -17,4 +17,5 @@ import router from "./router";
 new Vue({
   render: (h) => h(App),
   router,
+  store
 }).$mount("#app");
