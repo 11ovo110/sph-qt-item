@@ -5,20 +5,20 @@
       <div @mouseleave="leaveHandler">
         <h2 class="all">全部商品分类</h2>
       <div class="sort">
-        <div class="all-sort-list2">
-          <div class="item" v-for="(t1, index) in typeArr" :key="t1.categoryId" @click="handler">
-            <h3 :class="{active: index===current}" @mouseenter="enterHandler(index)">
-              <a :data-categoryName="t1.categoryName" :data-category1Id="t1.categoryId">{{t1.categoryName}}</a>
+        <div class="all-sort-list2" @click="handler">
+          <div class="item" v-for="(t1, index) in typeArr" :key="t1.categoryId">
+            <h3 @mouseenter="enterHandler(index)" :class="{active: index===current}" >
+              <a :data-category1Id="t1.categoryId" :data-categoryName="t1.categoryName">{{t1.categoryName}}</a>
             </h3>
             <div class="item-list clearfix" :style="{display: index===current ? 'block' : 'none'}">
               <div class="subitem">
                 <dl class="fore" v-for="t2 in t1.categoryChild" :key="t2.categoryId">
                   <dt>
-                    <a :data-categoryName="t2.categoryName" :data-category2Id="t2.categoryId">{{t2.categoryName}}</a>
+                    <a :data-category2Id="t2.categoryId" :data-categoryName="t2.categoryName">{{t2.categoryName}}</a>
                   </dt>
                   <dd>
                     <em v-for="t3 in t2.categoryChild" :key="t3.categoryId">
-                      <a :data-categoryName="t3.categoryName" :data-category3Id="t3.categoryId">{{t3.categoryName}}</a>
+                      <a :data-category3Id="t3.categoryId" :data-categoryName="t3.categoryName">{{t3.categoryName}}</a>
                     </em>
                   </dd>
                 </dl>
@@ -29,14 +29,14 @@
       </div>
       </div>
       <nav class="nav">
-        <a>服装城</a>
-        <a>美妆馆</a>
-        <a>尚品汇超市</a>
-        <a>全球购</a>
-        <a>闪购</a>
-        <a>团购</a>
-        <a>有趣</a>
-        <a>秒杀</a>
+        <a href="###">服装城</a>
+        <a href="###">美妆馆</a>
+        <a href="###">尚品汇超市</a>
+        <a href="###">全球购</a>
+        <a href="###">闪购</a>
+        <a href="###">团购</a>
+        <a href="###">有趣</a>
+        <a href="###">秒杀</a>
       </nav>
     </div>
   </div>
@@ -51,14 +51,6 @@ export default {
       current: -1
     }
   },
-  mounted() {
-    this.$store.dispatch('TypeNav');
-  },
-  computed: {
-    ...mapState({
-      typeArr: state => state.home.typeArr
-    })
-  },
   methods: {
     enterHandler(index) {
       this.current = index;
@@ -68,15 +60,22 @@ export default {
     },
     handler(e) {
       let {categoryname, category1id, category2id, category3id} = e.target.dataset;
-      console.log(e.target.dataset);
       if(categoryname) {
-        let obj = {name: 'search', query: { categoryname } };
-        if(category1id) {obj.query.category1Id = category1id}
-        else if(category2id) {obj.query.category2Id = category2id}
+        let obj = {name: 'search', query: {categoryname}};
+        if(category1id) obj.query.category1id = category1id;
+        else if(category2id) obj.query.category2id = category2id;
         else obj.query.category3id = category3id;
         this.$router.push(obj);
       }
-    },
+    }
+  },
+  mounted() {
+    this.$store.dispatch('TypeNav');
+  },
+  computed: {
+    ...mapState({
+      typeArr: state => state.home.typeArr
+    })
   },
 };
 </script>
@@ -122,10 +121,6 @@ export default {
       background: #fafafa;
       z-index: 999;
 
-      a {
-        cursor: pointer;
-      }
-
       .all-sort-list2 {
         .item {
           h3 {
@@ -138,11 +133,7 @@ export default {
 
             a {
               color: #333;
-              cursor: pointer;
             }
-          }
-          .active {
-            background-color: skyblue;
           }
 
           .item-list {
@@ -198,7 +189,9 @@ export default {
               }
             }
           }
-
+          .active {
+            background-color: skyblue;
+          }
         }
       }
     }
