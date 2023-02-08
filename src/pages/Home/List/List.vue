@@ -4,9 +4,9 @@
     <div class="sortList clearfix">
       <div class="center">
         <!--banner轮播-->
-        <Swiper :options="options" ref="swiperRef">
+        <Swiper :options="options">
           <SwiperSlide v-for="banner in bannerArr" :key="banner.id">
-            <img :src="banner.url" alt="" />
+            <img :src="banner.url" alt="">
           </SwiperSlide>
           <div class="swiper-pagination" slot="pagination"></div>
           <div class="swiper-button-prev" slot="button-prev"></div>
@@ -87,13 +87,12 @@
 </template>
 
 <script>
-import { SwiperSlide } from "vue-awesome-swiper";
-import { mapState } from "vuex";
+import { mapState } from 'vuex';
 export default {
-  name: "List",
-  data() {
-    return {
-      options: {
+    name: "List",
+    data() {
+      return {
+        options: {
         direction: "horizontal", // 垂直切换选项
         loop: true, // 循环模式选项
 
@@ -121,20 +120,16 @@ export default {
           el: ".swiper-scrollbar",
         },
       },
-    };
-  },
-  mounted() {
-    this.$store.dispatch("getBanner");
-    let div = this.$refs.swiperRef.$el;
-    div.onmouseenter = () => this.$refs.swiperRef.$swiper.autoplay.stop();
-    div.onmouseleave = () => this.$refs.swiperRef.$swiper.autoplay.start();
-  },
-  computed: {
-    ...mapState({
-      bannerArr: (state) => state.home.bannerArr,
-    }),
-  },
-  components: { SwiperSlide },
+      }
+    },
+    mounted() {
+        this.$store.dispatch("getBanner");
+    },
+    computed: {
+        ...mapState({
+            bannerArr: state => state.home.bannerArr
+        })
+    },
 };
 </script>
 

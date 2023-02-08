@@ -10,8 +10,8 @@ import '@/mock';
 import { SwiperSlide, Swiper } from "vue-awesome-swiper";
 import 'swiper/css/swiper.min.css';
 
-Vue.component('Swiper', Swiper);
 Vue.component('SwiperSlide', SwiperSlide);
+Vue.component('Swiper', Swiper);
 
 Vue.component(Header.name, Header);
 Vue.component(Footer.name, Footer);

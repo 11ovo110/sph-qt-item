@@ -2,8 +2,6 @@ import axios from "axios";
 import nprogress from "nprogress";
 import 'nprogress/nprogress.css';
 
-nprogress.configure({ showSpinner: false });
-
 let request = axios.create({
   baseURL: '/api',
   timeout: 5000

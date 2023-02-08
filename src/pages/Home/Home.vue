@@ -5,7 +5,7 @@
     <recommend></recommend>
     <rank></rank>
     <like></like>
-    <floor v-for="(floor, index) in floorArr" :key="index" :floor="floor"></floor>
+    <floor v-for="(floor, index) in floorArr" :key="index" :f="floor"></floor>
     <brand></brand>
   </div>
 </template>
@@ -29,7 +29,7 @@ export default {
     ...mapState({
       floorArr: state => state.home.floorArr
     })
-  }
+  },
 }
 </script>
 

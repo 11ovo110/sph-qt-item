@@ -3,10 +3,10 @@
   <div class="floor">
     <div class="py-container">
       <div class="title clearfix">
-        <h3 class="fl">{{floor.name}}</h3>
+        <h3 class="fl">{{f.name}}</h3>
         <div class="fr">
           <ul class="nav-tabs clearfix">
-            <li :class="{active: index===current}" @mouseenter="current=index" v-for="(nav, index) in floor.navList" :key="index">
+            <li class="active" v-for="(nav, index) in f.navList" :key="index">
               <a href="#tab1" data-toggle="tab">{{nav.text}}</a>
             </li>
           </ul>
@@ -17,39 +17,36 @@
           <div class="floor-1">
             <div class="blockgary">
               <ul class="jd-list">
-                <li v-for="(k, index) in floor.keywords" :key="index">{{k}}</li>
+                <li v-for="(k, index) in f.keywords" :key="index">{{k}}</li>
               </ul>
-              <img :src="floor.imgUrl" />
+              <img :src="f.imgUrl" />
             </div>
             <div class="floorBanner">
-              <Swiper :options="options" ref="swiperRef">
-                <SwiperSlide v-for="s in floor.carouselList">
-                  <img :src="s.imgUrl" alt="">
+              <Swiper>
+                <SwiperSlide v-for="carouse in f.carouselList" :key="carouse.id">
+                  <img :src="carouse.imgUrl" alt="">
                 </SwiperSlide>
-                <div class="swiper-pagination" slot="pagination"></div>
-                <div class="swiper-button-prev" slot="button-prev"></div>
-                <div class="swiper-button-next" slot="button-next"></div>
               </Swiper>
             </div>
             <div class="split">
               <span class="floor-x-line"></span>
               <div class="floor-conver-pit">
-                <img :src="floor.recommendList[0]" />
+                <img :src="f.recommendList[0]" />
               </div>
               <div class="floor-conver-pit">
-                <img :src="floor.recommendList[1]" />
+                <img :src="f.recommendList[1]" />
               </div>
             </div>
             <div class="split center">
-              <img :src="floor.bigImg" />
+              <img :src="f.bigImg" />
             </div>
             <div class="split">
               <span class="floor-x-line"></span>
               <div class="floor-conver-pit">
-                <img :src="floor.recommendList[2]" />
+                <img :src="f.recommendList[2]" />
               </div>
               <div class="floor-conver-pit">
-                <img :src="floor.recommendList[3]" />
+                <img :src="f.recommendList[3]" />
               </div>
             </div>
           </div>
@@ -60,48 +57,12 @@
 </template>
 
 <script>
+import { SwiperSlide } from 'vue-awesome-swiper';
+
 export default {
-  name: "Floor",
-  data() {
-    return {
-      current: 0,
-      options: {
-        direction: "horizontal", // 垂直切换选项
-        loop: true, // 循环模式选项
-
-        // 如果需要分页器
-        pagination: {
-          el: ".swiper-pagination",
-          clickable :true,
-        },
-
-        // 如果需要前进后退按钮
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev",
-        },
-
-        autoplay: {
-          delay: 1000,
-          stopOnLastSlide: false,
-          disableOnInteraction: true,
-        },
-        clickable: true,
-
-        // 如果需要滚动条
-        scrollbar: {
-          el: ".swiper-scrollbar",
-        },
-      },
-    }
-  },
-  mounted() {
-    let div = this.$refs.swiperRef.$el;
-    console.log(div);
-    div.onmouseenter = () => this.$refs.swiperRef.$swiper.autoplay.stop();
-    div.onmouseleave = () => this.$refs.swiperRef.$swiper.autoplay.start();
-  },
-  props: ['floor']
+    name: "Floor",
+    props: ["f"],
+    components: { SwiperSlide }
 };
 </script>
 
