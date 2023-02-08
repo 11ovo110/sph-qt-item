@@ -69,6 +69,7 @@ export default {
         },
         query: this.$route.query,
       });
+      console.log(this.$route);
       this.keyword = "";
     },
   },

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>swiper</title>
+  <link rel="stylesheet" href="./swiper.min.css">
+  <script src="./swiper.min.js"></script>
+  <style>
+    .swiper-container {
+      width: 600px;
+      height: 300px;
+      border: 1px solid aquamarine;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="swiper-container">
+    <div class="swiper-wrapper">
+      <div class="swiper-slide">Slide 1</div>
+      <div class="swiper-slide">Slide 2</div>
+      <div class="swiper-slide">Slide 3</div>
+    </div>
+    <!-- 如果需要分页器 -->
+    <div class="swiper-pagination"></div>
+
+    <!-- 如果需要导航按钮 -->
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+
+  </div>
+
+  <script>
+    var mySwiper = new Swiper('.swiper-container', {
+      direction: 'horizontal', // 垂直切换选项
+      loop: true, // 循环模式选项
+
+      // 如果需要分页器
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+
+      // effect: 'fade',
+      // 如果需要前进后退按钮
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      autoplay: {
+        delay: 1000,
+        stopOnLastSlide: false,
+        disableOnInteraction: true,
+      },
+    })
+
+    mySwiper.el.onmouseover = function () {
+      mySwiper.autoplay.stop();
+    }
+    mySwiper.el.onmouseout = function () {
+      mySwiper.autoplay.start();
+    }
+  </script>
+</body>
+
+</html>
