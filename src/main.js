@@ -9,6 +9,8 @@ import store from "./store";
 import { SwiperSlide, Swiper } from "vue-awesome-swiper";
 import 'swiper/css/swiper.min.css';
 
+import '@/mock/mockServe';
+
 Vue.component('Swiper', Swiper);
 Vue.component('SwiperSlide', SwiperSlide)
 

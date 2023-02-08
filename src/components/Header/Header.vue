@@ -38,6 +38,7 @@
             id="autocomplete"
             class="input-error input-xxlarge"
             v-model="keyword"
+            @keyup.enter="handler"
           />
           <button
             class="sui-btn btn-xlarge btn-danger"
@@ -69,7 +70,6 @@ export default {
         },
         query: this.$route.query,
       });
-      console.log(this.$route);
       this.keyword = "";
     },
   },

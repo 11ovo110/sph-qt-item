@@ -5,7 +5,7 @@
     <recommend></recommend>
     <rank></rank>
     <like></like>
-    <floor></floor>
+    <floor v-for="floor in floorArr" :key="index" :floor="floor"></floor>
     <brand></brand>
   </div>
 </template>
@@ -19,9 +19,18 @@ import Like from './Like/Like.vue'
 import Floor from './Floor/Floor.vue'
 import Brand from './Brand/Brand.vue'
 import { mapState } from 'vuex'
+
 export default {
   components: { List, TypeNav, Recommend, Rank, Like, Floor, Brand },
   name: 'Home',
+  mounted() {
+    this.$store.dispatch('getFloor');
+  },
+  computed: {
+    ...mapState({
+      floorArr: state => state.home.floorArr
+    })
+  },
 }
 </script>
 
