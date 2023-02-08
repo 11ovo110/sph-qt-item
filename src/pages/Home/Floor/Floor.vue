@@ -6,7 +6,7 @@
         <h3 class="fl">{{floor.name}}</h3>
         <div class="fr">
           <ul class="nav-tabs clearfix">
-            <li v-for="(nav, index) in floor.navList" :key="index" :class="{active: index===current}" @mouseenter="current=index">
+            <li :class="{active: index===current}" @mouseenter="current=index" v-for="(nav, index) in floor.navList" :key="index">
               <a href="#tab1" data-toggle="tab">{{nav.text}}</a>
             </li>
           </ul>
@@ -17,14 +17,14 @@
           <div class="floor-1">
             <div class="blockgary">
               <ul class="jd-list">
-                <li v-for="(word, index) in floor.keywords" :key="index">{{word}}</li>
+                <li v-for="(k, index) in floor.keywords" :key="index">{{k}}</li>
               </ul>
               <img :src="floor.imgUrl" />
             </div>
             <div class="floorBanner">
               <Swiper :options="options" ref="swiperRef">
-                <SwiperSlide v-for="carouse in floor.carouselList" :key="carouse.id">
-                  <img :src="carouse.imgUrl" alt="">
+                <SwiperSlide v-for="s in floor.carouselList">
+                  <img :src="s.imgUrl" alt="">
                 </SwiperSlide>
                 <div class="swiper-pagination" slot="pagination"></div>
                 <div class="swiper-button-prev" slot="button-prev"></div>
@@ -60,42 +60,48 @@
 </template>
 
 <script>
-
 export default {
-    name: "Floor",
-    props: ["floor"],
-    data() {
-        return {
-            current: 0,
-            options: {
-      direction: 'horizontal', // 垂直切换选项
-      loop: true, // 循环模式选项
+  name: "Floor",
+  data() {
+    return {
+      current: 0,
+      options: {
+        direction: "horizontal", // 垂直切换选项
+        loop: true, // 循环模式选项
 
-      // 如果需要分页器
-      pagination: {
-        el: '.swiper-pagination',
+        // 如果需要分页器
+        pagination: {
+          el: ".swiper-pagination",
+          clickable :true,
+        },
+
+        // 如果需要前进后退按钮
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+
+        autoplay: {
+          delay: 1000,
+          stopOnLastSlide: false,
+          disableOnInteraction: true,
+        },
         clickable: true,
-      },
 
-      // effect: 'fade',
-      // 如果需要前进后退按钮
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
-      autoplay: {
-        delay: 1000,
-        stopOnLastSlide: false,
-        disableOnInteraction: true,
+        // 如果需要滚动条
+        scrollbar: {
+          el: ".swiper-scrollbar",
+        },
       },
     }
-        };
-    },
-    mounted() {
-      let div = this.$refs.swiperRef.$el;
-      div.onmouseenter = () => this.$refs.swiperRef.$swiper.autoplay.stop();
-      div.onmouseleave = () => this.$refs.swiperRef.$swiper.autoplay.start();
-    },
+  },
+  mounted() {
+    let div = this.$refs.swiperRef.$el;
+    console.log(div);
+    div.onmouseenter = () => this.$refs.swiperRef.$swiper.autoplay.stop();
+    div.onmouseleave = () => this.$refs.swiperRef.$swiper.autoplay.start();
+  },
+  props: ['floor']
 };
 </script>
 

@@ -6,7 +6,7 @@
         <!--banner轮播-->
         <Swiper :options="options" ref="swiperRef">
           <SwiperSlide v-for="banner in bannerArr" :key="banner.id">
-            <img :src="banner.url" alt="">
+            <img :src="banner.url" alt="" />
           </SwiperSlide>
           <div class="swiper-pagination" slot="pagination"></div>
           <div class="swiper-button-prev" slot="button-prev"></div>
@@ -87,47 +87,54 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-
+import { SwiperSlide } from "vue-awesome-swiper";
+import { mapState } from "vuex";
 export default {
-    name: "List",
-    data() {
-      return {
-        options: {
-      direction: 'horizontal', // 垂直切换选项
-      loop: true, // 循环模式选项
+  name: "List",
+  data() {
+    return {
+      options: {
+        direction: "horizontal", // 垂直切换选项
+        loop: true, // 循环模式选项
 
-      // 如果需要分页器
-      pagination: {
-        el: '.swiper-pagination',
+        // 如果需要分页器
+        pagination: {
+          el: ".swiper-pagination",
+          clickable :true,
+        },
+
+        // 如果需要前进后退按钮
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+
+        autoplay: {
+          delay: 1000,
+          stopOnLastSlide: false,
+          disableOnInteraction: true,
+        },
         clickable: true,
-      },
 
-      // effect: 'fade',
-      // 如果需要前进后退按钮
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
+        // 如果需要滚动条
+        scrollbar: {
+          el: ".swiper-scrollbar",
+        },
       },
-      autoplay: {
-        delay: 1000,
-        stopOnLastSlide: false,
-        disableOnInteraction: true,
-      },
-    }
-      }
-    },
-    mounted() {
-        this.$store.dispatch("getBanner");
-        let div = this.$refs.swiperRef.$el;
-        div.onmouseenter = () => this.$refs.swiperRef.$swiper.autoplay.stop();
-        div.onmouseleave = () => this.$refs.swiperRef.$swiper.autoplay.start();
-    },
-    computed: {
-        ...mapState({
-            bannerArr: state => state.home.bannerArr
-        })
-    },
+    };
+  },
+  mounted() {
+    this.$store.dispatch("getBanner");
+    let div = this.$refs.swiperRef.$el;
+    div.onmouseenter = () => this.$refs.swiperRef.$swiper.autoplay.stop();
+    div.onmouseleave = () => this.$refs.swiperRef.$swiper.autoplay.start();
+  },
+  computed: {
+    ...mapState({
+      bannerArr: (state) => state.home.bannerArr,
+    }),
+  },
+  components: { SwiperSlide },
 };
 </script>
 

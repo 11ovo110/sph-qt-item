@@ -38,7 +38,6 @@
             id="autocomplete"
             class="input-error input-xxlarge"
             v-model="keyword"
-            @keyup.enter="handler"
           />
           <button
             class="sui-btn btn-xlarge btn-danger"

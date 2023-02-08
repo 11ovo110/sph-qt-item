@@ -2,6 +2,8 @@ import axios from "axios";
 import nprogress from "nprogress";
 import 'nprogress/nprogress.css';
 
+nprogress.configure({ showSpinner: false });
+
 let request = axios.create({
   baseURL: '/mock',
   timeout: 5000

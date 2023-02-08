@@ -5,14 +5,13 @@ import Footer from '@/components/Footer/Footer.vue';
 import TypeNav from '@/components/TypeNav/TypeNav.vue';
 import router from "./router";
 import store from "./store";
+import '@/mock';
 
 import { SwiperSlide, Swiper } from "vue-awesome-swiper";
 import 'swiper/css/swiper.min.css';
 
-import '@/mock/mockServe';
-
 Vue.component('Swiper', Swiper);
-Vue.component('SwiperSlide', SwiperSlide)
+Vue.component('SwiperSlide', SwiperSlide);
 
 Vue.component(Header.name, Header);
 Vue.component(Footer.name, Footer);

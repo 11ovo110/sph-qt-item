@@ -1,4 +1,5 @@
-import { reqTypeNav, reqBanner, reqFloor } from "@/api";
+import request from "@/utils/request"
+import { reqBanner, reqFloor, reqTypeNav } from "@/api";
 
 const state = {
   typeArr: [],
@@ -21,15 +22,15 @@ const mutations = {
 const actions = {
  async TypeNav({dispatch, state, getters, commit}) {
     let result = await reqTypeNav();
-    if(result.code === 200) 
+    if(result.code === 200)
     commit('TYPENAV', result.data);
   },
-  async getBanner({dispatch, state, getters, commit}) {
+  async getBanner({dispatch, getters, state, commit}) {
     let result = await reqBanner();
     if(result.code === 200) 
     commit('GETBANNER', result.data);
   },
-  async getFloor({state, commit, dispatch, getters}) {
+  async getFloor({dispatch, state, getters, commit}) {
     let result = await reqFloor();
     if(result.code === 200)
     commit('GETFLOOR', result.data);
