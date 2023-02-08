@@ -17,7 +17,7 @@
           <div class="floor-1">
             <div class="blockgary">
               <ul class="jd-list">
-                <li v-for="word in floor.keywords" :key="index">{{word}}</li>
+                <li v-for="(word, index) in floor.keywords" :key="index">{{word}}</li>
               </ul>
               <img :src="floor.imgUrl" />
             </div>

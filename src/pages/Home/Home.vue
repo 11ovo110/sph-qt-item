@@ -5,7 +5,7 @@
     <recommend></recommend>
     <rank></rank>
     <like></like>
-    <floor v-for="floor in floorArr" :key="index" :floor="floor"></floor>
+    <floor v-for="(floor, index) in floorArr" :key="index" :floor="floor"></floor>
     <brand></brand>
   </div>
 </template>
