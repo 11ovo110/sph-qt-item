@@ -1,5 +1,5 @@
+import VueRouter from "vue-router";
 import Vue from 'vue';
-import VueRouter from 'vue-router';
 import Home from '@/pages/Home/Home.vue';
 import Login from '@/pages/Login/Login.vue';
 import Register from '@/pages/Register/Register.vue';

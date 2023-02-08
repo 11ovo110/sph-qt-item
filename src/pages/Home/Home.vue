@@ -5,23 +5,26 @@
     <recommend></recommend>
     <rank></rank>
     <like></like>
-    <floor v-for="f in 2"></floor>
+    <floor></floor>
     <brand></brand>
   </div>
 </template>
 
 <script>
-import List from './List/List.vue';
-import Recommend from './Recommend/Recommend.vue';
-import Rank from './Rank/Rank.vue';
-import Like from './Like/Like.vue';
-import Floor from './Floor/Floor.vue';
-import Brand from './Brand/Brand.vue';
+import TypeNav from '@/components/TypeNav/TypeNav.vue'
+import List from './List/List.vue'
+import Recommend from './Recommend/Recommend.vue'
+import Rank from './Rank/Rank.vue'
+import Like from './Like/Like.vue'
+import Floor from './Floor/Floor.vue'
+import Brand from './Brand/Brand.vue'
+import { mapState } from 'vuex'
 export default {
-  components: { List, Recommend, Rank, Like, Floor, Brand },
-  name: "Home",
-};
+  components: { List, TypeNav, Recommend, Rank, Like, Floor, Brand },
+  name: 'Home',
+}
 </script>
 
 <style scoped>
+
 </style>

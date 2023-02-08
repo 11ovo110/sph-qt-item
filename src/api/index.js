@@ -1,3 +1,3 @@
-import request from "@/utils";
+import request from "@/utils/request";
 
-export const reqTypeNav = () => request.get('/product/getBaseCategoryList');
+export const reqTypeNav = async () => request.get('/product/getBaseCategoryList');
