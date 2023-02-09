@@ -4,7 +4,7 @@
     <div class="sortList clearfix">
       <div class="center">
         <!--banner轮播-->
-        <Swiper :options="options">
+        <Swiper :options="options" ref="swiperRef">
           <SwiperSlide v-for="banner in bannerArr" :key="banner.id">
             <img :src="banner.url" alt="">
           </SwiperSlide>
@@ -87,6 +87,7 @@
 </template>
 
 <script>
+import { SwiperSlide } from 'vue-awesome-swiper';
 import { mapState } from 'vuex';
 export default {
     name: "List",
@@ -124,12 +125,16 @@ export default {
     },
     mounted() {
         this.$store.dispatch("getBanner");
+        let div = this.$refs.swiperRef.$el;
+        div.onmouseenter = () => this.$refs.swiperRef.$swiper.autoplay.stop();
+        div.onmouseleave = () => this.$refs.swiperRef.$swiper.autoplay.start();
     },
     computed: {
         ...mapState({
             bannerArr: state => state.home.bannerArr
         })
     },
+    components: { SwiperSlide }
 };
 </script>
 

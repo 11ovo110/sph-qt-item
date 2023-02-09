@@ -7,6 +7,17 @@ import Search from '@/pages/Search/Search.vue';
 
 Vue.use(VueRouter);
 
+let push = VueRouter.prototype.push;
+let replace = VueRouter.prototype.replace;
+
+Vue.prototype.push = function(location) {
+  push.call(this, location, () => {}, () => {});
+}
+
+Vue.prototype.replace = function(location) {
+  replace.call(this, location, () => {}, () => {});
+}
+
 export default new VueRouter({
   mode: 'hash',
   routes: [

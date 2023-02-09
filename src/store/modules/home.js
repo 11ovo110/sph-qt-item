@@ -1,4 +1,4 @@
-import { reqTypeNav, reqBanner, reqFloor } from "@/api";
+import { reqBanner, reqFloor, reqTypeNav } from "@/api";
 
 const state = {
   typeArr: [],
@@ -23,9 +23,11 @@ const actions = {
     let result = await reqTypeNav();
     commit('TYPENAV', result.data);
   },
-  async getBanner({dispatch, getters, state, commit}) {
+  async getBanner({dispatch, state, getters, commit}) {
     let result = await reqBanner();
-    commit('GETBANNER', result.data);
+    if(result.code === 200) {
+      commit('GETBANNER', result.data);
+    }
   },
   async getFloor({dispatch, state, getters, commit}) {
     let result = await reqFloor();
