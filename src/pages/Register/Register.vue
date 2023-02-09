@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>我是Register内容</h1>
+    <h1>Register</h1>
   </div>
 </template>
 

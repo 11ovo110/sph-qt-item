@@ -2,45 +2,44 @@
   <!-- 商品分类导航 -->
   <div class="type-nav">
     <div class="container">
-      <div @mouseleave="leaveHandler">
-        <h2 class="all">全部商品分类</h2>
-      <div class="sort">
-        <div class="all-sort-list2">
-          <div class="item" v-for="(t1, index) in typeArr" :key="t1.categoryId" @click="handler">
-            <h3 @mouseenter="enterHandler(index)" :class="{active: index===current}">
-              <a :data-categoryName="t1.categoryName" :data-category1Id="t1.categoryId">{{t1.categoryName}}</a>
-            </h3>
-            <div class="item-list clearfix">
-              <div class="subitem">
-                <dl class="fore" v-for="t2 in t1.categoryChild" :key="t2.categoryId">
-                  <dt>
-                    <a :data-categoryName="t2.categoryName" :data-category2Id="t2.categoryId">{{t2.categoryName}}</a>
-                  </dt>
-                  <dd>
-                    <em v-for="t3 in t2.categoryChild" :key="t3.categoryId"> 
-                      <a :data-categoryName="t3.categoryName" :data-category3Id="t3.categoryId">{{t3.categoryName}}</a>
-                    </em>
-                  </dd>
-                </dl>
+        <div @mouseleave="current=-1">
+          <h2 class="all">全部商品分类</h2>
+        <div class="sort">
+          <div class="all-sort-list2">
+              <div class="item" v-for="(t1, index) in typeArr" :key="t1.categoryId" @click="handler">
+                  <h3 :class="{active: index===current}" @mouseenter="current=index">
+                      <a :data-categoryName="t1.categoryName" :data-category1Id="t1.categoryId">{{t1.categoryName}}</a>
+                  </h3>
+                  <div class="item-list clearfix">
+                      <div class="subitem">
+                          <dl class="fore" v-for="t2 in t1.categoryChild" :key="t2.categoryId">
+                              <dt>
+                                  <a :data-categoryName="t2.categoryName" :data-category2Id="t2.categoryId">{{t2.categoryName}}</a>
+                              </dt>
+                              <dd>
+                                  <em v-for="t3 in t2.categoryChild" :key="t3.categoryId">
+                                      <a :data-categoryName="t3.categoryName" :data-category3Id="t3.categoryId">{{t3.categoryName}}</a>
+                                  </em>
+                              </dd>
+                          </dl>
+                      </div>
+                  </div>
               </div>
-            </div>
           </div>
+      </div>
         </div>
-      </div>
-      </div>
-      <nav class="nav">
-        <a href="###">服装城</a>
-        <a href="###">美妆馆</a>
-        <a href="###">尚品汇超市</a>
-        <a href="###">全球购</a>
-        <a href="###">闪购</a>
-        <a href="###">团购</a>
-        <a href="###">有趣</a>
-        <a href="###">秒杀</a>
-      </nav>
-      
+        <nav class="nav">
+            <a href="###">服装城</a>
+            <a href="###">美妆馆</a>
+            <a href="###">尚品汇超市</a>
+            <a href="###">全球购</a>
+            <a href="###">闪购</a>
+            <a href="###">团购</a>
+            <a href="###">有趣</a>
+            <a href="###">秒杀</a>
+        </nav>
     </div>
-  </div>
+</div>
 </template>
 
 <script>
@@ -52,34 +51,30 @@ export default {
       current: -1
     }
   },
-  computed: {
-    ...mapState({
-      typeArr: state => state.home.typeArr
-    })
+  methods: {
+    handler(e) {
+      let {categoryname, category1id, category2id, category3id} = e.target.dataset;
+      if(categoryname) {
+        let obj = {
+          name: 'search',
+          query: {},
+          params: this.$route.params
+        };
+        if(category1id) obj.query.category1Id = category1id;
+        else if(category2id) obj.query.category2Id = category2id;
+        else obj.query.category3id = category3id;
+        obj.query.categoryname = categoryname;
+        this.$router.push(obj);
+      }
+    }
   },
   mounted() {
     this.$store.dispatch('TypeNav');
   },
-  methods: {
-    enterHandler(index) {
-      this.current = index;
-    },
-    leaveHandler() {
-      this.current = -1;
-    },
-    handler(e) {
-      console.log(e.target.dataset);
-      let {categoryname, category1id, category2id, category3id} = e.target.dataset;
-      if(categoryname) {
-        let obj = {name: 'search', query: {}};
-        if(category1id) obj.query.category1Id = category1id;
-        else if(category2id) obj.query.category2Id = category2id;
-        else obj.query.category3Id = category3id;
-        obj.query.categoryName = categoryname;
-        obj.params = this.$route.params;
-        this.$router.push(obj);
-      }
-    }
+  computed: {
+    ...mapState({
+      typeArr: state => state.home.typeArr
+    })
   },
 };
 </script>
@@ -138,7 +133,6 @@ export default {
             a {
               color: #333;
             }
-            
           }
 
           .active {

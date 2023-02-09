@@ -2,6 +2,8 @@ import axios from "axios";
 import nprogress from "nprogress";
 import 'nprogress/nprogress.css';
 
+nprogress.configure({ showSpinner: false });  // 取消显示小圈圈
+
 let request = axios.create({
   baseURL: '/mock',
   timeout: 5000
