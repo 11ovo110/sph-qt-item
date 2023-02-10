@@ -116,6 +116,22 @@ import { mapState } from 'vuex';
   import SearchSelector from './SearchSelector/SearchSelector'
   export default {
     name: 'Search',
+    data() {
+      return {
+        searchParams: {
+        "category1Id": "", //一级分类的ID
+        "category2Id": "",//二级分类的ID
+        "category3Id": "",//三级分类的ID
+        "categoryName": "",//一级分类的名字
+        "keyword": "",//关键字
+        "props": [],//平台属性需要携带搜索的条件
+        "trademark": "",//品牌需要携带搜索条件
+        "order": "1:desc",//排序需要携带的搜索条件   1:综合 2:价格  asc:升序  desc:降序    默认初始值:1:desc
+        "pageNo": 1,//分页器当前页码
+        "pageSize": 10,//一页展示几条数据
+}
+      }
+    },
     components: {
       SearchSelector
     },
@@ -124,7 +140,13 @@ import { mapState } from 'vuex';
     },
     methods: {
       getGoods() {
-        this.$store.dispatch('getGoods', {});
+       let { categoryName, category1Id, category2Id, category3Id } = this.$route.query;
+       this.searchParams.categoryName = categoryName;
+       this.searchParams.category1Id = category1Id;
+       this.searchParams.category2Id = category2Id;
+       this.searchParams.category3Id = category3Id;
+       this.searchParams.keyword = this.$route.params.keyword;
+       this.$store.dispatch('getGoods', this.searchParams);
       }
     },
     computed: {
@@ -132,6 +154,14 @@ import { mapState } from 'vuex';
         goodsList: state => state.search.searchData.goodsList
       })
     },
+    watch: {
+      $route() {
+        this.getGoods();
+      }
+    },
+    // beforeUpdate() {
+    //   this.getGoods();
+    // }
   }
 </script>
 

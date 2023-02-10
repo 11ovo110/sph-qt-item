@@ -65,8 +65,8 @@ export default {
         };
         if(category1id) obj.query.category1Id = category1id;
         else if(category2id) obj.query.category2Id = category2id;
-        else obj.query.category3id = category3id;
-        obj.query.categoryname = categoryname;
+        else obj.query.category3Id = category3id;
+        obj.query.categoryName = categoryname;
         this.$router.push(obj);
       }
     },
