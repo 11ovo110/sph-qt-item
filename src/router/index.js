@@ -4,7 +4,7 @@ import VueRouter from 'vue-router';
 import Home from '@/pages/Home/Home.vue';
 import Register from '@/pages/Register/Register.vue';
 import Login from '@/pages/Login/Login.vue';
-import Search from '@/pages/Search/Search.vue';
+import Search from '@/pages/Search';
 
 Vue.use(VueRouter);
 
