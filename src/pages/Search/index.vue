@@ -11,15 +11,14 @@
             </li>
           </ul>
           <ul class="fl sui-tag">
-            <li class="with-x">手机</li>
-            <li class="with-x">iphone<i>×</i></li>
-            <li class="with-x">华为<i>×</i></li>
-            <li class="with-x">OPPO<i>×</i></li>
+            <li class="with-x" v-show="searchParams.categoryName">{{searchParams.categoryName}}<i @click="remove">x</i></li>
+            <li class="with-x" v-show="searchParams.keyword">{{searchParams.keyword}}<i @click="removeKeyword">x</i></li>
+            <li class="with-x" v-show="searchParams.trademark">{{searchParams.trademark.split(':')[1]}}<i @click="removeBrand">x</i></li>
           </ul>
         </div>
 
         <!--selector-->
-        <SearchSelector />
+        <SearchSelector @getBrand="getBrand" />
 
         <!--details-->
         <div class="details clearfix">
@@ -147,6 +146,30 @@ import { mapState } from 'vuex';
        this.searchParams.category3Id = category3Id;
        this.searchParams.keyword = this.$route.params.keyword;
        this.$store.dispatch('getGoods', this.searchParams);
+      },
+      remove() {
+        this.searchParams.categoryName = '';
+        // push的原因，是因为 url 上方的地址栏需要变化，url改变请求也会发送
+        this.$router.push({
+          name: 'search',
+          params: this.$route.params
+        })
+      },
+      removeKeyword() {
+        this.searchParams.keyword = '';
+        this.$router.push({
+          name: 'search',
+          query: this.$route.query
+        })
+        this.$bus.$emit('keyword', '');
+      },
+      removeBrand() {
+        this.searchParams.trademark = '';
+        this.getGoods();
+      },
+      getBrand({tmId, tmName}) {
+        this.searchParams.trademark = `${tmId}:${tmName}`;
+        this.getGoods();
       }
     },
     computed: {

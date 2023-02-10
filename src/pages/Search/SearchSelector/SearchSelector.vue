@@ -4,7 +4,7 @@
       <div class="fl key brand">品牌</div>
       <div class="value logos">
         <ul class="logo-list">
-          <li v-for="brand in trademarkList" :key="brand.tmId">{{brand.tmName}}</li>
+          <li v-for="brand in trademarkList" :key="brand.tmId" @click="handler(brand)">{{brand.tmName}}</li>
         </ul>
       </div>
       <div class="ext">
@@ -30,6 +30,11 @@
 import { mapState } from 'vuex'
   export default {
     name: 'SearchSelector',
+    methods: {
+      handler(brand) {
+        this.$emit('getBrand', brand);
+      }
+    },
    computed: {
     ...mapState({
       trademarkList: state => state.search.searchData.trademarkList,

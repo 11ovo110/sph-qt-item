@@ -49,6 +49,11 @@ export default {
       keyWord: ''
     }
   },
+  mounted() {
+    this.$bus.$on('keyword', (keyWord) => {
+      this.keyWord = keyWord;
+    })
+  },
   methods: {
     goSearch() {
       this.$router.push({
