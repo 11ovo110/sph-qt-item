@@ -88,10 +88,6 @@ export default {
       prevEl: '.swiper-button-prev',
     },
     
-    // 如果需要滚动条
-    scrollbar: {
-      el: '.swiper-scrollbar',
-    },
   }
     }
   },

@@ -87,7 +87,6 @@
 </template>
 
 <script>
-import { SwiperSlide } from "vue-awesome-swiper";
 import { mapState } from "vuex";
 export default {
   name: "List",
@@ -95,6 +94,16 @@ export default {
     return {
       options: {
     direction: 'horizontal', // 垂直切换选项
+    // 如果需要前进后退按钮
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+    autoplay: {
+    delay: 1000,
+    stopOnLastSlide: false,
+    disableOnInteraction: true,
+    },
     loop: true, // 循环模式选项
     
     // 如果需要分页器
@@ -103,22 +112,6 @@ export default {
       clickable :true,
     },
 
-    autoplay: {
-    delay: 1000,
-    stopOnLastSlide: false,
-    disableOnInteraction: true,
-    },
-    
-    // 如果需要前进后退按钮
-    navigation: {
-      nextEl: '.swiper-button-next',
-      prevEl: '.swiper-button-prev',
-    },
-    
-    // 如果需要滚动条
-    scrollbar: {
-      el: '.swiper-scrollbar',
-    },
   }
     };
   },
@@ -133,7 +126,6 @@ export default {
       bannerArr: (state) => state.home.bannerArr,
     }),
   },
-  components: { SwiperSlide },
 };
 </script>
 
