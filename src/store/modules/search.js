@@ -1,23 +1,20 @@
-import { reqSearch } from "@/api"
+import { reqSearch } from "@/api";
 
 const state = {
-  searchData: {}
-}
+  SearchData: {}
+};
 const mutations = {
-  GETGOODS(state, data) {
-    state.searchData = data;
+  GETLIST(state, data) {
+    state.SearchData = data;
   }
-}
+};
 const actions = {
-  async getGoods({state, dispatch, getters, commit}, payload) {
+  async getList({commit, dispatch, state, getters},payload={}) {
     let result = await reqSearch(payload);
-    if(result.code === 200) {
-      commit('GETGOODS', result.data);
-    }
+    if(result.code === 200) 
+    commit('GETLIST', result.data);
   }
-}
-const getters = {
-  
-}
+};
+const getters = {};
 
-export default {state, mutations, actions, getters};
+export default { state, mutations, actions, getters };

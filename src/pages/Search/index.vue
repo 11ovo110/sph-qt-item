@@ -11,9 +11,9 @@
             </li>
           </ul>
           <ul class="fl sui-tag">
-            <li class="with-x" v-show="searchParams.categoryName">{{searchParams.categoryName}}<i @click="remove">x</i></li>
-            <li class="with-x" v-show="searchParams.keyword">{{searchParams.keyword}}<i @click="removeKeyword">x</i></li>
-            <li class="with-x" v-show="searchParams.trademark">{{searchParams.trademark.split(':')[1]}}<i @click="removeBrand">x</i></li>
+            <li class="with-x" v-show="SearchList.categoryName">{{SearchList.categoryName}}<i @click="remove">×</i></li>
+            <li class="with-x" v-show="SearchList.keyword">{{SearchList.keyword}}<i @click="removeKeyword">×</i></li>
+            <li class="with-x" v-show="SearchList.trademark">{{SearchList.trademark.split(':')[1]}}<i @click="removeBrand">×</i></li>
           </ul>
         </div>
 
@@ -48,12 +48,10 @@
           </div>
           <div class="goods-list">
             <ul class="yui3-g">
-              <li class="yui3-u-1-5" v-for="good in goodsList" :key="good.id">
+              <li class="yui3-u-1-5" v-for="good in SearchData.goodsList" :key="good.id">
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="item.html" target="_blank">
-                      <img :src="good.defaultImg" style="width:215px;height:215px"/>
-                    </a>
+                    <a><img :src="good.defaultImg" style="width:215px;height:215px"/></a>
                   </div>
                   <div class="price">
                     <strong>
@@ -68,7 +66,7 @@
                     <i class="command">已有<span>{{good.id**3}}</span>人评价</i>
                   </div>
                   <div class="operate">
-                    <a class="sui-btn btn-bordered btn-danger">加入购物车</a>
+                    <a href="success-cart.html" target="_blank" class="sui-btn btn-bordered btn-danger">加入购物车</a>
                     <a href="javascript:void(0);" class="sui-btn btn-bordered">收藏</a>
                   </div>
                 </div>
@@ -115,9 +113,12 @@ import { mapState } from 'vuex';
   import SearchSelector from './SearchSelector/SearchSelector'
   export default {
     name: 'Search',
+    components: {
+      SearchSelector
+    },
     data() {
       return {
-        searchParams: {
+        SearchList: {
         "category1Id": "", //一级分类的ID
         "category2Id": "",//二级分类的ID
         "category3Id": "",//三级分类的ID
@@ -131,60 +132,53 @@ import { mapState } from 'vuex';
 }
       }
     },
-    components: {
-      SearchSelector
-    },
-    mounted() {
-      this.getGoods();
-    },
     methods: {
       getGoods() {
-       let { categoryName, category1Id, category2Id, category3Id } = this.$route.query;
-       this.searchParams.categoryName = categoryName;
-       this.searchParams.category1Id = category1Id;
-       this.searchParams.category2Id = category2Id;
-       this.searchParams.category3Id = category3Id;
-       this.searchParams.keyword = this.$route.params.keyword;
-       this.$store.dispatch('getGoods', this.searchParams);
+        let {categoryName, category1Id, category2Id, category3Id} = this.$route.query;
+        this.SearchList.categoryName = categoryName;
+        this.SearchList.category1Id = category1Id;
+        this.SearchList.category2Id = category2Id;
+        this.SearchList.category3Id = category3Id;
+        this.SearchList.keyword = this.$route.params.keyword;
+        this.$store.dispatch('getList', this.SearchList);
       },
       remove() {
-        this.searchParams.categoryName = '';
-        // push的原因，是因为 url 上方的地址栏需要变化，url改变请求也会发送
+        this.SearchList.categoryName = '';
         this.$router.push({
           name: 'search',
-          params: this.$route.params
+          params: this.$route.query
         })
       },
       removeKeyword() {
-        this.searchParams.keyword = '';
+        this.SearchList.keyword = '';
+        this.$bus.$emit('keyWord', '');
         this.$router.push({
           name: 'search',
           query: this.$route.query
         })
-        this.$bus.$emit('keyword', '');
       },
       removeBrand() {
-        this.searchParams.trademark = '';
+        this.SearchList.trademark = '';
         this.getGoods();
       },
       getBrand({tmId, tmName}) {
-        this.searchParams.trademark = `${tmId}:${tmName}`;
+        this.SearchList.trademark = `${tmId}:${tmName}`;
         this.getGoods();
       }
     },
+    mounted() {
+      this.getGoods();
+    },
     computed: {
       ...mapState({
-        goodsList: state => state.search.searchData.goodsList
+        SearchData: state => state.search.SearchData
       })
     },
     watch: {
       $route() {
         this.getGoods();
       }
-    },
-    // beforeUpdate() {
-    //   this.getGoods();
-    // }
+    }
   }
 </script>
 

@@ -50,7 +50,7 @@ export default {
     }
   },
   mounted() {
-    this.$bus.$on('keyword', (keyWord) => {
+    this.$bus.$on('keyWord', (keyWord) => {
       this.keyWord = keyWord;
     })
   },

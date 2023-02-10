@@ -30,17 +30,17 @@
 import { mapState } from 'vuex'
   export default {
     name: 'SearchSelector',
+    computed: {
+      ...mapState({
+        attrsList: state => state.search.SearchData.attrsList,
+        trademarkList: state => state.search.SearchData.trademarkList
+      })
+    },
     methods: {
       handler(brand) {
-        this.$emit('getBrand', brand);
+        this.$emit('getBrand', brand)
       }
     },
-   computed: {
-    ...mapState({
-      trademarkList: state => state.search.searchData.trademarkList,
-      attrsList: state => state.search.searchData.attrsList
-    })
-   },
   }
 </script>
 

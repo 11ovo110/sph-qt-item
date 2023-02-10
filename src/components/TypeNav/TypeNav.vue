@@ -2,8 +2,8 @@
   <!-- 商品分类导航 -->
   <div class="type-nav">
     <div class="container">
-        <div @mouseleave="leaveTypeNav">
-          <h2 class="all" @mouseenter="enterTypeNav">全部商品分类</h2>
+        <div @mouseleave="leaveNav">
+          <h2 class="all" @mouseenter="changeTypeNav">全部商品分类</h2>
         <transition name="sort">
           <div class="sort" v-show="showTypeNav">
             <div class="all-sort-list2">
@@ -70,19 +70,23 @@ export default {
         this.$router.push(obj);
       }
     },
-    enterTypeNav() {
-      if(this.$route.path != '/home')
+    changeTypeNav() {
+      console.log(11);
+      if(this.$route.path !== '/home')
       this.showTypeNav = true;
     },
-    leaveTypeNav() {
+    leaveNav() {
       this.current = -1;
-      if(this.$route.path != '/home')
+      if(this.$route.path !== '/home') {
       this.showTypeNav = false;
+    }
     }
   },
   mounted() {
-    if(this.$route.path != '/home')
-    this.showTypeNav = false;
+    this.$store.dispatch('TypeNav');
+    if(this.$route.path !== '/home') {
+      this.showTypeNav = false;
+    }
   },
   computed: {
     ...mapState({
@@ -218,7 +222,7 @@ export default {
       height: 0;
     }
     .sort-enter-active {
-      transition: all 0.3s;
+      transition: all .4s;
     }
     .sort-enter-to {
       height: 461px;

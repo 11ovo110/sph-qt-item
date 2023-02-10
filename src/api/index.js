@@ -7,5 +7,4 @@ export const reqBanner = () => mockRequest.get('/banner');
 
 export const reqFloor = () => mockRequest.get('/floor');
 
-export const reqSearch = (data={}) => request.post('/list', data)
-
+export const reqSearch = (data) => request.post('/list', data);
