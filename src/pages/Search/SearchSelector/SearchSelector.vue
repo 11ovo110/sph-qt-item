@@ -4,7 +4,7 @@
       <div class="fl key brand">品牌</div>
       <div class="value logos">
         <ul class="logo-list">
-          <li v-for="brand in trademarkList" :key="brand.tmId" @click="getBrand(brand)">{{brand.tmName}}</li>
+          <li v-for="brand in trademarkList" :key="brand.tmId" @click="sendBrand(brand)">{{brand.tmName}}</li>
         </ul>
       </div>
       <div class="ext">
@@ -16,7 +16,7 @@
       <div class="fl key">{{attr.attrName}}</div>
       <div class="fl value">
         <ul class="type-list">
-          <li v-for="(attrValue, index) in attr.attrValueList" :key="index">
+          <li v-for="(attrValue, index) in attr.attrValueList" :key="index" @click="sendPhoneType(attrValue)">
             <a>{{attrValue}}</a>
           </li>
         </ul>
@@ -30,16 +30,19 @@
 import { mapState } from 'vuex'
   export default {
     name: 'SearchSelector',
+    methods: {
+      sendBrand(brand) {
+        this.$emit('getBrand', brand);
+      },
+      sendPhoneType(attrValue) {
+        this.$emit('getPhoneType', attrValue);
+      }
+    },
     computed: {
       ...mapState({
-        attrsList: state => state.search.SearchList.attrsList,
-        trademarkList: state => state.search.SearchList.trademarkList
+        attrsList: state => state.search.dataList.attrsList,
+        trademarkList: state => state.search.dataList.trademarkList
       })
-    },
-    methods: {
-      getBrand(brand) {
-        this.$emit('getBrand', brand);
-      }
     },
   }
 </script>

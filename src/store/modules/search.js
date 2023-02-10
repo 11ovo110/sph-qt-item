@@ -1,17 +1,17 @@
 import { reqSearchList } from "@/api"
 
 const state = {
-  SearchList: {}
+  dataList: {}
 }
 const mutations = {
-  GETSEARCHLIST(state, data) {
-    state.SearchList = data;
+  GETDATALIST(state, data) {
+    state.dataList = data;
   }
 }
 const actions = {
- async getSearchList({commit, state, dispatch, getters}, payload) {
+  async getDateList({state, dispatch, commit, getters}, payload) {
     let result = await reqSearchList(payload);
-    commit('GETSEARCHLIST', result.data);
+    commit('GETDATALIST', result.data);
   }
 }
 const getters = {
