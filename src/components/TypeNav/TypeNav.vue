@@ -3,32 +3,32 @@
   <div class="type-nav">
     <div class="container">
         <div @mouseleave="leaveNav">
-          <h2 class="all" @mouseenter="changeTypeNav">全部商品分类</h2>
-        <transition name="sort">
-          <div class="sort" v-show="showTypeNav">
-            <div class="all-sort-list2">
-                <div class="item" v-for="(t1, index) in typeArr" :key="t1.categoryId" @click="handler">
-                    <h3 :class="{active: index===current}" @mouseenter="current=index">
-                        <a :data-categoryName="t1.categoryName" :data-category1Id="t1.categoryId">{{t1.categoryName}}</a>
-                    </h3>
-                    <div class="item-list clearfix">
-                        <div class="subitem">
-                            <dl class="fore" v-for="t2 in t1.categoryChild" :key="t2.categoryId">
-                                <dt>
-                                    <a :data-categoryName="t2.categoryName" :data-category2Id="t2.categoryId">{{t2.categoryName}}</a>
-                                </dt>
-                                <dd>
-                                    <em v-for="t3 in t2.categoryChild" :key="t3.categoryId">
-                                        <a :data-categoryName="t3.categoryName" :data-category3Id="t3.categoryId">{{t3.categoryName}}</a>
-                                    </em>
-                                </dd>
-                            </dl>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        </transition>
+          <h2 class="all" @mouseenter="enterNav">全部商品分类</h2>
+       <transition name="sort">
+        <div class="sort" v-show="flag">
+          <div class="all-sort-list2">
+              <div class="item" v-for="(t1, index) in typeArr" :key="t1.categoryId" @click="handler">
+                  <h3 :class="{active: index===current}" @mouseenter="current=index">
+                      <a :data-categoryName="t1.categoryName" :data-category1Id="t1.categoryId">{{t1.categoryName}}</a>
+                  </h3>
+                  <div class="item-list clearfix">
+                      <div class="subitem">
+                          <dl class="fore" v-for="t2 in t1.categoryChild" :key="t2.categoryId">
+                              <dt>
+                                  <a :data-categoryName="t2.categoryName" :data-category2Id="t2.categoryId">{{t2.categoryName}}</a>
+                              </dt>
+                              <dd>
+                                  <em v-for="t3 in t2.categoryChild" :key="t3.categoryId">
+                                      <a :data-categoryName="t3.categoryName" :data-category3Id="t3.categoryId">{{t3.categoryName}}</a>
+                                  </em>
+                              </dd>
+                          </dl>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+       </transition>
         </div>
         <nav class="nav">
             <a href="###">服装城</a>
@@ -51,7 +51,7 @@ export default {
   data() {
     return {
       current: -1,
-      showTypeNav: true
+      flag: true
     }
   },
   methods: {
@@ -70,23 +70,20 @@ export default {
         this.$router.push(obj);
       }
     },
-    changeTypeNav() {
-      console.log(11);
+    enterNav() {
       if(this.$route.path !== '/home')
-      this.showTypeNav = true;
+      this.flag = true;
     },
     leaveNav() {
       this.current = -1;
-      if(this.$route.path !== '/home') {
-      this.showTypeNav = false;
-    }
+      if(this.$route.path !== '/home')
+      this.flag = false;
     }
   },
   mounted() {
     this.$store.dispatch('TypeNav');
-    if(this.$route.path !== '/home') {
-      this.showTypeNav = false;
-    }
+    if(this.$route.path !== '/home')
+    this.flag = false;
   },
   computed: {
     ...mapState({

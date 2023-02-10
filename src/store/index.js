@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 
 import home from '@/store/modules/home.js';
-import search from '@/store/modules/search';
+import search from '@/store/modules/search.js';
 
 Vue.use(Vuex);
 

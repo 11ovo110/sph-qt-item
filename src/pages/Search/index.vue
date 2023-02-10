@@ -11,14 +11,14 @@
             </li>
           </ul>
           <ul class="fl sui-tag">
-            <li class="with-x" v-show="SearchList.categoryName">{{SearchList.categoryName}}<i @click="remove">×</i></li>
-            <li class="with-x" v-show="SearchList.keyword">{{SearchList.keyword}}<i @click="removeKeyword">×</i></li>
-            <li class="with-x" v-show="SearchList.trademark">{{SearchList.trademark.split(':')[1]}}<i @click="removeBrand">×</i></li>
+            <li class="with-x" v-show="SearchParams.categoryName">{{SearchParams.categoryName}}<i @click="remove">×</i></li>
+            <li class="with-x" v-show="SearchParams.keyword">{{SearchParams.keyword}}<i @click="removeKeyword">×</i></li>
+            <li class="with-x" v-show="SearchParams.trademark">{{SearchParams.trademark.split(':')[1]}}<i @click="removeBrand">×</i></li>
           </ul>
         </div>
 
         <!--selector-->
-        <SearchSelector @getBrand="getBrand" />
+        <SearchSelector @getBrand="getBrand"/>
 
         <!--details-->
         <div class="details clearfix">
@@ -48,10 +48,10 @@
           </div>
           <div class="goods-list">
             <ul class="yui3-g">
-              <li class="yui3-u-1-5" v-for="good in SearchData.goodsList" :key="good.id">
+              <li class="yui3-u-1-5" v-for="good in dataList.goodsList" :key="good.id">
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a><img :src="good.defaultImg" style="width:215px;height:215px"/></a>
+                    <a href="item.html" target="_blank"><img :src="good.defaultImg" /></a>
                   </div>
                   <div class="price">
                     <strong>
@@ -66,7 +66,7 @@
                     <i class="command">已有<span>{{good.id**3}}</span>人评价</i>
                   </div>
                   <div class="operate">
-                    <a href="success-cart.html" target="_blank" class="sui-btn btn-bordered btn-danger">加入购物车</a>
+                    <a class="sui-btn btn-bordered btn-danger">加入购物车</a>
                     <a href="javascript:void(0);" class="sui-btn btn-bordered">收藏</a>
                   </div>
                 </div>
@@ -113,12 +113,9 @@ import { mapState } from 'vuex';
   import SearchSelector from './SearchSelector/SearchSelector'
   export default {
     name: 'Search',
-    components: {
-      SearchSelector
-    },
     data() {
       return {
-        SearchList: {
+        SearchParams:{
         "category1Id": "", //一级分类的ID
         "category2Id": "",//二级分类的ID
         "category3Id": "",//三级分类的ID
@@ -135,49 +132,53 @@ import { mapState } from 'vuex';
     methods: {
       getGoods() {
         let {categoryName, category1Id, category2Id, category3Id} = this.$route.query;
-        this.SearchList.categoryName = categoryName;
-        this.SearchList.category1Id = category1Id;
-        this.SearchList.category2Id = category2Id;
-        this.SearchList.category3Id = category3Id;
-        this.SearchList.keyword = this.$route.params.keyword;
-        this.$store.dispatch('getList', this.SearchList);
+        console.log(categoryName, category1Id, category2Id, category3Id);
+        this.SearchParams.keyword = this.$route.params.keyword;
+        this.SearchParams.categoryName = categoryName;
+        this.SearchParams.category1Id = category1Id;
+        this.SearchParams.category2Id = category2Id;
+        this.SearchParams.category3Id = category3Id;
+        this.$store.dispatch('getSearchList', this.SearchParams);
       },
       remove() {
-        this.SearchList.categoryName = '';
+        this.SearchParams.categoryName = '';
         this.$router.push({
           name: 'search',
-          params: this.$route.query
+          params: this.$route.params
         })
       },
       removeKeyword() {
-        this.SearchList.keyword = '';
-        this.$bus.$emit('keyWord', '');
+        this.SearchParams.keyword = '';
+        this.$bus.$emit('keyword', '');
         this.$router.push({
           name: 'search',
           query: this.$route.query
         })
       },
       removeBrand() {
-        this.SearchList.trademark = '';
+        this.SearchParams.trademark = '';
         this.getGoods();
       },
       getBrand({tmId, tmName}) {
-        this.SearchList.trademark = `${tmId}:${tmName}`;
+        this.SearchParams.trademark = `${tmId}:${tmName}`;
         this.getGoods();
       }
     },
     mounted() {
       this.getGoods();
     },
-    computed: {
-      ...mapState({
-        SearchData: state => state.search.SearchData
-      })
-    },
     watch: {
       $route() {
         this.getGoods();
       }
+    },
+    computed: {
+      ...mapState({
+        dataList: state => state.search.SearchList
+      })
+    },
+    components: {
+      SearchSelector
     }
   }
 </script>

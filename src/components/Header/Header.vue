@@ -50,8 +50,8 @@ export default {
     }
   },
   mounted() {
-    this.$bus.$on('keyWord', (keyWord) => {
-      this.keyWord = keyWord;
+    this.$bus.$on('keyword', (keyword) => {
+      this.keyWord = keyword;
     })
   },
   methods: {
