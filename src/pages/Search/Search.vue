@@ -63,33 +63,14 @@
             </ul>
           </div>
           <div class="fr page">
-            <div class="sui-pagination clearfix">
-              <ul>
-                <li class="prev disabled">
-                  <a href="#">«上一页</a>
-                </li>
-                <li class="active">
-                  <a href="#">1</a>
-                </li>
-                <li>
-                  <a href="#">2</a>
-                </li>
-                <li>
-                  <a href="#">3</a>
-                </li>
-                <li>
-                  <a href="#">4</a>
-                </li>
-                <li>
-                  <a href="#">5</a>
-                </li>
-                <li class="dotted"><span>...</span></li>
-                <li class="next">
-                  <a href="#">下一页»</a>
-                </li>
-              </ul>
-              <div><span>共10页&nbsp;</span></div>
-            </div>
+            <Pagination 
+            :total="total"
+            :current="SearchParams.pageNo"
+            :limit="SearchParams.pageSize"
+            :pageCount="5"
+            @getCurrent="getCurrent"
+            @getLimit="getLimit"
+            ></Pagination>
           </div>
         </div>
       </div>
@@ -114,11 +95,20 @@ import { mapState } from 'vuex';
         "trademark": "",//品牌需要携带搜索条件
         "order": "1:desc",//排序需要携带的搜索条件   1:综合 2:价格  asc:升序  desc:降序    默认初始值:1:desc
         "pageNo": 1,//分页器当前页码
-        "pageSize": 10,//一页展示几条数据
+        "pageSize": 3,//一页展示几条数据
 }
       }
     },
     methods: {
+      getCurrent(current) {
+        this.SearchParams.pageNo = current;
+        this.getGoods();
+      },
+      getLimit(limit) {
+        this.SearchParams.pageNo = 1;
+        this.SearchParams.pageSize = limit;
+        this.getGoods();
+      },
       // 封装发请求携带参数
       getGoods() {
         let {categoryName, category1Id, category2Id, category3Id} = this.$route.query;
@@ -193,7 +183,8 @@ import { mapState } from 'vuex';
     },
     computed: {
       ...mapState({
-        dataList: state => state.search.dataList
+        dataList: state => state.search.dataList,
+        total: state => state.search.dataList.total
       }),
       isOne() {
         return this.SearchParams.order.includes(1)

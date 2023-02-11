@@ -49,7 +49,6 @@ export default {
           end = pageCount;
         } 
         if(end > totalPage) {
-          console.log(222);
           end = totalPage;
           start = totalPage - pageCount + 1;
         }
@@ -92,7 +91,7 @@ export default {
     }
   }
   .select {
-    width: 100px;
+    width: 80px;
     height: 26px;
     text-align: center;
     margin-left: 20px;
