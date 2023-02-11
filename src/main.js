@@ -15,7 +15,6 @@ import store from './store';
 import router from './router';
 
 Vue.component(Header.name, Header);
-
 Vue.component(Footer.name, Footer);
 Vue.component(TypeNav.name, TypeNav);
 Vue.component(Pagination.name, Pagination);

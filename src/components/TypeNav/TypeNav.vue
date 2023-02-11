@@ -81,6 +81,7 @@ export default {
     }
   },
   mounted() {
+    this.$store.dispatch('TypeNav');
     if(this.$route.path !== '/home')
     this.flag = false;
   },

@@ -14,7 +14,7 @@
             <li class="with-x" v-show="SearchParams.categoryName" @click="remove">{{SearchParams.categoryName}}<i>×</i></li>
             <li class="with-x" v-show="SearchParams.keyword" @click="removeKeyword">{{SearchParams.keyword}}<i>×</i></li>
             <li class="with-x" v-show="SearchParams.trademark" @click="removeBrand">{{SearchParams.trademark.split(':')[1]}}<i>×</i></li>
-            <li class="with-x" v-for="(type, index) in SearchParams.props" :key="index" @click="removeProps(index)">{{type.split(':')[1]}}<i>×</i></li>
+            <li class="with-x" v-for="(type, index) in  SearchParams.props" :key="index" @click="removeType(index)">{{type.split(':')[1]}}<i>×</i></li>
           </ul>
         </div>
 
@@ -26,11 +26,11 @@
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li :class="{active: isOne}" @click="changeOrder(1)">
-                  <a>综合<span class="iconfont" v-show="isOne" :class="{'icon-jiantou_xiangxia': !isAsc, 'icon-jiantou_xiangshang': isAsc}"></span></a>
+                <li :class="{active: isOne}" @click="changeArow(1)">
+                  <a href="#">综合<span class="iconfont" v-show="isOne" :class="{'icon-jiantou_xiangxia': isDesc, 'icon-jiantou_xiangshang': isAsc}"></span></a>
                 </li>
-                <li :class="{active: isTwo}" @click="changeOrder(2)">
-                  <a>价格<span class="iconfont" v-show="isTwo" :class="{'icon-jiantou_xiangxia': !isAsc, 'icon-jiantou_xiangshang': isAsc}"></span></a>
+                <li :class="{active: isTwo}" @click="changeArow(2)">
+                  <a href="#">价格<span class="iconfont" v-show="isTwo" :class="{'icon-jiantou_xiangxia': isDesc, 'icon-jiantou_xiangshang': isAsc}"></span></a>
                 </li>
               </ul>
             </div>
@@ -63,11 +63,7 @@
             </ul>
           </div>
           <div class="fr page">
-            <Pagination 
-            :total="total"
-            :current="SearchParams.pageNo"
-            :limit="SearchParams.pageSize"
-            :pageCount="5"
+            <Pagination :total="total" :limit="SearchParams.pageSize" :pageCount="5" :current="SearchParams.pageNo"
             @getCurrent="getCurrent"
             @getLimit="getLimit"
             ></Pagination>
@@ -105,8 +101,24 @@ import { mapState } from 'vuex';
         this.getGoods();
       },
       getLimit(limit) {
-        this.SearchParams.pageNo = 1;
         this.SearchParams.pageSize = limit;
+        this.SearchParams.pageNo = 1;
+        this.getGoods();
+      },
+      changeArow(active) {
+        let OriginActive = this.SearchParams.order.split(':')[0];
+        let OriginSort = this.SearchParams.order.split(':')[1];
+        let str = '';
+        if(active == OriginActive) {
+          str = `${active}:${OriginSort == 'desc' ? 'asc' : 'desc'}`;
+        } else {
+          str = `${active}:desc`;
+        }
+        this.SearchParams.order = str;
+        this.getGoods();
+      },
+      removeType(index) {
+        this.SearchParams.props.splice(index, 1);
         this.getGoods();
       },
       // 封装发请求携带参数
@@ -127,11 +139,8 @@ import { mapState } from 'vuex';
       },
       // 获得手机型号
       getPhoneType({attrId, attrName}, attrValue) {
-        let str = `${attrId}:${attrValue}:${attrName}`;
-        if(!this.SearchParams.props.includes(str)) {
-          this.SearchParams.props.push(str);
-          this.getGoods();
-        }
+        this.SearchParams.props.push(`${attrId}:${attrValue}:${attrName}`);
+        this.getGoods();
       },
       // query参数取消面包屑回调
       remove() {
@@ -154,23 +163,6 @@ import { mapState } from 'vuex';
       removeBrand() {
         this.SearchParams.trademark = '';
         this.getGoods();
-      },
-      // 取消平台属性的面包屑的回调
-      removeProps(index) {
-        this.SearchParams.props.splice(index, 1);
-        this.getGoods();
-      },
-      changeOrder(active) {
-        let OriginActive = this.SearchParams.order.split(':')[0];
-        let OriginSort = this.SearchParams.order.split(':')[1];
-        let str = '';
-        if(OriginActive == active) {
-          str = `${active}:${OriginSort == 'desc' ? 'asc' : 'desc'}`
-        } else {
-          str = `${active}:desc`;
-        }
-        this.SearchParams.order = str;
-        this.getGoods();
       }
     },
     mounted() {
@@ -187,13 +179,16 @@ import { mapState } from 'vuex';
         total: state => state.search.dataList.total
       }),
       isOne() {
-        return this.SearchParams.order.includes(1)
+        return this.SearchParams.order.includes(1);
       },
       isTwo() {
-        return this.SearchParams.order.includes(2)
+        return this.SearchParams.order.includes(2);
+      },
+      isDesc() {
+        return this.SearchParams.order.includes('desc');
       },
       isAsc() {
-        return this.SearchParams.order.includes('asc')
+        return this.SearchParams.order.includes('asc');
       }
     },
     components: {
