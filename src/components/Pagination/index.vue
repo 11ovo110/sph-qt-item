@@ -1,20 +1,19 @@
 <template>
   <div class="pagination">
-    <h1>start: {{StartEnd.start}} -- end: {{StartEnd.end}}</h1>
-    <button>上一页</button>
-    <button v-show="StartEnd.start>1">1</button>
+    <button @click="$emit('getCurrent', current-1)" :disabled="current==1">上一页</button>
+    <button v-show="StartEnd.start>1" @click="$emit('getCurrent', 1)">1</button>
     <button v-show="StartEnd.start>2">···</button>
-    <button :class="{active: current==page}" v-for="(page, index) in StartEnd.end" :key="index" v-if="page >= StartEnd.start">{{page}}</button>
+    <button :class="{active: current==page}" @click="$emit('getCurrent', page)" v-for="(page, index) in StartEnd.end" :key="index" v-if="page >= StartEnd.start">{{page}}</button>
 
     <button v-show="StartEnd.end<totalPage-1">···</button>
-    <button v-show="StartEnd.end<totalPage">{{totalPage}}</button>
-    <button>下一页</button>
+    <button v-show="StartEnd.end<totalPage" @click="$emit('getCurrent', totalPage)">{{totalPage}}</button>
+    <button @click="$emit('getCurrent', current+1)" :disabled="current==totalPage">下一页</button>
 
-    <select class="select">
-      <option>3/页</option>
-      <option>5/页</option>
-      <option>7/页</option>
-      <option>9/页</option>
+    <select class="select" v-model="size" @change="$emit('getLimit', size)">
+      <option :value="3">3/页</option>
+      <option :value="5">5/页</option>
+      <option :value="7">7/页</option>
+      <option :value="9">9/页</option>
     </select>
 
     <button style="margin-left: 30px">共 {{ total }} 条</button>
@@ -25,6 +24,11 @@
 export default {
   name: "Pagination",
   props: ["total", "limit", "current", "pageCount"],
+  data() {
+    return {
+      size: 3
+    }
+  },
   computed: {
     totalPage() {
       return Math.ceil(this.total / this.limit);
