@@ -26,11 +26,11 @@
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li class="active">
-                  <a>综合<span class="iconfont icon-jiantou_xiangxia"></span></a>
+                <li :class="{active: isOne}" @click="changeOrder(1)">
+                  <a>综合<span class="iconfont" v-show="isOne" :class="{'icon-jiantou_xiangxia': !isAsc, 'icon-jiantou_xiangshang': isAsc}"></span></a>
                 </li>
-                <li>
-                  <a>价格<span class="iconfont icon-jiantou_xiangxia"></span></a>
+                <li :class="{active: isTwo}" @click="changeOrder(2)">
+                  <a>价格<span class="iconfont" v-show="isTwo" :class="{'icon-jiantou_xiangxia': !isAsc, 'icon-jiantou_xiangshang': isAsc}"></span></a>
                 </li>
               </ul>
             </div>
@@ -169,6 +169,18 @@ import { mapState } from 'vuex';
       removeProps(index) {
         this.SearchParams.props.splice(index, 1);
         this.getGoods();
+      },
+      changeOrder(active) {
+        let OriginActive = this.SearchParams.order.split(':')[0];
+        let OriginSort = this.SearchParams.order.split(':')[1];
+        let str = '';
+        if(OriginActive == active) {
+          str = `${active}:${OriginSort == 'desc' ? 'asc' : 'desc'}`
+        } else {
+          str = `${active}:desc`;
+        }
+        this.SearchParams.order = str;
+        this.getGoods();
       }
     },
     mounted() {
@@ -182,7 +194,16 @@ import { mapState } from 'vuex';
     computed: {
       ...mapState({
         dataList: state => state.search.dataList
-      })
+      }),
+      isOne() {
+        return this.SearchParams.order.includes(1)
+      },
+      isTwo() {
+        return this.SearchParams.order.includes(2)
+      },
+      isAsc() {
+        return this.SearchParams.order.includes('asc')
+      }
     },
     components: {
       SearchSelector
