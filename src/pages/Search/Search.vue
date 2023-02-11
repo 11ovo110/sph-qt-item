@@ -14,6 +14,7 @@
             <li class="with-x" v-show="SearchParams.categoryName" @click="remove">{{SearchParams.categoryName}}<i>×</i></li>
             <li class="with-x" v-show="SearchParams.keyword" @click="removeKeyword">{{SearchParams.keyword}}<i>×</i></li>
             <li class="with-x" v-show="SearchParams.trademark" @click="removeBrand">{{SearchParams.trademark.split(':')[1]}}<i>×</i></li>
+            <li class="with-x" v-for="(type, index) in SearchParams.props" :key="index" @click="removeProps(index)">{{type.split(':')[1]}}<i>×</i></li>
           </ul>
         </div>
 
@@ -26,22 +27,10 @@
             <div class="navbar-inner filter">
               <ul class="sui-nav">
                 <li class="active">
-                  <a href="#">综合</a>
+                  <a>综合<span class="iconfont icon-jiantou_xiangxia"></span></a>
                 </li>
                 <li>
-                  <a href="#">销量</a>
-                </li>
-                <li>
-                  <a href="#">新品</a>
-                </li>
-                <li>
-                  <a href="#">评价</a>
-                </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                  <a>价格<span class="iconfont icon-jiantou_xiangxia"></span></a>
                 </li>
               </ul>
             </div>
@@ -147,9 +136,12 @@ import { mapState } from 'vuex';
         this.getGoods();
       },
       // 获得手机型号
-      getPhoneType(PhoneType) {
-        this.SearchParams.props = [`${PhoneType}`];
-        this.getGoods();
+      getPhoneType({attrId, attrName}, attrValue) {
+        let str = `${attrId}:${attrValue}:${attrName}`;
+        if(!this.SearchParams.props.includes(str)) {
+          this.SearchParams.props.push(str);
+          this.getGoods();
+        }
       },
       // query参数取消面包屑回调
       remove() {
@@ -171,6 +163,11 @@ import { mapState } from 'vuex';
       // 取消品牌面包屑回调
       removeBrand() {
         this.SearchParams.trademark = '';
+        this.getGoods();
+      },
+      // 取消平台属性的面包屑的回调
+      removeProps(index) {
+        this.SearchParams.props.splice(index, 1);
         this.getGoods();
       }
     },

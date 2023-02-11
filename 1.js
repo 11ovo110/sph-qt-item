@@ -5,7 +5,7 @@ function clone(obj) {
     if(obj.hasOwnProperty(attr)) {
       res[attr] = clone(obj[attr]);
     }
-  } 
+  }
   return res;
 }
 
@@ -22,4 +22,3 @@ let a = clone(obj1);
 a.hobby.a = 2;
 console.log(a);
 console.log(obj1);
-

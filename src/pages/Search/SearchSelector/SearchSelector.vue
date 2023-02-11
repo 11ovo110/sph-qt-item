@@ -16,7 +16,7 @@
       <div class="fl key">{{attr.attrName}}</div>
       <div class="fl value">
         <ul class="type-list">
-          <li v-for="(attrValue, index) in attr.attrValueList" :key="index" @click="sendPhoneType(attrValue)">
+          <li v-for="(attrValue, index) in attr.attrValueList" :key="index" @click="sendPhoneType(attr,attrValue)">
             <a>{{attrValue}}</a>
           </li>
         </ul>
@@ -34,8 +34,8 @@ import { mapState } from 'vuex'
       sendBrand(brand) {
         this.$emit('getBrand', brand);
       },
-      sendPhoneType(attrValue) {
-        this.$emit('getPhoneType', attrValue);
+      sendPhoneType(attr, attrValue) {
+        this.$emit('getPhoneType', attr, attrValue);
       }
     },
     computed: {
