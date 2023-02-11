@@ -1,17 +1,13 @@
 <template>
   <div class="pagination">
+    <h1>start: {{StartEnd.start}} -- end: {{StartEnd.end}}</h1>
     <button>上一页</button>
-    <button>1</button>
-    <button>···</button>
+    <button v-show="StartEnd.start>1">1</button>
+    <button v-show="StartEnd.start>2">···</button>
+    <button :class="{active: current==page}" v-for="(page, index) in StartEnd.end" :key="index" v-if="page >= StartEnd.start">{{page}}</button>
 
-    <button>3</button>
-    <button>4</button>
-    <button class="active">5</button>
-    <button>6</button>
-    <button>7</button>
-
-    <button>···</button>
-    <button>9</button>
+    <button v-show="StartEnd.end<totalPage-1">···</button>
+    <button v-show="StartEnd.end<totalPage">{{totalPage}}</button>
     <button>下一页</button>
 
     <select class="select">
@@ -21,13 +17,42 @@
       <option>9/页</option>
     </select>
 
-    <button style="margin-left: 30px">共 60 条</button>
+    <button style="margin-left: 30px">共 {{ total }} 条</button>
   </div>
 </template>
 
 <script>
 export default {
   name: "Pagination",
+  props: ["total", "limit", "current", "pageCount"],
+  computed: {
+    totalPage() {
+      return Math.ceil(this.total / this.limit);
+    },
+    StartEnd() {
+      let { pageCount, totalPage, current } = this;
+      let start = 0,
+        end = 0;
+      if (pageCount > totalPage) {
+        start = 1;
+        end = totalPage;
+      } else {
+        start = current - Math.floor(pageCount / 2);
+        end = current + Math.floor(pageCount / 2);
+        if(start < 1) {
+          console.log(11);
+          start = 1;
+          end = pageCount;
+        } 
+        if(end > totalPage) {
+          console.log(222);
+          end = totalPage;
+          start = totalPage - pageCount + 1;
+        }
+      }
+      return {start, end};
+    },
+  },
 };
 </script>
 

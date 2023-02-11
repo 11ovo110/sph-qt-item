@@ -47,7 +47,9 @@
       "vue/multi-word-component-names": 0,
       "vue/valid-v-for": 0,
       "vue/no-unused-vars": 0,
-      "no-unused-vars": 0
+      "no-unused-vars": 0,
+      "no-empty": 0,
+      "vue/no-use-v-if-with-v-for": 0
     }
   },
   "browserslist": [
