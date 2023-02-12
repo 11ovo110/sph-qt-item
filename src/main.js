@@ -21,8 +21,7 @@ Vue.component(TypeNav.name, TypeNav);
 Vue.component('Swiper', Swiper);
 Vue.component('SwiperSlide', SwiperSlide);
 
-// 全局注册分页器
-Vue.component(Pagination.name ,Pagination);
+Vue.component(Pagination.name, Pagination);
 
 new Vue({
   render: h => h(App),

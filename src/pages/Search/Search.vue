@@ -102,22 +102,17 @@ import { mapState } from 'vuex';
         this.SearchParams.pageNo = 1;
         this.getGoods();
       },
-      // 改变排序方式
+      // 改变排序的回调
       changeSort(active) {
         let OriginActive = this.SearchParams.order.split(':')[0];
         let OriginSort = this.SearchParams.order.split(':')[1];
-        let str =  '';
+        let str = '';
         if(active == OriginActive) {
           str = `${active}:${OriginSort == 'desc' ? 'asc' : 'desc'}`;
         } else {
           str = `${active}:desc`;
         }
         this.SearchParams.order = str;
-        this.getGoods();
-      },
-      // 取消平台属性面包屑的回调
-      removeType(index) {
-        this.SearchParams.props.splice(index, 1);
         this.getGoods();
       },
       // 封装发请求携带参数
@@ -136,9 +131,14 @@ import { mapState } from 'vuex';
         this.SearchParams.trademark = `${tmId}:${tmName}`;
         this.getGoods();
       },
+      removeType(index) {
+        this.SearchParams.props.splice(index, 1);
+        this.getGoods();
+      },
       // 获得手机型号
       getPhoneType({attrId, attrName}, attrValue) {
         let str = `${attrId}:${attrValue}:${attrName}`;
+        if(this.SearchParams.props.includes(str)) return;
         this.SearchParams.props.push(str);
         this.getGoods();
       },
@@ -184,12 +184,12 @@ import { mapState } from 'vuex';
       isTwo() {
         return this.SearchParams.order.includes(2);
       },
+      isAsc() {
+        return this.SearchParams.order.includes('asc');
+      },
       isDesc() {
         return this.SearchParams.order.includes('desc');
       },
-      isAsc() {
-        return this.SearchParams.order.includes('asc');
-      }
     },
     components: {
       SearchSelector
