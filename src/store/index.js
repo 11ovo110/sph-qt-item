@@ -1,8 +1,8 @@
-import Vue from 'vue';
 import Vuex from 'vuex';
+import Vue from 'vue';
 
-import home from '@/store/modules/home.js';
-import search from '@/store/modules/search.js';
+import home from './modules/home'
+import search from './modules/search'
 
 Vue.use(Vuex);
 

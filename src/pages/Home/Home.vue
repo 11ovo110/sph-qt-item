@@ -5,7 +5,7 @@
     <recommend></recommend>
     <rank></rank>
     <like></like>
-    <floor v-for="(floor, index) in floorArr" :f="floor" :key="index"></floor>
+    <floor v-for="floor in floorArr" :key="floor.id" :floor="floor"></floor>
     <brand></brand>
   </div>
 </template>
@@ -19,16 +19,18 @@ import List from './List/List.vue'
 import Rank from './Rank/Rank.vue'
 import Recommend from './Recommend/Recommend.vue'
 export default {
-  components: { List, Recommend, Rank, Like, Floor, Brand },
+  components: { Recommend, List, Rank, Like, Floor, Brand },
   name: 'Home',
   mounted() {
     this.$store.dispatch('getFloor');
   },
   computed: {
     ...mapState({
-      floorArr: state => state.home.floorArr
+        floorArr: state => state.home.floorArr
     })
+
   },
+
 }
 </script>
 

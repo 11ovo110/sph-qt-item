@@ -1,12 +1,12 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
-import Home from '@/pages/Home/Home.vue';
-import Register from '@/pages/Register/Register.vue';
-import Login from '@/pages/Login/Login.vue';
-import Search from '@/pages/Search/Search.vue';
-
 Vue.use(VueRouter);
+
+import Home from '@/pages/Home/Home.vue';
+import Login from '@/pages/Login/Login.vue';
+import Register from '@/pages/Register/Register.vue';
+import Search from '@/pages/Search';
 
 let push = VueRouter.prototype.push;
 let replace = VueRouter.prototype.replace;
@@ -25,17 +25,17 @@ export default new VueRouter({
     {
       path: '/home',
       component: Home,
-      meta: {flag: true},
+      meta: {flag: true}
     },
     {
       path: '/login',
       component: Login,
-      meta: {flag: false},
+      meta: {flag: false}
     },
     {
       path: '/register',
       component: Register,
-      meta: {flag: false},
+      meta: {flag: false}
     },
     {
       path: '/search/:keyword?',
@@ -49,3 +49,6 @@ export default new VueRouter({
     }
   ]
 })
+
+
+

@@ -1,13 +1,13 @@
 <template>
   <div class="pagination">
-    <button @click="$emit('getCurrent', current - 1)" :disabled="current==1">上一页</button>
+    <button @click="$emit('getCurrent', current - 1)" :disabled="StartEnd.start==1">上一页</button>
     <button @click="$emit('getCurrent', 1)" v-show="StartEnd.start > 1">1</button>
     <button v-show="StartEnd.start > 2">···</button>
-    <button @click="$emit('getCurrent', page)" :class="{active: page == current}" v-for="(page, index) in StartEnd.end" :key="index" v-if="page >= StartEnd.start">{{page}}</button>
+    <button @click="$emit('getCurrent', page)" :class="{'active': page==current}" v-for="(page, index) in StartEnd.end" :key="index" v-show="page >= StartEnd.start">{{page}}</button>
     <button v-show="StartEnd.end < totalPage - 1">···</button>
     <button @click="$emit('getCurrent', totalPage)" v-show="StartEnd.end < totalPage">{{totalPage}}</button>
-    <button @click="$emit('getCurrent', current + 1)" :disabled="current==totalPage">下一页</button>
-    <select v-model="size" @change="$emit('getLimit', size)" class="select">
+    <button @click="$emit('getCurrent', current + 1)" :disabled="StartEnd.end==totalPage">下一页</button>
+    <select v-model="size" @change="$emit('getLimit', size)">
       <option value="3">3/页</option>
       <option value="5">5/页</option>
       <option value="7">7/页</option>
@@ -20,7 +20,7 @@
 <script>
   export default {
     name: "Pagination",
-    props: ['current', 'total', 'limit', 'pageCount'],
+    props: ['current', 'pageCount', 'limit', 'total'],
     data() {
       return {
         size: 3
@@ -31,8 +31,8 @@
         return Math.ceil(this.total / this.limit);
       },
       StartEnd() {
-        let {current, pageCount, totalPage} = this;
         let start = 0, end = 0;
+        let {current, pageCount, totalPage} = this;
         if(pageCount > totalPage) {
           start = 1;
           end = totalPage;
@@ -42,7 +42,7 @@
           if(start < 1) {
             start = 1;
             end = pageCount;
-          }
+          } 
           if(end > totalPage) {
             end = totalPage;
             start = totalPage - pageCount + 1;
@@ -89,7 +89,6 @@
       width: 80px;
       height: 23px;
       border: 1px solid #ccc;
-      text-align: center;
       outline: none;
     }
   }

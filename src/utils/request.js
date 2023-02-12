@@ -1,8 +1,7 @@
-import axios from "axios";
-import nprogress from "nprogress";
-import 'nprogress/nprogress.css';
+import axios from 'axios';
 
-nprogress.configure({ showSpinner: false });  // 取消显示小圈圈
+import nprogress from 'nprogress';
+import 'nprogress/nprogress.css';
 
 let request = axios.create({
   baseURL: '/api',

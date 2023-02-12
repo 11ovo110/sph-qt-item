@@ -11,15 +11,15 @@
             </li>
           </ul>
           <ul class="fl sui-tag">
-            <li class="with-x" v-show="SearchParams.categoryName" @click="remove">{{SearchParams.categoryName}}<i>×</i></li>
-            <li class="with-x" v-show="SearchParams.keyword" @click="removeKeyword">{{SearchParams.keyword}}<i>×</i></li>
-            <li class="with-x" v-show="SearchParams.trademark" @click="removeBrand">{{SearchParams.trademark.split(':')[1]}}<i>×</i></li>
-            <li class="with-x" v-for="(type, index) in SearchParams.props" :key="index" @click="removeType(index)">{{type.split(':')[1]}}<i>×</i></li>
+            <li class="with-x" v-show="SearchParams.categoryName">{{SearchParams.categoryName}}<i @click="removeQuery">×</i></li>
+            <li class="with-x" v-show="SearchParams.keyword">{{SearchParams.keyword}}<i @click="removeParams">×</i></li>
+            <li class="with-x" v-for="(type, index) in SearchParams.props" :key="index">{{type.split(':')[1]}}<i @click="removeType(index)">×</i></li>
+            <li class="with-x" v-show="SearchParams.trademark">{{SearchParams.trademark.split(":")[1]}}<i @click="removeBrand">×</i></li>
           </ul>
         </div>
 
         <!--selector-->
-        <SearchSelector @getBrand="getBrand" @getPhoneType="getPhoneType"/>
+        <SearchSelector @getBrand="getBrand" @getType="getType"/>
 
         <!--details-->
         <div class="details clearfix">
@@ -37,10 +37,10 @@
           </div>
           <div class="goods-list">
             <ul class="yui3-g">
-              <li class="yui3-u-1-5" v-for="good in dataList.goodsList" :key="good.id">
+              <li class="yui3-u-1-5" v-for="good in goodsList" :key="good.id">
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a><img :src="good.defaultImg" style="width:215px;height:215px"/></a>
+                    <a><img :src="good.defaultImg" /></a>
                   </div>
                   <div class="price">
                     <strong>
@@ -63,7 +63,7 @@
             </ul>
           </div>
           <div class="fr page">
-            <Pagination :total="total" :current="SearchParams.pageNo" :limit="SearchParams.pageSize" :pageCount="5" @getCurrent="getCurrent" @getLimit="getLimit"></Pagination>
+           <Pagination :total="total" :current="SearchParams.pageNo" :limit="SearchParams.pageSize" :pageCount="5" @getCurrent="getCurrent" @getLimit="getLimit"></Pagination>
           </div>
         </div>
       </div>
@@ -92,6 +92,9 @@ import { mapState } from 'vuex';
 }
       }
     },
+    mounted() {
+      this.getGoods();
+    },
     methods: {
       getCurrent(current) {
         this.SearchParams.pageNo = current;
@@ -102,12 +105,12 @@ import { mapState } from 'vuex';
         this.SearchParams.pageNo = 1;
         this.getGoods();
       },
-      // 改变排序的回调
       changeSort(active) {
-        let OriginActive = this.SearchParams.order.split(':')[0];
+        let OriginAcive = this.SearchParams.order.split(":")[0];
         let OriginSort = this.SearchParams.order.split(':')[1];
         let str = '';
-        if(active == OriginActive) {
+        if(OriginAcive == active) {
+          console.log(111);
           str = `${active}:${OriginSort == 'desc' ? 'asc' : 'desc'}`;
         } else {
           str = `${active}:desc`;
@@ -115,43 +118,33 @@ import { mapState } from 'vuex';
         this.SearchParams.order = str;
         this.getGoods();
       },
-      // 封装发请求携带参数
-      getGoods() {
-        let {categoryName, category1Id, category2Id, category3Id} = this.$route.query;
-        this.SearchParams.categoryName = categoryName;
-        this.SearchParams.category1Id = category1Id;
-        this.SearchParams.category2Id = category2Id;
-        this.SearchParams.category3Id = category3Id;
-        this.SearchParams.keyword = this.$route.params.keyword;
-        this.$store.dispatch('getDateList', this.SearchParams);
-      },
-      // 获得品牌名称
-      getBrand({tmId, tmName}) {
-        console.log(tmId);
-        this.SearchParams.trademark = `${tmId}:${tmName}`;
-        this.getGoods();
-      },
       removeType(index) {
         this.SearchParams.props.splice(index, 1);
         this.getGoods();
       },
-      // 获得手机型号
-      getPhoneType({attrId, attrName}, attrValue) {
-        let str = `${attrId}:${attrValue}:${attrName}`;
-        if(this.SearchParams.props.includes(str)) return;
-        this.SearchParams.props.push(str);
+      removeBrand() {
+        this.SearchParams.trademark = '';
         this.getGoods();
       },
-      // query参数取消面包屑回调
-      remove() {
+      getBrand({tmId, tmName}) {
+        this.SearchParams.trademark = `${tmId}:${tmName}`;
+        this.getGoods();
+      },
+      getType({attrId, attrName}, attrValue) {
+        let str = `${attrId}:${attrValue}:${attrName}`;
+        if(!this.SearchParams.props.includes(str)) {
+          this.SearchParams.props.push(str);
+          this.getGoods();
+        }
+      },
+      removeQuery() {
         this.SearchParams.categoryName = '';
         this.$router.push({
           name: 'search',
           params: this.$route.params
         })
       },
-      // params参数取消面包屑回调
-      removeKeyword() {
+      removeParams() {
         this.SearchParams.keyword = '';
         this.$bus.$emit('keyword', '');
         this.$router.push({
@@ -159,23 +152,19 @@ import { mapState } from 'vuex';
           query: this.$route.query
         })
       },
-      // 取消品牌面包屑回调
-      removeBrand() {
-        this.SearchParams.trademark = '';
-        this.getGoods();
-      }
-    },
-    mounted() {
-      this.getGoods();
-    },
-    watch: {
-      $route() {
-      this.getGoods();
+      getGoods() {
+        let {categoryName, category1Id, category2Id, category3Id} = this.$route.query;
+        this.SearchParams.category1Id = category1Id;
+        this.SearchParams.category2Id = category2Id;
+        this.SearchParams.category3Id = category3Id;
+        this.SearchParams.categoryName = categoryName;
+        this.SearchParams.keyword = this.$route.params.keyword;
+        this.$store.dispatch('getDataList', this.SearchParams);
       }
     },
     computed: {
       ...mapState({
-        dataList: state => state.search.dataList,
+        goodsList: state => state.search.dataList.goodsList,
         total: state => state.search.dataList.total
       }),
       isOne() {
@@ -184,12 +173,17 @@ import { mapState } from 'vuex';
       isTwo() {
         return this.SearchParams.order.includes(2);
       },
-      isAsc() {
-        return this.SearchParams.order.includes('asc');
-      },
       isDesc() {
         return this.SearchParams.order.includes('desc');
       },
+      isAsc() {
+        return this.SearchParams.order.includes('asc');
+      },
+    },
+    watch: {
+      $route() {
+        this.getGoods();
+      }
     },
     components: {
       SearchSelector
