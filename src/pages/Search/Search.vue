@@ -14,7 +14,7 @@
             <li class="with-x" v-show="SearchParams.categoryName" @click="remove">{{SearchParams.categoryName}}<i>×</i></li>
             <li class="with-x" v-show="SearchParams.keyword" @click="removeKeyword">{{SearchParams.keyword}}<i>×</i></li>
             <li class="with-x" v-show="SearchParams.trademark" @click="removeBrand">{{SearchParams.trademark.split(':')[1]}}<i>×</i></li>
-            <li class="with-x" v-for="(type, index) in  SearchParams.props" :key="index" @click="removeType(index)">{{type.split(':')[1]}}<i>×</i></li>
+            <li class="with-x" v-for="(type, index) in SearchParams.props" :key="index" @click="removeType(index)">{{type.split(':')[1]}}<i>×</i></li>
           </ul>
         </div>
 
@@ -26,10 +26,10 @@
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li :class="{active: isOne}" @click="changeArow(1)">
+                <li :class="{active: isOne}" @click="changeSort(1)">
                   <a href="#">综合<span class="iconfont" v-show="isOne" :class="{'icon-jiantou_xiangxia': isDesc, 'icon-jiantou_xiangshang': isAsc}"></span></a>
                 </li>
-                <li :class="{active: isTwo}" @click="changeArow(2)">
+                <li :class="{active: isTwo}" @click="changeSort(2)">
                   <a href="#">价格<span class="iconfont" v-show="isTwo" :class="{'icon-jiantou_xiangxia': isDesc, 'icon-jiantou_xiangshang': isAsc}"></span></a>
                 </li>
               </ul>
@@ -63,10 +63,7 @@
             </ul>
           </div>
           <div class="fr page">
-            <Pagination :total="total" :limit="SearchParams.pageSize" :pageCount="5" :current="SearchParams.pageNo"
-            @getCurrent="getCurrent"
-            @getLimit="getLimit"
-            ></Pagination>
+            <Pagination :total="total" :current="SearchParams.pageNo" :limit="SearchParams.pageSize" :pageCount="5" @getCurrent="getCurrent" @getLimit="getLimit"></Pagination>
           </div>
         </div>
       </div>
@@ -105,10 +102,11 @@ import { mapState } from 'vuex';
         this.SearchParams.pageNo = 1;
         this.getGoods();
       },
-      changeArow(active) {
+      // 改变排序方式
+      changeSort(active) {
         let OriginActive = this.SearchParams.order.split(':')[0];
         let OriginSort = this.SearchParams.order.split(':')[1];
-        let str = '';
+        let str =  '';
         if(active == OriginActive) {
           str = `${active}:${OriginSort == 'desc' ? 'asc' : 'desc'}`;
         } else {
@@ -117,6 +115,7 @@ import { mapState } from 'vuex';
         this.SearchParams.order = str;
         this.getGoods();
       },
+      // 取消平台属性面包屑的回调
       removeType(index) {
         this.SearchParams.props.splice(index, 1);
         this.getGoods();
@@ -139,7 +138,8 @@ import { mapState } from 'vuex';
       },
       // 获得手机型号
       getPhoneType({attrId, attrName}, attrValue) {
-        this.SearchParams.props.push(`${attrId}:${attrValue}:${attrName}`);
+        let str = `${attrId}:${attrValue}:${attrName}`;
+        this.SearchParams.props.push(str);
         this.getGoods();
       },
       // query参数取消面包屑回调

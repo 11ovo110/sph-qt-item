@@ -1,18 +1,17 @@
-<!-- eslint-disable vue/no-use-v-if-with-v-for -->
 <template>
   <div class="pagination">
-    <button @click="$emit('getCurrent', current - 1)" :disabled="current==1">上一页</button>
-    <button @click="$emit('getCurrent', 1)" v-show="StartEnd.start > 1">1</button>
-    <button v-show="StartEnd.start>2">···</button>
-    <button @click="$emit('getCurrent', page)" :class="{active: page==current}" v-for="(page, index) in StartEnd.end" v-show="page >= StartEnd.start" :key="index">{{page}}</button>
-    <button v-show="StartEnd.end<totalPage-1">···</button>
-    <button @click="$emit('getCurrent', totalPage)" v-show="StartEnd.end<totalPage">{{this.totalPage}}</button>
-    <button @click="$emit('getCurrent', current + 1)" :disabled="current==totalPage">下一页</button>
-    <select v-model="size" @change="$emit('getLimit', size)" class="select">
-      <option :value="3">3/页</option>
-      <option :value="5">5/页</option>
-      <option :value="7">7/页</option>
-      <option :value="9">9/页</option>
+    <button :disabled="current==1" @click="$emit('getCurrent', current - 1)">上一页</button>
+    <button v-show="StartEnd.start > 1" @click="$emit('getCurrent', 1)">1</button>
+    <button v-show="StartEnd.start > 2">···</button>
+    <button v-for="(page, index) in StartEnd.end" :class="{active: page == current}" @click="$emit('getCurrent', page)" :key="index" v-if="page >= StartEnd.start">{{page}}</button>
+    <button v-show="StartEnd.end < totalPage - 1">···</button>
+    <button v-show="StartEnd.end < totalPage" @click="$emit('getCurrent', totalPage)">{{totalPage}}</button>
+    <button :disabled="current==totalPage" @click="$emit('getCurrent', current + 1)">下一页</button>
+    <select v-model="size" class="select" @change="$emit('getLimit', size)">
+      <option value="3">3/页</option>
+      <option value="5">5/页</option>
+      <option value="7">7/页</option>
+      <option value="9">9/页</option>
     </select>
     <button style="margin-left: 30px">共 {{ total }} 条</button>
   </div>
@@ -21,7 +20,7 @@
 <script>
   export default {
     name: "Pagination",
-    props: ['total', 'limit', 'pageCount', 'current'],
+    props: ['current', 'limit', 'pageCount', 'total'],
     data() {
       return {
         size: 3
@@ -29,17 +28,17 @@
     },
     computed: {
       totalPage() {
-        return Math.ceil(this.total / this.limit)
+        return Math.ceil(this.total / this.limit);
       },
       StartEnd() {
-        let start = 0, end = 0;
+        let start = 1,end = 1;
         let {pageCount, current, totalPage} = this;
         if(pageCount > totalPage) {
           start = 1;
           end = totalPage;
         } else {
-          start = current - Math.floor(pageCount / 2);
-          end = current + Math.floor(pageCount / 2);
+          start = current - 2;
+          end = current + 2;
           if(start < 1) {
             start = 1;
             end = pageCount;
@@ -88,11 +87,9 @@
     }
     .select {
       width: 80px;
-      height: 28px;
-      outline: none;
-      text-align: center;
-      margin-left: 20px;
+      height: 23px;
       border: 1px solid #ccc;
+      outline: none;
     }
   }
 </style>

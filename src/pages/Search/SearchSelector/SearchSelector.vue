@@ -35,7 +35,7 @@ import { mapState } from 'vuex'
         this.$emit('getBrand', brand);
       },
       sendPhoneType(attr, attrValue) {
-        this.$emit('getPhoneType',attr,  attrValue);
+        this.$emit('getPhoneType', attr, attrValue);
       }
     },
     computed: {
