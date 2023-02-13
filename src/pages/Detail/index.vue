@@ -35,7 +35,7 @@
                 </div>
                 <div class="remark">
                   <i>累计评价</i>
-                  <em>{{skuInfo.id**3}}</em>
+                  <em>{{skuInfo.id ** 3}}</em>
                 </div>
               </div>
               <div class="priceArea2">
@@ -63,9 +63,9 @@
           <div class="choose">
             <div class="chooseArea">
               <div class="choosed"></div>
-              <dl v-for="sale in SaleAttr" :key="sale.id">
+              <dl v-for="sale in saleAttr" :key="sale.id">
                 <dt class="title">{{sale.saleAttrName}}</dt>
-                <dd changepirce="0" @click="changeChecked(sale.spuSaleAttrValueList, value)" :class="{'active': value.isChecked==1}" v-for="value in sale.spuSaleAttrValueList" :key="value.id">{{value.saleAttrValueName}}</dd>
+                <dd changepirce="0" @click="changeChecked(sale.spuSaleAttrValueList, value)" :class="{active: value.isChecked == 1}" v-for="value in sale.spuSaleAttrValueList" :key="value.id">{{value.saleAttrValueName}}</dd>
               </dl>
             </div>
             <div class="cartWrap">
@@ -332,13 +332,8 @@ import { mapGetters } from 'vuex';
 
   export default {
     name: 'Detail',
-    data() {
-      return {
-        
-      }
-    },
     mounted() {
-      this.$store.dispatch('getGoodItem', this.$route.params.skuId);
+      this.$store.dispatch('getItemList', this.$route.params.skuId);
     },
     methods: {
       changeChecked(arr, item) {
@@ -347,7 +342,7 @@ import { mapGetters } from 'vuex';
       }
     },
     computed: {
-      ...mapGetters(['categoryView', 'SaleAttr', 'skuInfo'])
+      ...mapGetters(['categoryView', 'skuInfo', 'saleAttr'])
     },
     components: {
       ImageList,

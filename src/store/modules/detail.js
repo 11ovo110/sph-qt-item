@@ -1,35 +1,33 @@
-import { reqGoodItem } from "@/api";
+import { reqGoodItemList } from "@/api";
 
 const state = {
-  goodDetail: {}
-}
+  itemList: {}
+};
 
 const mutations = {
-  GETGOODITEM(state, goodDetail) {
-    state.goodDetail = goodDetail;
+  GETITEMLIST(state, data) {
+    state.itemList = data;
   }
-}
+};
 
 const actions = {
-  async getGoodItem({dispatch, getters, state, commit}, skuId) {
-    let result = await reqGoodItem(skuId);
+  async getItemList({ dispatch, getters, state, commit }, payload) {
+    let result = await reqGoodItemList(payload);
     if(result.code == 200)
-    commit('GETGOODITEM', result.data)
-  }
-}
+    commit("GETITEMLIST", result.data);
+  },
+};
 
-// getters：类似于组件的computed 计算属性
-// getters在项目中一般用于简化state的数据，可以让
 const getters = {
   categoryView(state) {
-    return state.goodDetail.categoryView || {};
-  },
-  SaleAttr(state) {
-    return state.goodDetail.spuSaleAttrList || {};
+    return state.itemList.categoryView || {};
   },
   skuInfo(state) {
-    return state.goodDetail.skuInfo || {};
+    return state.itemList.skuInfo || {};
+  },
+  saleAttr(state) {
+    return state.itemList.spuSaleAttrList || {};
   }
-}
+};
 
-export default {state, mutations, actions, getters};
+export default { state, mutations, actions, getters };

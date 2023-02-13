@@ -27,12 +27,12 @@ export const routes = [
     name: 'search'
   },
   {
-    path: '/',
-    redirect: '/home'
-  },
-  {
     path: '/detail/:skuId',
     component: Detail,
     meta: {flag: true}
+  },
+  {
+    path: '/',
+    redirect: '/home'
   }
 ]
