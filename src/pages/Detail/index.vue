@@ -63,9 +63,9 @@
           <div class="choose">
             <div class="chooseArea">
               <div class="choosed"></div>
-              <dl v-for="sale in saleAttr" :key="sale.id">
+              <dl v-for="sale in saleAttr" :key="sale.value">
                 <dt class="title">{{sale.saleAttrName}}</dt>
-                <dd changepirce="0" :class="{'active': value.isChecked == 1}" @click="changeChecked(sale.spuSaleAttrValueList, value)" v-for="value in sale.spuSaleAttrValueList" :key="value.id">{{value.saleAttrValueName}}</dd>
+                <dd changepirce="0" v-for="value in sale.spuSaleAttrValueList" @click="changeChecked(sale.spuSaleAttrValueList, value)" :key="value.id" :class="{'active': value.isChecked == 1}">{{value.saleAttrValueName}}</dd>
               </dl>
             </div>
             <div class="cartWrap">
@@ -341,14 +341,9 @@ import { mapGetters } from 'vuex';
       this.$store.dispatch('getItemList', this.$route.params.skuId);
     },
     methods: {
-      addCar(skuNum) {
-        this.$store.dispatch('addCar', {skuId: this.$route.params.skuId, skuNum});
-        this.$router.push({
-          name: 'success',
-          params: {
-            skuNum
-          }
-        })
+      changeChecked(arr, item) {
+        arr.forEach(item => item.isChecked = 0);
+        item.isChecked = 1;
       },
       changeNum(e) {
         let inputValue = e.target.value * 1;
@@ -358,24 +353,30 @@ import { mapGetters } from 'vuex';
             this.skuNum = 1;
           }
           if(this.skuNum < 1) {
-            this.skuNum = 1;
+            this.skuNum = 1
           }
-        } else {
+        }else {
           this.skuNum = Math.ceil(inputValue);
         }
       },
-      changeChecked(arr, item) {
-        arr.forEach(item => item.isChecked = 0);
-        item.isChecked = 1;
+      addCar(skuNum) {
+        this.$store.dispatch('addCar', {skuId: this.$route.params.skuId, skuNum});
+        console.log(skuNum);
+        this.$router.push({
+          name: 'success',
+          params: {
+            skuNum
+          }
+        })
       }
-    },
-    components: {
-      ImageList,
-      Zoom
     },
     computed: {
       ...mapGetters(['categoryView', 'skuInfo', 'saleAttr'])
     },
+    components: {
+      ImageList,
+      Zoom
+    }
   }
 </script>
 

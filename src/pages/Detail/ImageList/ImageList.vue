@@ -1,20 +1,20 @@
 <template>
- <div>
-  <Swiper :options="options">
-    <SwiperSlide v-for="(thubImg, index) in skuImageList" :key="thubImg.id">
-      <img :src="thubImg.imgUrl" alt="" @click="changeImg(index)" :class="{active: current==index}">
-    </SwiperSlide>
-    <div class="swiper-pagination" slot="pagination"></div>
-    <div class="swiper-button-prev" slot="button-prev"></div>
-    <div class="swiper-button-next" slot="button-next"></div>
-  </Swiper>
- </div>
+  <div>
+    <Swiper :options="options">
+      <SwiperSlide v-for="(thumImg, index) in skuImageList" :key="thumImg.id">
+        <img :src="thumImg.imgUrl" :class="{active: current==index}" @click="changeImg(index)" alt="">
+      </SwiperSlide>
+      <div class="swiper-pagination" slot="swiper-pagination"></div>
+      <div class="swiper-button-prev" slot="button-prev"></div>
+      <div class="swiper-button-next" slot="button-next"></div>
+    </Swiper>
+  </div>
 </template>
 
 <script>
-
 import { SwiperSlide } from 'vue-awesome-swiper';
 import { mapGetters } from 'vuex'
+
   export default {
     name: "ImageList",
     data() {
@@ -26,19 +26,19 @@ import { mapGetters } from 'vuex'
           prevEl: ".swiper-button-prev",
         },
         //轮播图一个同时展示几张图标
-        slidesPerView: 5,
+        slidesPerView: 4,
       },
       current: 0
       }
     },
     methods: {
       changeImg(index) {
-        this.current = index;
         this.$bus.$emit('changeImg', index);
+        this.current = index;
       }
     },
     computed: {
-        ...mapGetters(["skuImageList"])
+        ...mapGetters(["skuImageList"]),
     },
     components: { SwiperSlide }
 }
@@ -68,6 +68,7 @@ import { mapGetters } from 'vuex'
           border: 2px solid #f60;
           padding: 1px;
         }
+
       }
     }
 

@@ -11,4 +11,4 @@ export const reqFloor = () => mockRequest.get("/floor");
 
 export const reqItemList = (skuId) => request.get(`/item/${skuId}`);
 
-export const reqAddOrUpdate = (skuId, skuNum) => request.post(`/cart/addToCart/${skuId}/${skuNum}`);
+export const reqAddOrUpdata = (skuId, skuNum) => request.post(`/cart/addToCart/${skuId}/${skuNum}`);
