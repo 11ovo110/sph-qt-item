@@ -9,3 +9,5 @@ export const reqBanner = () => mockRequest.get('/banner');
 
 export const reqFloor = () => mockRequest.get('/floor');
 
+export const reqGoodItem = (skuId) => request.get(`/item/${ skuId }`)
+

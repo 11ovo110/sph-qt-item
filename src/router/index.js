@@ -1,12 +1,10 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
+import {routes} from './routes';
+
 Vue.use(VueRouter);
 
-import Home from '@/pages/Home/Home.vue';
-import Login from '@/pages/Login/Login.vue';
-import Register from '@/pages/Register/Register.vue';
-import Search from '@/pages/Search';
 
 let push = VueRouter.prototype.push;
 let replace = VueRouter.prototype.replace;
@@ -21,33 +19,10 @@ VueRouter.prototype.replace = function(location) {
 
 export default new VueRouter({
   mode: 'hash',
-  routes: [
-    {
-      path: '/home',
-      component: Home,
-      meta: {flag: true}
-    },
-    {
-      path: '/login',
-      component: Login,
-      meta: {flag: false}
-    },
-    {
-      path: '/register',
-      component: Register,
-      meta: {flag: false}
-    },
-    {
-      path: '/search/:keyword?',
-      component: Search,
-      meta: {flag: true},
-      name: 'search'
-    },
-    {
-      path: '/',
-      redirect: '/home'
-    }
-  ]
+  routes,
+  scrollBehavior(to, from) {
+    return {y: 0};
+  }
 })
 
 
