@@ -7,10 +7,9 @@
     <section class="con">
       <!-- 导航路径区域 -->
       <div class="conPoin">
-        <span>手机、数码、通讯</span>
-        <span>手机</span>
-        <span>Apple苹果</span>
-        <span>iphone 6S系类</span>
+        <span>{{categoryView.category1Name}}</span>
+        <span>{{categoryView.category2Name}}</span>
+        <span>{{categoryView.category3Name}}</span>
       </div>
       <!-- 主要内容区域 -->
       <div class="mainCon">
@@ -24,19 +23,19 @@
         <!-- 右侧选择区域布局 -->
         <div class="InfoWrap">
           <div class="goodsDetail">
-            <h3 class="InfoName">Apple iPhone 6s（A1700）64G玫瑰金色 移动通信电信4G手机</h3>
-            <p class="news">推荐选择下方[移动优惠购],手机套餐齐搞定,不用换号,每月还有花费返</p>
+            <h3 class="InfoName">{{skuInfo.skuName}}</h3>
+            <p class="news">{{skuInfo.skuDesc}}</p>
             <div class="priceArea">
               <div class="priceArea1">
                 <div class="title">价&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;格</div>
                 <div class="price">
                   <i>¥</i>
-                  <em>5299</em>
+                  <em>{{skuInfo.price}}</em>
                   <span>降价通知</span>
                 </div>
                 <div class="remark">
                   <i>累计评价</i>
-                  <em>65545</em>
+                  <em>{{skuInfo.id**3}}</em>
                 </div>
               </div>
               <div class="priceArea2">
@@ -45,7 +44,7 @@
                 </div>
                 <div class="fixWidth">
                   <i class="red-bg">加价购</i>
-                  <em class="t-gray">满999.00另加20.00元，或满1999.00另加30.00元，或满2999.00另加40.00元，即可在购物车换购热销商品</em>
+                  <em class="t-gray">{{skuInfo.createTime + skuInfo.skuName}}</em>
                 </div>
               </div>
             </div>
@@ -64,29 +63,9 @@
           <div class="choose">
             <div class="chooseArea">
               <div class="choosed"></div>
-              <dl>
-                <dt class="title">选择颜色</dt>
-                <dd changepirce="0" class="active">金色</dd>
-                <dd changepirce="40">银色</dd>
-                <dd changepirce="90">黑色</dd>
-              </dl>
-              <dl>
-                <dt class="title">内存容量</dt>
-                <dd changepirce="0" class="active">16G</dd>
-                <dd changepirce="300">64G</dd>
-                <dd changepirce="900">128G</dd>
-                <dd changepirce="1300">256G</dd>
-              </dl>
-              <dl>
-                <dt class="title">选择版本</dt>
-                <dd changepirce="0" class="active">公开版</dd>
-                <dd changepirce="-1000">移动版</dd>
-              </dl>
-              <dl>
-                <dt class="title">购买方式</dt>
-                <dd changepirce="0" class="active">官方标配</dd>
-                <dd changepirce="-240">优惠移动版</dd>
-                <dd changepirce="-390">电信优惠版</dd>
+              <dl v-for="sale in SaleAttr" :key="sale.id">
+                <dt class="title">{{sale.saleAttrName}}</dt>
+                <dd changepirce="0" @click="changeChecked(sale.spuSaleAttrValueList, value)" :class="{'active': value.isChecked==1}" v-for="value in sale.spuSaleAttrValueList" :key="value.id">{{value.saleAttrValueName}}</dd>
               </dl>
             </div>
             <div class="cartWrap">
@@ -347,19 +326,28 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapGetters } from 'vuex';
   import ImageList from './ImageList/ImageList'
   import Zoom from './Zoom/Zoom'
 
   export default {
     name: 'Detail',
+    data() {
+      return {
+        
+      }
+    },
     mounted() {
       this.$store.dispatch('getGoodItem', this.$route.params.skuId);
     },
+    methods: {
+      changeChecked(arr, item) {
+        arr.forEach(item => item.isChecked = 0);
+        item.isChecked = 1;
+      }
+    },
     computed: {
-      ...mapState({
-        goodDetail: state => state.detail.goodDetail
-      })
+      ...mapGetters(['categoryView', 'SaleAttr', 'skuInfo'])
     },
     components: {
       ImageList,

@@ -18,8 +18,18 @@ const actions = {
   }
 }
 
+// getters：类似于组件的computed 计算属性
+// getters在项目中一般用于简化state的数据，可以让
 const getters = {
-
+  categoryView(state) {
+    return state.goodDetail.categoryView || {};
+  },
+  SaleAttr(state) {
+    return state.goodDetail.spuSaleAttrList || {};
+  },
+  skuInfo(state) {
+    return state.goodDetail.skuInfo || {};
+  }
 }
 
 export default {state, mutations, actions, getters};
