@@ -2,9 +2,9 @@
   <div>
     <Swiper :options="options">
       <SwiperSlide v-for="(thumImg, index) in skuImageList" :key="thumImg.id">
-        <img :src="thumImg.imgUrl" :class="{active: current==index}" @click="changeImg(index)" alt="">
+        <img :src="thumImg.imgUrl" @click="changeChecked(index)" :class="{'active': current==index}" alt="">
       </SwiperSlide>
-      <div class="swiper-pagination" slot="swiper-pagination"></div>
+      <div class="swiper-pagination" slot="pagination"></div>
       <div class="swiper-button-prev" slot="button-prev"></div>
       <div class="swiper-button-next" slot="button-next"></div>
     </Swiper>
@@ -12,9 +12,9 @@
 </template>
 
 <script>
+
 import { SwiperSlide } from 'vue-awesome-swiper';
 import { mapGetters } from 'vuex'
-
   export default {
     name: "ImageList",
     data() {
@@ -32,13 +32,13 @@ import { mapGetters } from 'vuex'
       }
     },
     methods: {
-      changeImg(index) {
-        this.$bus.$emit('changeImg', index);
+      changeChecked(index) {
         this.current = index;
+        this.$bus.$emit('changeImg', index);
       }
     },
     computed: {
-        ...mapGetters(["skuImageList"]),
+        ...mapGetters(["skuImageList"])
     },
     components: { SwiperSlide }
 }

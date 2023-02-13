@@ -18,10 +18,15 @@ import { mapGetters } from 'vuex'
         index: 0
       }
     },
+    mounted() {
+      this.$bus.$on('changeImg', (index) => {
+        this.index = index;
+      })
+    },
     methods: {
       moveHandler(e) {
-        let mask = this.$refs.mask;
         let bigImg = this.$refs.bigImg;
+        let mask = this.$refs.mask;
         let left = e.offsetX - mask.offsetWidth / 2;
         let top = e.offsetY - mask.offsetHeight / 2;
         if(left < 0) left = 0;
@@ -29,22 +34,17 @@ import { mapGetters } from 'vuex'
         if(top < 0) top = 0;
         if(top > mask.offsetHeight) top = mask.offsetHeight;
         mask.style.left = left + 'px';
-        mask.style.top = top + 'px'
+        mask.style.top = top + 'px';
         bigImg.style.left = -2 * left + 'px';
         bigImg.style.top = -2 * top + 'px';
       }
-    },
-    mounted() {
-      this.$bus.$on('changeImg', (index) => {
-        this.index = index;
-      })
     },
     computed: {
       ...mapGetters(['skuImageList']),
       imgObj() {
         return this.skuImageList[this.index] || {}
       }
-    }
+    },
   }
 </script>
 

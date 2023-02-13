@@ -19,7 +19,7 @@ export default new VueRouter({
   mode: 'hash',
   routes,
   scrollBehavior(to, from) {
-    return {y: 0};
+    return {y: 0}
   }
 })
 
