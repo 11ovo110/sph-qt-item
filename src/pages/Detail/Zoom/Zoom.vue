@@ -1,17 +1,50 @@
 <template>
   <div class="spec-preview">
-    <img src="../images/s1.png" />
-    <div class="event"></div>
+    <img :src="imgObj.imgUrl" />
+    <div class="event" @mousemove="moveHandler"></div>
     <div class="big">
-      <img src="../images/s1.png" />
+      <img :src="imgObj.imgUrl" ref="bigImg"/>
     </div>
-    <div class="mask"></div>
+    <div class="mask" ref="mask"></div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
   export default {
     name: "Zoom",
+    data() {
+      return {
+        index: 0
+      }
+    },
+    mounted() {
+      this.$bus.$on('changeImg', (index) => {
+        this.index = index;
+      })
+    },
+    computed: {
+      ...mapGetters(['skuImageList']),
+      imgObj() {
+        return this.skuImageList[this.index] || {}
+      }
+    },
+    methods: {
+      moveHandler(e) {
+        let bigImg = this.$refs.bigImg;
+        let mask = this.$refs.mask;
+        let left = e.offsetX - mask.offsetWidth / 2;
+        let top = e.offsetY - mask.offsetHeight / 2;
+        if(left < 0) left = 0;
+        if(left > mask.offsetWidth) left = mask.offsetWidth;
+        if(top < 0) top = 0;
+        if(top > mask.offsetHeight) top = mask.offsetHeight;
+        mask.style.left = left + 'px';
+        mask.style.top = top + 'px';
+        bigImg.style.top = -2 * top + 'px';
+        bigImg.style.left = -2 * left + 'px';
+      }
+    },
   }
 </script>
 

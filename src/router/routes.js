@@ -3,6 +3,7 @@ import Login from '@/pages/Login/Login.vue';
 import Register from '@/pages/Register/Register.vue';
 import Search from '@/pages/Search';
 import Detail from '@/pages/Detail';
+import AddCartSuccess from '@/pages/AddCartSuccess';
 
 export const routes = [
   {
@@ -29,6 +30,12 @@ export const routes = [
   {
     path: '/detail/:skuId',
     component: Detail,
+    meta: {flag: true}
+  },
+  {
+    path: '/addcartsuccess/:skuNum',
+    name: 'success',
+    component: AddCartSuccess,
     meta: {flag: true}
   },
   {

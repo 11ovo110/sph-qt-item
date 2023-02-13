@@ -1,4 +1,4 @@
-import { reqGoodItemList } from "@/api";
+import { reqGoodItemList, reqAddOrUpdate } from "@/api";
 
 const state = {
   itemList: {}
@@ -16,6 +16,9 @@ const actions = {
     if(result.code == 200)
     commit("GETITEMLIST", result.data);
   },
+  async addOrUpdateCart({dispatch, getters, state, commit}, {skuId, skuNum}) {
+    let result = await reqAddOrUpdate(skuId, skuNum);
+  }
 };
 
 const getters = {
@@ -27,6 +30,9 @@ const getters = {
   },
   saleAttr(state) {
     return state.itemList.spuSaleAttrList || {};
+  },
+  skuImageList(state) {
+    return (state.itemList.skuInfo || {}).skuImageList || []
   }
 };
 
