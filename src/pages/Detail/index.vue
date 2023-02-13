@@ -65,14 +65,14 @@
               <div class="choosed"></div>
               <dl v-for="sale in saleAttr" :key="sale.id">
                 <dt class="title">{{sale.saleAttrName}}</dt>
-                <dd changepirce="0" @click="changeChecked(sale.spuSaleAttrValueList, value)" :class="{active: value.isChecked == 1}" v-for="value in sale.spuSaleAttrValueList" :key="value.id">{{value.saleAttrValueName}}</dd>
+                <dd changepirce="0" :class="{'active': value.isChecked == 1}" @click="changeChecked(sale.spuSaleAttrValueList, value)" v-for="value in sale.spuSaleAttrValueList" :key="value.id">{{value.saleAttrValueName}}</dd>
               </dl>
             </div>
             <div class="cartWrap">
               <div class="controls">
                 <input autocomplete="off" class="itxt" v-model="skuNum" @change="changeNum">
-                <a href="javascript:" class="plus" @click="skuNum++">+</a>
-                <a href="javascript:" class="mins" @click="skuNum > 1 && skuNum--">-</a>
+                <a class="plus" @click="skuNum++">+</a>
+                <a class="mins" @click="skuNum > 1 && skuNum--">-</a>
               </div>
               <div class="add">
                 <a @click="addCar(skuNum)">加入购物车</a>
@@ -341,7 +341,16 @@ import { mapGetters } from 'vuex';
       this.$store.dispatch('getItemList', this.$route.params.skuId);
     },
     methods: {
-      changeNum(e){
+      addCar(skuNum) {
+        this.$store.dispatch('addCar', {skuId: this.$route.params.skuId, skuNum});
+        this.$router.push({
+          name: 'success',
+          params: {
+            skuNum
+          }
+        })
+      },
+      changeNum(e) {
         let inputValue = e.target.value * 1;
         if(isNaN(inputValue) || inputValue < 1) {
           this.skuNum = parseInt(e.target.value);
@@ -358,23 +367,15 @@ import { mapGetters } from 'vuex';
       changeChecked(arr, item) {
         arr.forEach(item => item.isChecked = 0);
         item.isChecked = 1;
-      },
-      addCar(skuNum) {
-        this.$store.dispatch('addOrUpdateCart', {skuId: this.$route.params.skuId, skuNum});
-        this.$router.push({
-          name: 'success',
-          params: skuNum
-        })
       }
-    },
-
-    computed: {
-      ...mapGetters(['categoryView', 'skuInfo', 'saleAttr'])
     },
     components: {
       ImageList,
       Zoom
-    }
+    },
+    computed: {
+      ...mapGetters(['categoryView', 'skuInfo', 'saleAttr'])
+    },
   }
 </script>
 

@@ -3,7 +3,6 @@ import VueRouter from 'vue-router';
 import { routes } from './routes';
 Vue.use(VueRouter);
 
-
 let push = VueRouter.prototype.push;
 let replace = VueRouter.prototype.replace;
 

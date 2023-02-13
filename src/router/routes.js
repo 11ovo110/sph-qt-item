@@ -30,13 +30,14 @@ export const routes = [
   {
     path: '/detail/:skuId',
     component: Detail,
-    meta: {flag: true}
+    meta: {flag: true},
+    name: 'detail'
   },
   {
     path: '/addcartsuccess/:skuNum',
-    name: 'success',
     component: AddCartSuccess,
-    meta: {flag: true}
+    meta: {flag: true},
+    name: 'success'
   },
   {
     path: '/',

@@ -1,38 +1,39 @@
-import { reqGoodItemList, reqAddOrUpdate } from "@/api";
+import { reqItemList, reqAddOrUpdate } from "@/api";
 
 const state = {
-  itemList: {}
+  ItemList: {}
 };
 
 const mutations = {
   GETITEMLIST(state, data) {
-    state.itemList = data;
+    state.ItemList = data;
   }
 };
 
 const actions = {
-  async getItemList({ dispatch, getters, state, commit }, payload) {
-    let result = await reqGoodItemList(payload);
+  async getItemList({ dispatch, getters, state, commit }, skuId) {
+    let result = await reqItemList(skuId);
     if(result.code == 200)
     commit("GETITEMLIST", result.data);
   },
-  async addOrUpdateCart({dispatch, getters, state, commit}, {skuId, skuNum}) {
+  async addCar({dispatch, getters, state, commit}, {skuId, skuNum}) {
     let result = await reqAddOrUpdate(skuId, skuNum);
+    console.log(result);
   }
 };
 
 const getters = {
   categoryView(state) {
-    return state.itemList.categoryView || {};
+    return state.ItemList.categoryView || {};
   },
   skuInfo(state) {
-    return state.itemList.skuInfo || {};
+    return state.ItemList.skuInfo || {};
   },
   saleAttr(state) {
-    return state.itemList.spuSaleAttrList || {};
+    return state.ItemList.spuSaleAttrList || {};
   },
   skuImageList(state) {
-    return (state.itemList.skuInfo || {}).skuImageList || []
+    return (state.ItemList.skuInfo || {}).skuImageList || [];
   }
 };
 
