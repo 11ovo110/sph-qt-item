@@ -1,6 +1,5 @@
 import axios from 'axios';
 import userTemp from './userTempId';
-
 import nprogress from 'nprogress';
 import 'nprogress/nprogress.css';
 

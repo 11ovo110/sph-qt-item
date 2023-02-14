@@ -341,19 +341,15 @@ import { mapGetters } from 'vuex';
       this.$store.dispatch('getItemList', this.$route.params.skuId);
     },
     methods: {
-      async addCar(skuNum) {
-        try {
-        await this.$store.dispatch('addCar', { skuId: this.$route.params.skuId, skuNum });
-        sessionStorage.setItem('addcar', JSON.stringify(this.skuInfo));
-          this.$router.push({
-            name: 'success',
-            params: {
-              skuNum
-            }
-          })
-        } catch (e) {
-          alert(e.message);
-        }
+      addCar(skuNum) {
+        this.$store.dispatch('addCar', {skuId: this.$route.params.skuId, skuNum});
+        sessionStorage.setItem('addCar', JSON.stringify(this.skuInfo));
+        this.$router.push({
+          name: 'success',
+          params: {
+            skuNum
+          }
+        })
       },
       changeNum(e) {
         let inputValue = e.target.value * 1;

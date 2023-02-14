@@ -11,27 +11,27 @@
         <div class="cart-th6">操作</div>
       </div>
       <div class="cart-body">
-        <ul class="cart-list" v-for="car in cartInfoList" :key="car.id">
+        <ul class="cart-list" v-for="good in cartInfoList" :key="good.id">
           <li class="cart-list-con1">
-            <input type="checkbox" name="chk_list" :checked="car.isChecked" @click="changeChecked(car)">
+            <input type="checkbox" name="chk_list" :checked="good.isChecked" @change="changeChecked(good)">
           </li>
           <li class="cart-list-con2">
-            <img :src="car.imgUrl">
-            <div class="item-msg">{{car.skuName}}</div>
+            <img :src="good.imgUrl">
+            <div class="item-msg">{{good.skuName}}</div>
           </li>
           <li class="cart-list-con4">
-            <span class="price">{{car.skuPrice}}</span>
+            <span class="price">{{good.skuPrice}}</span>
           </li>
           <li class="cart-list-con5">
-            <a class="mins" @click="MinusNum(car)">-</a>
-            <input autocomplete="off" type="text" :value="car.skuNum" @change="ChangeNum(car)" minnum="1" class="itxt">
-            <a class="plus" @click="addNum(car)">+</a>
+            <a @click="MinusNum(good)" class="mins">-</a>
+            <input autocomplete="off" type="text" :value="good.skuNum" @change="UpdateNum(good, $event)" minnum="1" class="itxt">
+            <a @click="AddNum(good)" class="plus">+</a>
           </li>
           <li class="cart-list-con6">
-            <span class="sum">{{car.skuNum * car.skuPrice}}</span>
+            <span class="sum">{{good.skuPrice * good.skuNum}}</span>
           </li>
           <li class="cart-list-con7">
-            <a @click="deleteGood(car)" class="sindelet">删除</a>
+            <a @click="deleteGood(good)" class="sindelet">删除</a>
             <br>
             <a href="#none">移到收藏</a>
           </li>
@@ -40,7 +40,7 @@
     </div>
     <div class="cart-tool">
       <div class="select-all">
-        <input class="chooseAll" type="checkbox" :checked="checkAll">
+        <input class="chooseAll" type="checkbox" :checked="CheckAll">
         <span>全选</span>
       </div>
       <div class="option">
@@ -67,60 +67,62 @@
 import { mapGetters } from 'vuex';
   export default {
     name: 'ShopCart',
+    mounted() {
+      this.getCarList();
+    },
     methods: {
-     async changeChecked(car) {
-        let {skuId} = car;
-        let isChecked = car.isChecked == 1 ? 0 : 1;
-        try{
-        await this.$store.dispatch('changeChecked', {skuId, isChecked});
+      async changeChecked(good,) {
+        let { skuId } = good;
+        let isChecked = good.isChecked == 0 ? 1 : 0;
+        try {
+          await this.$store.dispatch('changeChecked', { skuId, isChecked });
           this.getCarList();
-        }catch(e) {
+        } catch (e) {
           alert(e.message);
         }
       },
-     async ChangeNum(car, e) {
-        let {skuId} = car;
+      async deleteGood(good,) {
+        let { skuId } = good;
+        try {
+          await this.$store.dispatch('deleteGood', skuId);
+          this.getCarList();
+        } catch (e) {
+          alert(e.message);
+        }
+      },
+      async AddNum(good,) {
+        let { skuId } = good;
+        let skuNum = 1;
+        try {
+          await this.$store.dispatch('changeNum', {skuId, skuNum});
+          this.getCarList();
+        } catch (e) {
+          alert(e.message);
+        }
+      },
+      async MinusNum(good,) {
+        let { skuId } = good;
+        let skuNum = -1;
+        try {
+          await this.$store.dispatch('changeNum', {skuId, skuNum});
+          this.getCarList();
+        } catch (e) {
+          alert(e.message);
+        }
+      },
+      async UpdateNum(good, e) {
+        let { skuId } = good;
         let inputValue = e.target.value * 1;
         let skuNum;
         if(isNaN(inputValue) || inputValue < 1) {
           skuNum = 0;
         }else {
-          skuNum = Math.ceil(inputValue - car.skuNum);
+          skuNum = Math.ceil(inputValue - good.skuNum);
         }
-        try{
-        await this.$store.dispatch('ChangeNum', {skuId, skuNum});
+        try {
+          await this.$store.dispatch('changeNum', {skuId, skuNum});
           this.getCarList();
-        }catch(e) {
-          alert(e.message);
-        }
-      },
-     async addNum(car, ) {
-        let {skuId} = car;
-        let skuNum = 1;
-        try{
-        await this.$store.dispatch('ChangeNum', {skuId, skuNum});
-          this.getCarList();
-        }catch(e) {
-          alert(e.message);
-        }
-      },
-     async MinusNum(car, ) {
-      if(car.skuNum < 2) return;
-        let {skuId} = car;
-        let skuNum = -1;
-        try{
-        await this.$store.dispatch('ChangeNum', {skuId, skuNum});
-          this.getCarList();
-        }catch(e) {
-          alert(e.message);
-        }
-      },
-     async deleteGood(car) {
-        let {skuId} = car;
-        try{
-        await this.$store.dispatch('deleteGood', skuId);
-          this.getCarList();
-        }catch(e) {
+        } catch (e) {
           alert(e.message);
         }
       },
@@ -128,21 +130,18 @@ import { mapGetters } from 'vuex';
         this.$store.dispatch('getCarList');
       }
     },
-    mounted() {
-      this.getCarList();
-    },
     computed: {
       ...mapGetters(['cartInfoList']),
       total() {
-       return this.cartInfoList.reduce((pre, cur) => cur.isChecked && pre + cur.isChecked, 0);
+        return this.cartInfoList.reduce((pre, cur) => pre + cur.isChecked, 0);
       },
       totalPrice() {
-        return this.cartInfoList.reduce((pre, cur) => cur.isChecked && pre + cur.skuNum * cur.skuPrice, 0)
+        return this.cartInfoList.reduce((pre, cur) => cur.isChecked && pre + cur.skuPrice * cur.skuNum, 0);
       },
-      checkAll(car) {
+      CheckAll() {
         return this.cartInfoList.every(item => item.isChecked) && this.cartInfoList.length > 0;
       }
-    }
+    },
   }
 </script>
 
@@ -226,6 +225,7 @@ import { mapGetters } from 'vuex';
               line-height: 18px;
             }
           }
+
 
           .cart-list-con4 {
             width: 10%;

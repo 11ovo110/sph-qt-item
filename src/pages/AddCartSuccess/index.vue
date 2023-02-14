@@ -22,12 +22,11 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
   export default {
     name: 'AddCartSuccess',
     data() {
       return {
-        goodInfo: JSON.parse(sessionStorage.getItem('addcar'))
+        goodInfo: JSON.parse(sessionStorage.getItem('addCar'))
       }
     },
   }
