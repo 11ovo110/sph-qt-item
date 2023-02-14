@@ -1,4 +1,4 @@
-import { reqCarList, reqUpdateChecked } from "@/api";
+import { reqCarList, reqUpdateChecked, reqDeleteGood } from "@/api";
 
 const state = {
   carList: {}
@@ -17,6 +17,14 @@ const actions = {
   },
   async changeChecked({dispatch, commit, getters, state}, {skuId, isChecked}) {
     let result = await reqUpdateChecked(skuId, isChecked);
+    if(result.code == 200) {
+      return;
+    }else {
+      return Promise.reject(new Error(result.message));
+    }
+  },
+  async deleteGood({dispatch, state, commit, getters}, skuId) {
+    let result = await reqDeleteGood(skuId);
     if(result.code == 200) {
       return;
     }else {

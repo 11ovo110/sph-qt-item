@@ -16,3 +16,5 @@ export const reqAddOrUpdateCar = (skuId, skuNum) => request.post(`/cart/addToCar
 export const reqCarList = () => request.get("/cart/cartList");
 
 export const reqUpdateChecked = (skuId, isChecked) => request.get(`/cart/checkCart/${skuId}/${isChecked}`);
+
+export const reqDeleteGood = (skuId) => request.delete(`/cart/deleteCart/${skuId}`);

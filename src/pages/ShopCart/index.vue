@@ -31,7 +31,7 @@
             <span class="sum">{{good.skuNum * good.skuPrice}}</span>
           </li>
           <li class="cart-list-con7">
-            <a href="#none" class="sindelet">删除</a>
+            <a @click="deleteGood(good)" class="sindelet">删除</a>
             <br>
             <a href="#none">移到收藏</a>
           </li>
@@ -71,6 +71,15 @@ import { mapGetters } from 'vuex';
       this.getCarList();
     },
     methods: {
+      async deleteGood(good) {
+        let {skuId} = good;
+        try {
+          await this.$store.dispatch('deleteGood', skuId);
+          this.getCarList();
+        }catch(e) {
+          alert(e.message);
+        }
+      },
      async changeChecked(good) {
         let {skuId} = good;
         let isChecked = good.isChecked == 0 ? 1 : 0;
