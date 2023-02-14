@@ -23,9 +23,9 @@
             <span class="price">{{good.skuPrice}}</span>
           </li>
           <li class="cart-list-con5">
-            <a href="javascript:void(0)" class="mins">-</a>
-            <input autocomplete="off" type="text" :value="good.skuNum" minnum="1" class="itxt">
-            <a href="javascript:void(0)" class="plus">+</a>
+            <a @click="MinusNum(good)" class="mins">-</a>
+            <input autocomplete="off" type="text" :value="good.skuNum" @change="updateNum(good, $event)" minnum="1" class="itxt">
+            <a @click="AddNum(good)" class="plus">+</a>
           </li>
           <li class="cart-list-con6">
             <span class="sum">{{good.skuNum * good.skuPrice}}</span>
@@ -67,12 +67,60 @@
 import { mapGetters } from 'vuex';
   export default {
     name: 'ShopCart',
+    data() {
+      return {
+        flag: false
+      }
+    },
     mounted() {
       this.getCarList();
-    },
+    }, 
     methods: {
-      async deleteGood(good) {
+      async updateNum(good, e) {
         let {skuId} = good;
+        let inputValue = e.target.value * 1;
+        let skuNum;
+        if(isNaN(inputValue) || inputValue < 1) {
+          skuNum = 0;
+        } else {
+          skuNum = Math.ceil(inputValue - good.skuNum)
+        }
+        try{
+         await this.$store.dispatch('changeNum', {skuId, skuNum});
+         this.getCarList();
+        }catch(e) {
+          alert(e.message);
+        }
+      },
+      async AddNum(good) {
+        let {skuId} = good;
+        let skuNum = 1; 
+        try {
+          await this.$store.dispatch('changeNum', {skuId, skuNum});
+          this.getCarList();
+        }catch(e) {
+          alert(e.message);
+        }
+      },
+      async MinusNum(good) {
+        if(this.flag) return;
+        this.flag = true;
+        let { skuId } = good;
+        let skuNum = -1;
+        try {
+          if (good.skuNum > 1) {
+            await this.$store.dispatch('changeNum', { skuId, skuNum });
+            this.getCarList();
+          }
+
+        } catch (e) {
+          alert(e.message);
+        }
+        this.flag = false;
+      },
+      async deleteGood(good) { 
+       if(!confirm('你确定删除吗?')) return;
+       let {skuId} = good;
         try {
           await this.$store.dispatch('deleteGood', skuId);
           this.getCarList();
@@ -80,7 +128,7 @@ import { mapGetters } from 'vuex';
           alert(e.message);
         }
       },
-     async changeChecked(good) {
+      async changeChecked(good) {
         let {skuId} = good;
         let isChecked = good.isChecked == 0 ? 1 : 0;
         try {

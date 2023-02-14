@@ -339,6 +339,7 @@ import { mapGetters } from 'vuex';
     },
     mounted() {
       this.$store.dispatch('getItemList', this.$route.params.skuId);
+      console.log(this.$route.params.skuId);
     },
     methods: {
       async addCar(skuNum) {
