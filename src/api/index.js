@@ -17,4 +17,4 @@ export const reqCarList = () => request.get("/cart/cartList");
 
 export const reqChangeChecked = (skuId, isChecked) => request.get(`/cart/checkCart/${skuId}/${isChecked}`);
 
-export const deleteGood = (skuId) => request.delete(`/cart/deleteCart/${skuId}`);
+export const reqDelateGood = (skuId) => request.delete(`/cart/deleteCart/${skuId}`);

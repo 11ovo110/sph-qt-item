@@ -26,9 +26,9 @@
     name: 'AddCartSuccess',
     data() {
       return {
-        goodInfo: JSON.parse(sessionStorage.getItem('addCar'))
+        goodInfo: JSON.parse(sessionStorage.getItem('carInfo'))
       }
-    },
+    }
   }
 </script>
 

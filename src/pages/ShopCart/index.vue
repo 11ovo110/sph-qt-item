@@ -24,14 +24,14 @@
           </li>
           <li class="cart-list-con5">
             <a @click="MinusNum(good)" class="mins">-</a>
-            <input autocomplete="off" type="text" :value="good.skuNum" @change="UpdateNum(good, $event)" minnum="1" class="itxt">
+            <input autocomplete="off" type="text" @change="UpdateNum(good, $event)" :value="good.skuNum" minnum="1" class="itxt">
             <a @click="AddNum(good)" class="plus">+</a>
           </li>
           <li class="cart-list-con6">
-            <span class="sum">{{good.skuPrice * good.skuNum}}</span>
+            <span class="sum">{{good.skuNum * good.skuPrice}}</span>
           </li>
           <li class="cart-list-con7">
-            <a @click="deleteGood(good)" class="sindelet">删除</a>
+            <a href="#none" class="sindelet">删除</a>
             <br>
             <a href="#none">移到收藏</a>
           </li>
@@ -40,7 +40,7 @@
     </div>
     <div class="cart-tool">
       <div class="select-all">
-        <input class="chooseAll" type="checkbox" :checked="CheckAll">
+        <input class="chooseAll" type="checkbox" :checked="checkAll">
         <span>全选</span>
       </div>
       <div class="option">
@@ -68,50 +68,42 @@ import { mapGetters } from 'vuex';
   export default {
     name: 'ShopCart',
     mounted() {
-      this.getCarList();
+      this.getGood();
     },
     methods: {
-      async changeChecked(good,) {
-        let { skuId } = good;
+     async changeChecked(good) {
+        let {skuId} = good;
         let isChecked = good.isChecked == 0 ? 1 : 0;
-        try {
-          await this.$store.dispatch('changeChecked', { skuId, isChecked });
-          this.getCarList();
-        } catch (e) {
+        try{
+        await this.$store.dispatch('changeChecked', {skuId, isChecked});
+          this.getGood();
+        }catch(e) {
           alert(e.message);
         }
       },
-      async deleteGood(good,) {
-        let { skuId } = good;
-        try {
-          await this.$store.dispatch('deleteGood', skuId);
-          this.getCarList();
-        } catch (e) {
-          alert(e.message);
-        }
-      },
-      async AddNum(good,) {
-        let { skuId } = good;
-        let skuNum = 1;
-        try {
-          await this.$store.dispatch('changeNum', {skuId, skuNum});
-          this.getCarList();
-        } catch (e) {
-          alert(e.message);
-        }
-      },
-      async MinusNum(good,) {
-        let { skuId } = good;
+     async MinusNum(good) {
+        if(good.skuNum < 2) return;
+        let {skuId} = good;
         let skuNum = -1;
-        try {
-          await this.$store.dispatch('changeNum', {skuId, skuNum});
-          this.getCarList();
-        } catch (e) {
+        try{
+        await this.$store.dispatch('changeNum', {skuId, skuNum});
+          this.getGood();
+        }catch(e) {
           alert(e.message);
         }
       },
-      async UpdateNum(good, e) {
-        let { skuId } = good;
+     async AddNum(good) {
+        let {skuId} = good;
+        let skuNum = 1;
+        try{
+        await this.$store.dispatch('changeNum', {skuId, skuNum});
+          this.getGood();
+        }catch(e) {
+          alert(e.message);
+        }
+      },
+     async UpdateNum(good, e) {
+        let {skuId} = good;
         let inputValue = e.target.value * 1;
         let skuNum;
         if(isNaN(inputValue) || inputValue < 1) {
@@ -119,15 +111,15 @@ import { mapGetters } from 'vuex';
         }else {
           skuNum = Math.ceil(inputValue - good.skuNum);
         }
-        try {
-          await this.$store.dispatch('changeNum', {skuId, skuNum});
-          this.getCarList();
-        } catch (e) {
+        try{
+        await this.$store.dispatch('changeNum', {skuId, skuNum});
+          this.getGood();
+        }catch(e) {
           alert(e.message);
         }
       },
-      getCarList() {
-        this.$store.dispatch('getCarList');
+      getGood() {
+        this.$store.dispatch('getGood');
       }
     },
     computed: {
@@ -136,9 +128,14 @@ import { mapGetters } from 'vuex';
         return this.cartInfoList.reduce((pre, cur) => pre + cur.isChecked, 0);
       },
       totalPrice() {
-        return this.cartInfoList.reduce((pre, cur) => cur.isChecked && pre + cur.skuPrice * cur.skuNum, 0);
+        return this.cartInfoList.reduce((pre, cur) => {
+          if(cur.isChecked) {
+            pre += cur.skuNum * cur.skuPrice;
+          }
+          return pre;
+        }, 0);
       },
-      CheckAll() {
+      checkAll() {
         return this.cartInfoList.every(item => item.isChecked) && this.cartInfoList.length > 0;
       }
     },

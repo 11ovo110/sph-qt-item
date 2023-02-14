@@ -18,6 +18,7 @@ const actions = {
   },
   async addCar({dispatch, state, getters, commit}, {skuId, skuNum}) {
     let result = await reqAddOrUpdateCar(skuId, skuNum);
+    console.log(result);
     if(result.code == 200) {
       return;
     }else {
