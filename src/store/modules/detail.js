@@ -18,6 +18,11 @@ const actions = {
   },
   async addCar({dispatch, state, getters, commit}, {skuId, skuNum}) {
     let result = await reqAddOrUpdateCar(skuId, skuNum);
+    if(result.code == 200) {
+      return;
+    } else {
+      return Promise.reject(new Error(result.message));
+    }
   }
 };
 
