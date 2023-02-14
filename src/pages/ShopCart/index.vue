@@ -13,7 +13,7 @@
       <div class="cart-body">
         <ul class="cart-list" v-for="good in cartInfoList" :key="good.id">
           <li class="cart-list-con1">
-            <input type="checkbox" name="chk_list" :checked="good.isChecked">
+            <input type="checkbox" name="chk_list" :checked="good.isChecked" @click="changeChecked(good)">
           </li>
           <li class="cart-list-con2">
             <img :src="good.imgUrl">
@@ -50,10 +50,10 @@
       </div>
       <div class="money-box">
         <div class="chosed">已选择
-          <span>0</span>件商品</div>
+          <span>{{total}}</span>件商品</div>
         <div class="sumprice">
           <em>总价（不含运费） ：</em>
-          <i class="summoney">0</i>
+          <i class="summoney">{{totalPrice}}</i>
         </div>
         <div class="sumbtn">
           <a class="sum-btn" href="###" target="_blank">结算</a>
@@ -71,12 +71,28 @@ import { mapGetters } from 'vuex';
       this.getCarList();
     },
     methods: {
+     async changeChecked(good) {
+        let {skuId} = good;
+        let isChecked = good.isChecked == 0 ? 1 : 0;
+        try {
+          await this.$store.dispatch('changeChecked', {skuId, isChecked});
+          this.getCarList();
+        }catch(e) {
+          alert(e.message);
+        }
+      },
       getCarList() {
         this.$store.dispatch('getCarList');
       }
     },
     computed: {
-      ...mapGetters(['cartInfoList'])
+      ...mapGetters(['cartInfoList']),
+      total() {
+        return this.cartInfoList.reduce((pre, cur) => cur.isChecked && pre + cur.isChecked, 0)
+      },
+      totalPrice() {
+        return this.cartInfoList.reduce((pre, cur) => cur.isChecked && pre + cur.skuNum * cur.skuPrice, 0)
+      }
     },
   }
 </script>

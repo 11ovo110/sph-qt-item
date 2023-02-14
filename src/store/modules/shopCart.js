@@ -1,4 +1,4 @@
-import { reqCarList } from "@/api";
+import { reqCarList, reqUpdateChecked } from "@/api";
 
 const state = {
   carList: {}
@@ -15,11 +15,19 @@ const actions = {
     let result = await reqCarList();
     commit('GETDATALIST', result.data);
   },
+  async changeChecked({dispatch, commit, getters, state}, {skuId, isChecked}) {
+    let result = await reqUpdateChecked(skuId, isChecked);
+    if(result.code == 200) {
+      return;
+    }else {
+      return Promise.reject(new Error(result.message));
+    }
+  }
 };
 
 const getters = {
   cartInfoList(state) {
-    return (state.carList[0] || {}).cartInfoList || {}
+    return (state.carList[0] || {}).cartInfoList || []
   }
 };
 
