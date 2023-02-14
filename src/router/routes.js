@@ -4,7 +4,7 @@ import Register from '@/pages/Register/Register.vue';
 import Search from '@/pages/Search';
 import Detail from '@/pages/Detail';
 import AddCartSuccess from '@/pages/AddCartSuccess';
-import shopCart from '@/pages/ShopCart';
+import shopCar from '@/pages/ShopCart';
 
 export const routes = [
   {
@@ -42,7 +42,7 @@ export const routes = [
   },
   {
     path: '/shopcar',
-    component: shopCart,
+    component: shopCar,
     meta: {flag: true}
   },
   {

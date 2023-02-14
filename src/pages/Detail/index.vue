@@ -339,22 +339,21 @@ import { mapGetters } from 'vuex';
     },
     mounted() {
       this.$store.dispatch('getItemList', this.$route.params.skuId);
-      console.log(this.$route.params.skuId);
     },
     methods: {
       async addCar(skuNum) {
-       try{
-        await this.$store.dispatch('addCar', {skuId: this.$route.params.skuId, skuNum});
-        sessionStorage.setItem('goodInfo', JSON.stringify(this.skuInfo));
-        this.$router.push({
-          name: 'success',
-          params: {
-            skuNum
-          }
-        })
-       } catch(e) {
-        alert('加入购物车失败');
-       }
+        try {
+        await this.$store.dispatch('addCar', { skuId: this.$route.params.skuId, skuNum });
+        sessionStorage.setItem('addcar', JSON.stringify(this.skuInfo));
+          this.$router.push({
+            name: 'success',
+            params: {
+              skuNum
+            }
+          })
+        } catch (e) {
+          alert(e.message);
+        }
       },
       changeNum(e) {
         let inputValue = e.target.value * 1;

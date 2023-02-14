@@ -1,12 +1,8 @@
 import axios from 'axios';
+import userTemp from './userTempId';
 
 import nprogress from 'nprogress';
 import 'nprogress/nprogress.css';
-import userTemp from './userTempId';
-
-
-//控制进度条旋转器
-nprogress.configure({ showSpinner: false })
 
 let request = axios.create({
   baseURL: '/api',

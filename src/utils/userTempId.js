@@ -1,10 +1,9 @@
-import { v4 as uuidV4 } from 'uuid';
+import {v4 as uuidV4} from 'uuid';
 
 export default function() {
-  let userId = localStorage.getItem('tourist');
+  let userId = localStorage.getItem('userTempId');
   if(!userId) {
-    userId = uuidV4();
-    localStorage.setItem('tourist', userId);
+    userId = localStorage.setItem('userTempId', uuidV4());
   }
   return userId;
 }

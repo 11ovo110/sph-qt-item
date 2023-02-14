@@ -20,7 +20,7 @@ const actions = {
     let result = await reqAddOrUpdateCar(skuId, skuNum);
     if(result.code == 200) {
       return;
-    } else {
+    }else {
       return Promise.reject(new Error(result.message));
     }
   }

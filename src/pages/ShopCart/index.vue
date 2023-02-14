@@ -11,27 +11,27 @@
         <div class="cart-th6">操作</div>
       </div>
       <div class="cart-body">
-        <ul class="cart-list" v-for="good in cartInfoList" :key="good.id">
+        <ul class="cart-list" v-for="car in cartInfoList" :key="car.id">
           <li class="cart-list-con1">
-            <input type="checkbox" name="chk_list" :checked="good.isChecked" @click="changeChecked(good)">
+            <input type="checkbox" name="chk_list" :checked="car.isChecked" @click="changeChecked(car)">
           </li>
           <li class="cart-list-con2">
-            <img :src="good.imgUrl">
-            <div class="item-msg">{{good.skuName}}</div>
+            <img :src="car.imgUrl">
+            <div class="item-msg">{{car.skuName}}</div>
           </li>
           <li class="cart-list-con4">
-            <span class="price">{{good.skuPrice}}</span>
+            <span class="price">{{car.skuPrice}}</span>
           </li>
           <li class="cart-list-con5">
-            <a @click="MinusNum(good)" class="mins">-</a>
-            <input autocomplete="off" type="text" :value="good.skuNum" @change="updateNum(good, $event)" minnum="1" class="itxt">
-            <a @click="AddNum(good)" class="plus">+</a>
+            <a class="mins" @click="MinusNum(car)">-</a>
+            <input autocomplete="off" type="text" :value="car.skuNum" @change="ChangeNum(car)" minnum="1" class="itxt">
+            <a class="plus" @click="addNum(car)">+</a>
           </li>
           <li class="cart-list-con6">
-            <span class="sum">{{good.skuNum * good.skuPrice}}</span>
+            <span class="sum">{{car.skuNum * car.skuPrice}}</span>
           </li>
           <li class="cart-list-con7">
-            <a @click="deleteGood(good)" class="sindelet">删除</a>
+            <a @click="deleteGood(car)" class="sindelet">删除</a>
             <br>
             <a href="#none">移到收藏</a>
           </li>
@@ -67,72 +67,58 @@
 import { mapGetters } from 'vuex';
   export default {
     name: 'ShopCart',
-    data() {
-      return {
-        flag: false
-      }
-    },
-    mounted() {
-      this.getCarList();
-    }, 
     methods: {
-      async updateNum(good, e) {
-        let {skuId} = good;
+     async changeChecked(car) {
+        let {skuId} = car;
+        let isChecked = car.isChecked == 1 ? 0 : 1;
+        try{
+        await this.$store.dispatch('changeChecked', {skuId, isChecked});
+          this.getCarList();
+        }catch(e) {
+          alert(e.message);
+        }
+      },
+     async ChangeNum(car, e) {
+        let {skuId} = car;
         let inputValue = e.target.value * 1;
         let skuNum;
         if(isNaN(inputValue) || inputValue < 1) {
           skuNum = 0;
-        } else {
-          skuNum = Math.ceil(inputValue - good.skuNum)
+        }else {
+          skuNum = Math.ceil(inputValue - car.skuNum);
         }
         try{
-         await this.$store.dispatch('changeNum', {skuId, skuNum});
-         this.getCarList();
-        }catch(e) {
-          alert(e.message);
-        }
-      },
-      async AddNum(good) {
-        let {skuId} = good;
-        let skuNum = 1; 
-        try {
-          await this.$store.dispatch('changeNum', {skuId, skuNum});
+        await this.$store.dispatch('ChangeNum', {skuId, skuNum});
           this.getCarList();
         }catch(e) {
           alert(e.message);
         }
       },
-      async MinusNum(good) {
-        if(this.flag) return;
-        this.flag = true;
-        let { skuId } = good;
+     async addNum(car, ) {
+        let {skuId} = car;
+        let skuNum = 1;
+        try{
+        await this.$store.dispatch('ChangeNum', {skuId, skuNum});
+          this.getCarList();
+        }catch(e) {
+          alert(e.message);
+        }
+      },
+     async MinusNum(car, ) {
+      if(car.skuNum < 2) return;
+        let {skuId} = car;
         let skuNum = -1;
-        try {
-          if (good.skuNum > 1) {
-            await this.$store.dispatch('changeNum', { skuId, skuNum });
-            this.getCarList();
-          }
-
-        } catch (e) {
-          alert(e.message);
-        }
-        this.flag = false;
-      },
-      async deleteGood(good) { 
-       if(!confirm('你确定删除吗?')) return;
-       let {skuId} = good;
-        try {
-          await this.$store.dispatch('deleteGood', skuId);
+        try{
+        await this.$store.dispatch('ChangeNum', {skuId, skuNum});
           this.getCarList();
         }catch(e) {
           alert(e.message);
         }
       },
-      async changeChecked(good) {
-        let {skuId} = good;
-        let isChecked = good.isChecked == 0 ? 1 : 0;
-        try {
-          await this.$store.dispatch('changeChecked', {skuId, isChecked});
+     async deleteGood(car) {
+        let {skuId} = car;
+        try{
+        await this.$store.dispatch('deleteGood', skuId);
           this.getCarList();
         }catch(e) {
           alert(e.message);
@@ -142,15 +128,18 @@ import { mapGetters } from 'vuex';
         this.$store.dispatch('getCarList');
       }
     },
+    mounted() {
+      this.getCarList();
+    },
     computed: {
       ...mapGetters(['cartInfoList']),
       total() {
-        return this.cartInfoList.reduce((pre, cur) => cur.isChecked && pre + cur.isChecked, 0)
+       return this.cartInfoList.reduce((pre, cur) => cur.isChecked && pre + cur.isChecked, 0);
       },
       totalPrice() {
         return this.cartInfoList.reduce((pre, cur) => cur.isChecked && pre + cur.skuNum * cur.skuPrice, 0)
       }
-    },
+    }
   }
 </script>
 
@@ -235,7 +224,6 @@ import { mapGetters } from 'vuex';
             }
           }
 
-
           .cart-list-con4 {
             width: 10%;
 
@@ -275,7 +263,7 @@ import { mapGetters } from 'vuex';
           }
 
           .cart-list-con6 {
-            width: 13%;
+            width: 10%;
 
             .sum {
               font-size: 16px;
@@ -283,7 +271,7 @@ import { mapGetters } from 'vuex';
           }
 
           .cart-list-con7 {
-            width: 12.5%;
+            width: 13%;
 
             a {
               color: #666;

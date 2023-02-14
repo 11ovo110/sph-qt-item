@@ -94,7 +94,6 @@ import { mapState } from 'vuex';
     },
     mounted() {
       this.getGoods();
-      
     },
     methods: {
       getCurrent(current) {

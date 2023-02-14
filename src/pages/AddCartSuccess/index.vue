@@ -9,12 +9,12 @@
           </div>
           <div class="right-info">
             <p class="title">{{goodInfo.skuName}}</p>
-            <p class="attr">颜色：{{goodInfo.skuDesc}} 数量：{{$route.params.skuNum}}</p>
+            <p class="attr">{{goodInfo.skuDesc}}</p>
           </div>
         </div>
         <div class="right-gocart">
           <router-link :to="`/detail/${goodInfo.id}`" class="sui-btn btn-xlarge">查看商品详情</router-link>
-          <router-link to="/shopcar">去购物车结算 > </router-link>
+          <router-link to="/shopcar" >去购物车结算 > </router-link>
         </div>
       </div>
     </div>
@@ -22,11 +22,12 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
   export default {
     name: 'AddCartSuccess',
     data() {
       return {
-        goodInfo: JSON.parse(sessionStorage.getItem('goodInfo'))
+        goodInfo: JSON.parse(sessionStorage.getItem('addcar'))
       }
     },
   }
