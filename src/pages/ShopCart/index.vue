@@ -40,7 +40,7 @@
     </div>
     <div class="cart-tool">
       <div class="select-all">
-        <input class="chooseAll" type="checkbox">
+        <input class="chooseAll" type="checkbox" :checked="checkAll">
         <span>全选</span>
       </div>
       <div class="option">
@@ -138,6 +138,9 @@ import { mapGetters } from 'vuex';
       },
       totalPrice() {
         return this.cartInfoList.reduce((pre, cur) => cur.isChecked && pre + cur.skuNum * cur.skuPrice, 0)
+      },
+      checkAll(car) {
+        return this.cartInfoList.every(item => item.isChecked) && this.cartInfoList.length > 0;
       }
     }
   }
