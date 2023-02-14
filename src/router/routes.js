@@ -4,6 +4,7 @@ import Register from '@/pages/Register/Register.vue';
 import Search from '@/pages/Search';
 import Detail from '@/pages/Detail';
 import AddCartSuccess from '@/pages/AddCartSuccess';
+import shopCart from '@/pages/ShopCart';
 
 export const routes = [
   {
@@ -38,6 +39,11 @@ export const routes = [
     component: AddCartSuccess,
     meta: {flag: true},
     name: 'success'
+  },
+  {
+    path: '/shopcar',
+    component: shopCart,
+    meta: {flag: true}
   },
   {
     path: '/',

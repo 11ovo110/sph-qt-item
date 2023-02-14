@@ -2,6 +2,11 @@ import axios from 'axios';
 
 import nprogress from 'nprogress';
 import 'nprogress/nprogress.css';
+import userTemp from './userTempId';
+
+
+//控制进度条旋转器
+nprogress.configure({ showSpinner: false })
 
 let request = axios.create({
   baseURL: '/api',
@@ -10,6 +15,7 @@ let request = axios.create({
 
 request.interceptors.request.use(config => {
   nprogress.start();
+  config.headers.userTempId = userTemp();
   return config;
 })
 

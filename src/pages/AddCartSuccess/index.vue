@@ -13,8 +13,8 @@
           </div>
         </div>
         <div class="right-gocart">
-          <a href="javascript:" class="sui-btn btn-xlarge">查看商品详情</a>
-          <a href="javascript:" >去购物车结算 > </a>
+          <router-link :to="`/detail/${goodInfo.id}`" class="sui-btn btn-xlarge">查看商品详情</router-link>
+          <router-link to="/shopcar">去购物车结算 > </router-link>
         </div>
       </div>
     </div>
@@ -24,9 +24,9 @@
 <script>
   export default {
     name: 'AddCartSuccess',
-    computed: {
-      goodInfo() {
-        return JSON.parse(sessionStorage.getItem('goodInfo'));
+    data() {
+      return {
+        goodInfo: JSON.parse(sessionStorage.getItem('goodInfo'))
       }
     },
   }
