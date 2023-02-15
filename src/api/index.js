@@ -25,4 +25,4 @@ export const reqRegister = (data) => request.post(`/user/passport/register`, dat
 
 export const reqLogin = (data) => request.post(`/user/passport/login`, data);
 
-export const reqGetUserInfo = () => request.get('/user/passport/auth/getUserInfo');
+export const reqGetUserInfo = () => request.get(`/user/passport/auth/getUserInfo`);

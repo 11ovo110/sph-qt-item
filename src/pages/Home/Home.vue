@@ -23,7 +23,7 @@ export default {
   name: 'Home',
   mounted() {
     this.$store.dispatch('getFloor');
-    this.$store.dispatch('getUserInfo');
+    this.$store.dispatch('getUserInfo')
   },
   computed: {
     ...mapState({

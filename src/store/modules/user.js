@@ -1,4 +1,4 @@
-import { reqGetUserInfo, reqLogin, reqRegister, reqGetCode } from "@/api"
+import { reqGetCode, reqLogin, reqRegister, reqGetUserInfo } from "@/api"
 
 const state = {
   token: '',
@@ -15,11 +15,11 @@ const mutations = {
 }
 
 const actions = {
-  async getCode({dispatch, state, getters, commit} ,phone) {
+  async getCode({dispatch, state, commit, getters}, phone) {
     let result = await reqGetCode(phone);
     console.log(result);
   },
-  async register({dispatch, state, getters, commit}, data) {
+  async register({dispatch, state, commit, getters}, data) {
     let result = await reqRegister(data);
     if(result.code == 200) {
       return;
@@ -27,8 +27,9 @@ const actions = {
       return Promise.reject(new Error(result.message));
     }
   },
-  async login({dispatch, state, getters, commit}, data) {
+  async login({dispatch, state, commit, getters}, data) {
     let result = await reqLogin(data);
+    console.log(result);
     if(result.code == 200) {
       commit('LOGIN', result.data.token)
       return;
@@ -36,7 +37,7 @@ const actions = {
       return Promise.reject(new Error(result.message));
     }
   },
-  async getUserInfo({dispatch, state, commit, getters} ) {
+  async getUserInfo({dispatch, commit, getters, state}) {
     let result = await reqGetUserInfo();
     if(result.code == 200) {
       commit('GETUSERINFO', result.data.nickName);
