@@ -31,6 +31,25 @@ const actions = {
       return Promise.reject(new Error(result.message));
     }
   },
+  async deleteGood({dispatch, state, commit, getters}, skuId) {
+    let result = await reqDelateGood(skuId);
+    if(result.code == 200) {
+      return;
+    }else {
+      return Promise.reject(new Error(result.message));
+    }
+  },
+  deleteAll({dispatch, state, commit, getters}) {
+    let goods = getters.cartInfoList;
+    let arr = [];
+    goods.forEach(good => {
+      if(good.isChecked) {
+        let ps = dispatch('deleteGood', good.skuId);
+        arr.push(ps);
+      }
+    })
+    return Promise.all(arr);
+  }
 };
 
 const getters = {

@@ -11,7 +11,6 @@ const mutations = {
     state.typeArr = data;
   },
   GETBANNER(state, data) {
-    console.log(data);
     state.bannerArr = data;
   },
   GETFLOOR(state, data) {

@@ -24,14 +24,14 @@
           </li>
           <li class="cart-list-con5">
             <a @click="MinusNum(good)" class="mins">-</a>
-            <input autocomplete="off" type="text" @change="UpdateNum(good, $event)" :value="good.skuNum" minnum="1" class="itxt">
+            <input autocomplete="off" type="text" @input="UpdateNum(good, $event)" :value="good.skuNum" minnum="1" class="itxt">
             <a @click="AddNum(good)" class="plus">+</a>
           </li>
           <li class="cart-list-con6">
             <span class="sum">{{good.skuNum * good.skuPrice}}</span>
           </li>
           <li class="cart-list-con7">
-            <a href="#none" class="sindelet">删除</a>
+            <a @click="deleteGood(good)" class="sindelet">删除</a>
             <br>
             <a href="#none">移到收藏</a>
           </li>
@@ -40,11 +40,11 @@
     </div>
     <div class="cart-tool">
       <div class="select-all">
-        <input class="chooseAll" type="checkbox" :checked="checkAll">
+        <input class="chooseAll" type="checkbox" :checked="checkAll" @click="cheCkedHandler">
         <span>全选</span>
       </div>
       <div class="option">
-        <a href="#none">删除选中的商品</a>
+        <a @click="deleteAll">删除选中的商品</a>
         <a href="#none">移到我的关注</a>
         <a href="#none">清除下柜商品</a>
       </div>
@@ -65,12 +65,38 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import debounce from 'lodash/debounce';
+import throttle from 'lodash/throttle';
   export default {
     name: 'ShopCart',
     mounted() {
       this.getGood();
     },
     methods: {
+     async deleteAll() {
+      try {
+       await this.$store.dispatch('deleteAll');
+       this.getGood();
+      }catch(e) {
+        console.log('失败');
+      }
+      },
+     async cheCkedHandler(e) {
+      let isChecked = e.target.checked ? 1 : 0;
+      let arr = [];
+      this.cartInfoList.forEach(good => {
+      let {skuId} = good;
+       let ps = this.$store.dispatch('changeChecked', {skuId, isChecked});
+       arr.push(ps);
+      })
+      try {
+        await Promise.all(arr);
+        this.getGood();
+
+      }catch(e) {
+        alert('失败');
+      }
+      },
      async changeChecked(good) {
         let {skuId} = good;
         let isChecked = good.isChecked == 0 ? 1 : 0;
@@ -81,7 +107,7 @@ import { mapGetters } from 'vuex';
           alert(e.message);
         }
       },
-     async MinusNum(good) {
+      MinusNum: throttle(async function(good) {
         if(good.skuNum < 2) return;
         let {skuId} = good;
         let skuNum = -1;
@@ -91,7 +117,7 @@ import { mapGetters } from 'vuex';
         }catch(e) {
           alert(e.message);
         }
-      },
+      }, 2000),
      async AddNum(good) {
         let {skuId} = good;
         let skuNum = 1;
@@ -102,7 +128,7 @@ import { mapGetters } from 'vuex';
           alert(e.message);
         }
       },
-     async UpdateNum(good, e) {
+      UpdateNum: debounce(async function(good, e) {
         let {skuId} = good;
         let inputValue = e.target.value * 1;
         let skuNum;
@@ -117,9 +143,18 @@ import { mapGetters } from 'vuex';
         }catch(e) {
           alert(e.message);
         }
-      },
+      }, 1000),
       getGood() {
         this.$store.dispatch('getGood');
+      },
+      async deleteGood(good) {
+        let {skuId} = good;
+        try {
+          await this.$store.dispatch('deleteGood', skuId);
+          this.getGood();
+        }catch(e) {
+          alert(e.message);
+        }
       }
     },
     computed: {
