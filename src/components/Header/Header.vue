@@ -74,7 +74,7 @@ export default {
     ...mapState({
         nickName: state => state.user.nickName
     })
-},
+  },
 }
 </script>
 

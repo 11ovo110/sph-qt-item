@@ -66,26 +66,26 @@
 </template>
 
 <script>
-export default {
-  name: 'Login',
-  data() {
-    return {
-      phone: '',
-      password: ''
-    }
-  },
-  methods: {
-    async login() {
-      let { phone, password } = this;
-      try {
-        await this.$store.dispatch('login', { phone, password });
-        this.$router.push('/home');
-      } catch (e) {
-        alert(e.message);
+  export default {
+    name: 'Login',
+    data() {
+      return {
+        phone: '',
+        password: ''
       }
-    }
-  },
-}
+    },
+    methods: {
+      async login() {
+        let { phone, password } = this;
+        try {
+          await this.$store.dispatch('login', { phone, password });
+          this.$router.push('/home');
+        } catch (e) {
+          alert(e.message);
+        }
+      }
+    },
+  }
 </script>
 
 <style lang="less" scoped>
@@ -161,7 +161,7 @@ export default {
                 width: 37px;
                 height: 32px;
                 border: 1px solid #ccc;
-                background: url(@/assets/images/icons.png) no-repeat -10px -201px;
+                background: url(../../assets/images/icons.png) no-repeat -10px -201px;
                 box-sizing: border-box;
                 border-radius: 2px 0 0 2px;
               }
