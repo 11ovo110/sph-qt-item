@@ -14,7 +14,7 @@
       <div class="content">
         <label>验证码:</label>
         <input type="text" placeholder="请输入验证码" v-model="code">
-        <button @click="getPhoneCode" style="width:100px;height:36px;margin:0 10px">验证码</button>
+        <button style="width:80px;height:36px;margin:0 10px" @click="getPhoneCode">验证码</button>
         <span class="error-msg">错误提示信息</span>
       </div>
       <div class="content">
@@ -61,30 +61,30 @@
     name: 'Register',
     data() {
       return {
+        code: '',
         phone: '',
         password: '',
         password1: '',
         agree: true,
-        code: '',
       }
     },
     methods: {
-    getPhoneCode() {
-      this.$store.dispatch('getPhoneCode', this.phone);
-    },
-    async register() {
-      let { phone, code, password, password1, agree } = this;
-      try {
-        if (phone && code && password === password1 && agree) {
-          await this.$store.dispatch('register', { phone, code, password });
-          this.$router.push('/login');
+      getPhoneCode() {
+        this.$store.dispatch('getCode', this.phone);
+      },
+      async register() {
+        let { phone, code, password, password1, agree } = this;
+        try {
+          if (phone && code && password === password1 && agree) {
+            await this.$store.dispatch('register', { phone, code, password });
+            this.$router.push('/login');
+          }
+        } catch (e) {
+          alert(e.message);
         }
-      } catch (e) {
-        alert(e.message);
       }
     }
-  },
-}
+  }
 </script>
 
 <style lang="less" scoped>

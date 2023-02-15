@@ -1,4 +1,4 @@
-import { reqGetCode, reqGetUserInfo, reqRegister, reqLogin } from "@/api"
+import { reqGetUserInfo, reqLogin, reqRegister, reqGetCode } from "@/api"
 
 const state = {
   token: '',
@@ -6,7 +6,7 @@ const state = {
 }
 
 const mutations = {
-  Login(state, token) {
+  LOGIN(state, token) {
     state.token = token;
   },
   GETUSERINFO(state, nickName) {
@@ -15,33 +15,33 @@ const mutations = {
 }
 
 const actions = {
- async getPhoneCode({dispatch, state, getters, commit}, phone) {
-  let result = await reqGetCode(phone);
+  async getCode({dispatch, state, getters, commit} ,phone) {
+    let result = await reqGetCode(phone);
     console.log(result);
- },
- async register({dispatch, state, getters, commit}, data) {
-  let result = await reqRegister(data);
-  if(result.code == 200) {
-    return;
-  }else {
-    return Promise.reject(new Error(result.message))
+  },
+  async register({dispatch, state, getters, commit}, data) {
+    let result = await reqRegister(data);
+    if(result.code == 200) {
+      return;
+    }else {
+      return Promise.reject(new Error(result.message));
+    }
+  },
+  async login({dispatch, state, getters, commit}, data) {
+    let result = await reqLogin(data);
+    if(result.code == 200) {
+      commit('LOGIN', result.data.token)
+      return;
+    }else {
+      return Promise.reject(new Error(result.message));
+    }
+  },
+  async getUserInfo({dispatch, state, commit, getters} ) {
+    let result = await reqGetUserInfo();
+    if(result.code == 200) {
+      commit('GETUSERINFO', result.data.nickName);
+    }
   }
- },
- async login({dispatch, state, getters, commit}, data) {
-  let result = await reqLogin(data);
-  if(result.code == 200) {
-    commit('Login', result.data.token);
-    console.log(result);
-  }else {
-    return Promise.reject(new Error(result.message));
-  }
- },
- async getUserInfo({dispatch, state, getters, commit}) {
-  let result = await reqGetUserInfo();
-  if(result.code == 200){
-    commit('GETUSERINFO', result.data.nickName);
-  }
- }
 }
 
 const getters = {

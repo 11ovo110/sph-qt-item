@@ -74,15 +74,15 @@
         password: ''
       }
     },
-    methods: {
-      async login() {
-        let { phone, password } = this;
-        try {
-          await this.$store.dispatch('login', { phone, password });
-          this.$router.push('/home');
-        } catch (e) {
-          alert(e.message);
-        }
+  methods: {
+    async login() {
+      let { phone, password } = this;
+      try {
+        await this.$store.dispatch('login', { phone, password });
+        this.$router.push('/home');
+      } catch (e) {
+        alert(e.message);
+      }
       }
     },
   }

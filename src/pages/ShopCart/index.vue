@@ -41,7 +41,7 @@
     </div>
     <div class="cart-tool">
       <div class="select-all">
-        <input class="chooseAll" type="checkbox" :checked="checkAll" @click="isCheckAll">
+        <input class="chooseAll" type="checkbox" :checked="checkAll" @change="updateChecked">
         <span>全选</span>
       </div>
       <div class="option">
@@ -75,12 +75,12 @@ export default {
     this.getGood();
   },
   methods: {
-    async isCheckAll(e) {
-      let arr = [];
+    async updateChecked(e) {
       let isChecked = e.target.checked ? 1 : 0;
+      let arr = [];
       this.cartInfoList.forEach(good => {
-        let { skuId } = good;
-        let ps = this.$store.dispatch('changeChecked', { skuId, isChecked });
+        let {skuId} = good;
+        let ps =  this.$store.dispatch('changeChecked', {skuId, isChecked}); 
         arr.push(ps);
       })
       await Promise.all(arr);
@@ -98,20 +98,21 @@ export default {
       await Promise.all(arr);
       this.getGood();
     },
-    async deleteGood(good) {
-      let { skuId } = good;
-      try {
-        await this.$store.dispatch('deleteGood', skuId);
-        this.getGood();
-      } catch (e) {
-        alert(e.message);
-      }
-    },
     async changeChecked(good) {
       let { skuId } = good;
       let isChecked = good.isChecked == 0 ? 1 : 0;
       try {
         await this.$store.dispatch('changeChecked', { skuId, isChecked });
+        this.getGood();
+      } catch (e) {
+        alert(e.message);
+      }
+    },
+    async deleteGood(good) {
+      let { skuId } = good;
+      try {
+        await this.$store.dispatch('deleteGood', skuId);
+        console.log(111);
         this.getGood();
       } catch (e) {
         alert(e.message);
@@ -153,9 +154,9 @@ export default {
       } catch (e) {
         alert(e.message);
       }
-    }, 1000),
+    }, 2000),
     getGood() {
-      this.$store.dispatch('getCarList');
+      this.$store.dispatch('getGood');
     }
   },
   computed: {

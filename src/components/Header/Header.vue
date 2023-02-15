@@ -54,6 +54,11 @@ export default {
         keyword: ''
     }
   },
+  computed: {
+    ...mapState({
+        nickName: state => state.user.nickName
+    })
+  },
   mounted() {
     this.$bus.$on('keyword', (keyword) => {
         this.keyword = keyword;
@@ -69,11 +74,6 @@ export default {
             query: this.$route.query
         })
     }
-  },
-  computed: {
-    ...mapState({
-        nickName: state => state.user.nickName
-    })
   },
 }
 </script>
