@@ -7,10 +7,14 @@
           <div class="container">
               <div class="loginList">
                   <p>尚品汇欢迎您！</p>
-                  <p>
+                  <p v-show="!nickName">
                       <span>请</span>
                       <router-link to="/login">登录</router-link>
                       <router-link to="register" class="register">免费注册</router-link>
+                  </p>
+                  <p v-show="nickName">
+                      <a>{{nickName}}</a>
+                      <a class="register">退出登录</a>
                   </p>
               </div>
               <div class="typeList">
@@ -28,9 +32,9 @@
       <!--头部第二行 搜索区域-->
       <div class="bottom">
           <h1 class="logoArea">
-              <a class="logo" title="尚品汇" href="###" target="_blank">
+              <router-link class="logo" title="尚品汇" to="/home">
                   <img src="./images/logo.png" alt="">
-              </a>
+              </router-link>
           </h1>
           <div class="searchArea">
               <form action="###" class="searchForm">
@@ -44,6 +48,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 export default {
   name: 'Header',
   data() {
@@ -51,12 +56,22 @@ export default {
         keyword: ''
     }
   },
+  mounted() {
+    this.$bus.$on('keyword', (keyword) => {
+        this.keyword = keyword;
+    })
+  },
+  computed: {
+    ...mapState({
+        nickName: state => state.user.nickName
+    })
+  },
   methods: {
     goSearch() {
         this.$router.push({
             name: 'search',
             params: {
-                keword: this.keyword || undefined
+                keyword: this.keyword || undefined
             },
             query: this.$route.query
         })

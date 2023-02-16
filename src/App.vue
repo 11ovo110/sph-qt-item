@@ -1,13 +1,17 @@
 <template>
   <div>
     <Header></Header>
-    <Footer></Footer>
+    <router-view></router-view>
+    <Footer v-show="$route.meta.flag"></Footer>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  mounted() {
+    this.$store.dispatch('getTypeNav');
+  },
 }
 </script>
 
