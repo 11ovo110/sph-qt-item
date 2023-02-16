@@ -3,37 +3,37 @@
     <!-- 注册内容 -->
     <div class="register">
       <h3>注册新用户
-        <span class="go">我有账号，去 <router-link to="/login">登陆</router-link>
+        <span class="go">我有账号，去 <a href="login.html" target="_blank">登陆</a>
         </span>
       </h3>
       <div class="content">
         <label>手机号:</label>
-        <input type="text" placeholder="请输入你的手机号" v-model="phone">
+        <input type="text" placeholder="请输入你的手机号">
         <span class="error-msg">错误提示信息</span>
       </div>
       <div class="content">
         <label>验证码:</label>
-        <input type="text" placeholder="请输入验证码" v-model="code">
-        <button style="width:80px;height:36px;margin:0 10" @click="getCode">验证码</button>
+        <input type="text" placeholder="请输入验证码">
+        <img ref="code" src="http://182.92.128.115/api/user/passport/code" alt="code">
         <span class="error-msg">错误提示信息</span>
       </div>
       <div class="content">
         <label>登录密码:</label>
-        <input type="text" placeholder="请输入你的登录密码" v-model="password">
+        <input type="text" placeholder="请输入你的登录密码">
         <span class="error-msg">错误提示信息</span>
       </div>
       <div class="content">
         <label>确认密码:</label>
-        <input type="text" placeholder="请输入确认密码" v-model="password1">
+        <input type="text" placeholder="请输入确认密码">
         <span class="error-msg">错误提示信息</span>
       </div>
       <div class="controls">
-        <input name="m1" type="checkbox" v-model="agree">
+        <input name="m1" type="checkbox">
         <span>同意协议并注册《尚品汇用户协议》</span>
         <span class="error-msg">错误提示信息</span>
       </div>
       <div class="btn">
-        <button @click="register">完成注册</button>
+        <button>完成注册</button>
       </div>
     </div>
 
@@ -58,32 +58,7 @@
 
 <script>
   export default {
-    name: 'Register',
-    data() {
-      return {
-        code: '',
-        password: '',
-        password1: '',
-        agree: true,
-        phone: ''
-      }
-    },
-    methods: {
-      getCode() {
-        this.$store.dispatch('getCode', this.phone);
-      },
-      async register() {
-        let { password, password1, phone, code, agree } = this;
-        try {
-          if (password === password1 && phone && code && agree) {
-            await this.$store.dispatch('register', { phone, password, code });
-            this.$router.push('/login');
-          }
-        } catch (e) {
-          alert(e.message);
-        }
-      }
-    },
+    name: 'Register'
   }
 </script>
 

@@ -5,16 +5,16 @@
       <div class="goods">
         <div class="left-good">
           <div class="left-pic">
-            <img :src="goodInfo.skuDefaultImg">
+            <img src="good.skuDefaultImg">
           </div>
           <div class="right-info">
-            <p class="title">{{goodInfo.skuName}}</p>
-            <p class="attr">{{goodInfo.skuDesc}}</p>
+            <p class="title">小米红米 Redmi note8 手机 梦幻蓝 全网通(4GB+64GB)</p>
+            <p class="attr">颜色：WFZ5099IH/5L钛金釜内胆 数量：2</p>
           </div>
         </div>
         <div class="right-gocart">
-          <router-link :to="`/detail/${goodInfo.id}`" class="sui-btn btn-xlarge">查看商品详情</router-link>
-          <router-link to="/shopcar" >去购物车结算 > </router-link>
+          <a href="javascript:" class="sui-btn btn-xlarge">查看商品详情</a>
+          <a href="javascript:" >去购物车结算 > </a>
         </div>
       </div>
     </div>
@@ -24,11 +24,6 @@
 <script>
   export default {
     name: 'AddCartSuccess',
-    data() {
-      return {
-        goodInfo: JSON.parse(sessionStorage.getItem('carInfo'))
-      }
-    }
   }
 </script>
 
