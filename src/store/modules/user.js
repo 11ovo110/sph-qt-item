@@ -1,4 +1,4 @@
-import { reqGetCode, reqGetUserInfo, reqLogin, reqLoginOut, reqRegister } from "@/api"
+import { reqGetCode, reqGetUserInfo, reqLogin, reqLoginOut, reqRegister } from "@/api";
 import { GET_TOKEN, SET_TOKEN, REMOVE_TOKEN } from "@/utils/auth-token";
 
 const state = {
@@ -14,8 +14,8 @@ const mutations = {
     state.nickName = nickName;
   },
   LOGINOUT(state) {
-    state.nickName = '';
     state.token = '';
+    state.nickName = '';
     REMOVE_TOKEN();
   }
 }
@@ -49,13 +49,10 @@ const actions = {
       commit('GETUSERINFO', result.data.nickName)
     }
   },
-  async loginOut({dispatch, state, commit, getters}) {
+  async loginOunt({dispatch, state, commit, getters}) {
     let result = await reqLoginOut();
     if(result.code == 200) {
       commit('LOGINOUT');
-      return;
-    }else {
-      return Promise.reject(new Error(result.message));
     }
   }
 }

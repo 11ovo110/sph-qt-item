@@ -10,6 +10,7 @@ import 'swiper/css/swiper.min.css';
 import '@/mock';
 import router from './router';
 import store from './store';
+import './permisstion';
 
 Vue.component(Footer.name, Footer);
 Vue.component(Header.name, Header);

@@ -67,9 +67,6 @@ export default {
     })
   },
   methods: {
-    loginOut() {
-        this.$store.dispatch('loginOut');
-    },
     goSearch() {
         this.$router.push({
             name: 'search',
@@ -78,6 +75,9 @@ export default {
             },
             query: this.$route.query
         })
+    },
+    loginOut() {
+        this.$store.dispatch('loginOunt');
     }
   },
 }
