@@ -5,6 +5,10 @@ import Search from '@/pages/Search';
 import Detail from '@/pages/Detail';
 import ShopCart from '@/pages/ShopCart';
 import AddCartSuccess from '@/pages/AddCartSuccess';
+import Pay from '@/pages/Detail';
+import PaySuccess from '@/pages/PaySuccess';
+import Trade from '@/pages/Trade';
+import Center from '@/pages/Center';
 
 export const routes = [
   {
@@ -43,6 +47,30 @@ export const routes = [
     path: '/shopcar',
     component: ShopCart,
     meta: {flag: true}
+  },
+  {
+    path: '/pay',
+    component: Pay,
+    meta: {flag: true},
+    name: '支付'
+  },
+  {
+    path: '/paysuccess',
+    component: PaySuccess,
+    meta: {flag: true},
+    name: '支付成功'
+  },
+  {
+    path: '/trad',
+    component: Trade,
+    meta: {flag: true},
+    name: '我的订单'
+  },
+  {
+    path: '/center',
+    component: Center,
+    meta: {flag: true},
+    name: '个人中心'
   },
   {
     path: '/',

@@ -25,6 +25,8 @@ export const reqGetUserInfo = () => request.get("/user/passport/auth/getUserInfo
 
 export const reqLoginOut = () => request.get("/user/passport/logout");
 
+export const reqUserTrad = () => request.get("/order/auth/trade");
+
 export const reqBanner = () => mockRequest.get("/banner");
 
 export const reqFloor = () => mockRequest.get("/floor");

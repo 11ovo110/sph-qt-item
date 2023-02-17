@@ -46,7 +46,10 @@ const actions = {
   async getUserInfo({dispatch, state, commit, getters},) {
     let result = await reqGetUserInfo();
     if(result.code == 200) {
-      commit('GETUSERINFO', result.data.nickName)
+      commit('GETUSERINFO', result.data.nickName);
+      return;
+    }else {
+      return Promise.reject(new Error(result.message));
     }
   },
   async loginOunt({dispatch, state, commit, getters}) {
