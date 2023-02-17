@@ -61,7 +61,7 @@ export const routes = [
     name: '支付成功'
   },
   {
-    path: '/trad',
+    path: '/trade',
     component: Trade,
     meta: {flag: true},
     name: '我的订单'

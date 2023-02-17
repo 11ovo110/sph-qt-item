@@ -3,28 +3,14 @@
     <h3 class="title">填写并核对订单信息</h3>
     <div class="content">
       <h5 class="receive">收件人信息</h5>
-      <div class="address clearFix">
-        <span class="username selected">张三</span>
-        <p>
-          <span class="s1">北京市昌平区宏福科技园综合楼6层</span>
-          <span class="s2">15010658793</span>
-          <span class="s3">默认地址</span>
-        </p>
-      </div>
-      <div class="address clearFix">
-        <span class="username selected">李四</span>
-        <p>
-          <span class="s1">北京市昌平区宏福科技园综合楼6层</span>
-          <span class="s2">13590909098</span>
-          <span class="s3">默认地址</span>
-        </p>
-      </div>
-      <div class="address clearFix">
-        <span class="username selected">王五</span>
-        <p>
-          <span class="s1">北京市昌平区宏福科技园综合楼6层</span>
-          <span class="s2">18012340987</span>
-          <span class="s3">默认地址</span>
+      <div class="address clearFix" v-for="user in userArr" :key="user.id">
+        <span class="username selected">{{user.consignee}}</span>
+        <p @click="changeUser(user)">
+          <span class="s1">{{user.fullAddress}}</span>
+          <span class="s2">{{user.phoneNum}}</span>
+          <transition name="s3">
+            <span class="s3" v-show="user.isDefault == 1">默认地址</span>
+          </transition>
         </p>
       </div>
       <div class="line"></div>
@@ -45,34 +31,19 @@
       </div>
       <div class="detail">
         <h5>商品清单</h5>
-        <ul class="list clearFix">
+        <ul class="list clearFix" v-for="good in shopArr" :key="good.skuId">
           <li>
-            <img src="./images/goods.png" alt="">
+            <img :src="good.imgUrl" alt="" title="good.skuName" style="width:100px;height:100px;border-radius:7px">
           </li>
           <li>
             <p>
-              Apple iPhone 6s (A1700) 64G 玫瑰金色 移动联通电信4G手机硅胶透明防摔软壳 本色系列</p>
+              {{good.skuName}}</p>
             <h4>7天无理由退货</h4>
           </li>
           <li>
-            <h3>￥5399.00</h3>
+            <h3>￥{{ good.orderPrice }}.00</h3>
           </li>
-          <li>X1</li>
-          <li>有货</li>
-        </ul>
-        <ul class="list clearFix">
-          <li>
-            <img src="./images/goods.png" alt="">
-          </li>
-          <li>
-            <p>
-              Apple iPhone 6s (A1700) 64G 玫瑰金色 移动联通电信4G手机硅胶透明防摔软壳 本色系列</p>
-            <h4>7天无理由退货</h4>
-          </li>
-          <li>
-            <h3>￥5399.00</h3>
-          </li>
-          <li>X1</li>
+          <li>X{{good.skuNum}}</li>
           <li>有货</li>
         </ul>
       </div>
@@ -91,8 +62,8 @@
     <div class="money clearFix">
       <ul>
         <li>
-          <b><i>1</i>件商品，总商品金额</b>
-          <span>¥5399.00</span>
+          <b><i>{{total}}</i>件商品，总商品金额</b>
+          <span>¥{{totalPrice}}.00</span>
         </li>
         <li>
           <b>返现：</b>
@@ -105,12 +76,12 @@
       </ul>
     </div>
     <div class="trade">
-      <div class="price">应付金额:　<span>¥5399.00</span></div>
+      <div class="price">应付金额:<span>¥{{totalPrice}}.00</span></div>
       <div class="receiveInfo">
         寄送至:
-        <span>北京市昌平区宏福科技园综合楼6层</span>
-        收货人：<span>张三</span>
-        <span>15010658793</span>
+        <span>{{checkedUser.fullAddress}}</span>
+        收货人：<span>{{checkedUser.consignee}}</span>
+        <span>{{checkedUser.phoneNum}}</span>
       </div>
     </div>
     <div class="sub clearFix">
@@ -122,6 +93,38 @@
 <script>
   export default {
     name: 'Trade',
+    data() {
+      return {
+        shopArr: [],
+        userArr: []
+      }
+    },
+    mounted() {
+      this.getTrade();
+    },
+    computed: {
+      checkedUser() {
+        return this.userArr.find(user => user.isDefault == '1') || {}
+      },
+      total() {
+        return this.shopArr.length;
+      },
+      totalPrice() {
+        return this.shopArr.reduce((pre, cur) => pre + cur.orderPrice * cur.skuNum, 0)
+      }
+    },
+    methods: {
+      changeUser(user) {
+        this.userArr.forEach(item => item.isDefault = '0');
+        user.isDefault = '1';
+      },
+     async getTrade() {
+       let result = await this.$ajax.reqUserTrad();
+       this.shopArr = result.data.detailArrayList;
+       this.userArr = result.data.userAddressList;
+       console.log(result);
+      }
+    },
   }
 </script>
 
@@ -150,7 +153,17 @@
       .address {
         padding-left: 20px;
         margin-bottom: 15px;
-
+        .s3-enter {
+          opacity: 1;
+          transform: scale(1);
+        }
+        .s3-enter-active {
+          transition: all .4s;
+        }
+        .s3-enter-to {
+          opacity: 0.7;
+          transform: scale(.8);
+        }
         .username {
           float: left;
           width: 100px;

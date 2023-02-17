@@ -11,6 +11,9 @@ import '@/mock';
 import router from './router';
 import store from './store';
 import './permisstion';
+import * as ajax from './api';
+
+Vue.prototype.$ajax = ajax;
 
 Vue.component(Footer.name, Footer);
 Vue.component(Header.name, Header);
