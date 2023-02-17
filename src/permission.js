@@ -1,5 +1,5 @@
-import router from "./router";
 import store from "./store";
+import router from "./router";
 
 router.beforeEach(async (to, from, next) => {
   let {token, nickName} = store.state.user;
@@ -10,17 +10,17 @@ router.beforeEach(async (to, from, next) => {
       if(nickName) {
         next();
       }else {
-        try {
-          await store.dispatch('getUserInfo');
-          next();
-        }catch(e) {
-          await store.dispatch('loginOut');
-          alert('账号登陆失效');
-          next({path: '/login'});
-        }
+       try {
+        await store.dispatch('getUserInfo');
+        next();
+       }catch(e) {
+        await store.dispatch('loginOut');
+        alert('账户登录失效');
+        next();
+       }
       }
     }
   }else {
     next();
   }
-}) 
+})

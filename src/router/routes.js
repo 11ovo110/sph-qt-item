@@ -49,16 +49,16 @@ export const routes = [
     meta: {flag: true}
   },
   {
-    path: '/pay',
-    component: Pay,
-    meta: {flag: true},
-    name: '支付'
-  },
-  {
     path: '/center',
     component: Center,
     meta: {flag: true},
     name: '个人中心'
+  },
+  {
+    path: '/pay',
+    component: Pay,
+    meta: {flag: true},
+    name: '支付'
   },
   {
     path: '/paysuccess',
