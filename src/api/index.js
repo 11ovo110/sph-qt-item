@@ -19,9 +19,11 @@ export const reqGetCode = (phone) => request.get(`/user/passport/sendCode/${phon
 
 export const reqRegister = (data) => request.post(`/user/passport/register`, data);
 
-export const reqLogin = (data) => request.post('/user/passport/login', data);
+export const reqLogin = (data) => request.post("/user/passport/login", data);
 
-export const reqGetUserInfo = () => request.get('/user/passport/auth/getUserInfo');
+export const reqGetUserInfo = () => request.get("/user/passport/auth/getUserInfo");
+
+export const reqLoginOut = () => request.get("/user/passport/logout");
 
 export const reqBanner = () => mockRequest.get("/banner");
 

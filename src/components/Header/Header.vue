@@ -14,7 +14,7 @@
                   </p>
                   <p v-show="nickName">
                       <a>{{nickName}}</a>
-                      <a class="register">退出登录</a>
+                      <a class="register" @click="loginOut">退出登录</a>
                   </p>
               </div>
               <div class="typeList">
@@ -67,6 +67,9 @@ export default {
     })
   },
   methods: {
+    loginOut() {
+        this.$store.dispatch('loginOut');
+    },
     goSearch() {
         this.$router.push({
             name: 'search',
