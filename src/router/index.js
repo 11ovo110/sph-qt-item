@@ -16,13 +16,10 @@ VueRouter.prototype.replace = function(location) {
   replace.call(this, location, () => {}, () => {});
 }
 
-const router = new VueRouter({
+export const router = new VueRouter({
   mode: 'hash',
   routes,
   scrollBehavior(to, from) {
     return {y: 0};
   }
 })
-
-export default router;
-

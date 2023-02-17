@@ -80,7 +80,7 @@ export default {
       let { phone, password } = this;
       try {
         await this.$store.dispatch('login', { phone, password });
-        alert('登录成功');
+        alert('登陆成功');
         this.$router.push('/home');
       } catch (e) {
         alert(e.message);

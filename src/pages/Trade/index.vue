@@ -3,14 +3,12 @@
     <h3 class="title">填写并核对订单信息</h3>
     <div class="content">
       <h5 class="receive">收件人信息</h5>
-      <div class="address clearFix" v-for="user in userArr" :key="user.id">
+      <div class="address clearFix" v-for="user in userList" :key="user.id">
         <span class="username selected">{{user.consignee}}</span>
         <p @click="changeUser(user)">
           <span class="s1">{{user.fullAddress}}</span>
           <span class="s2">{{user.phoneNum}}</span>
-          <transition name="s3">
-            <span class="s3" v-show="user.isDefault == 1">默认地址</span>
-          </transition>
+          <span class="s3" v-show="user.isDefault == '1'">默认地址</span>
         </p>
       </div>
       <div class="line"></div>
@@ -31,17 +29,16 @@
       </div>
       <div class="detail">
         <h5>商品清单</h5>
-        <ul class="list clearFix" v-for="good in shopArr" :key="good.skuId">
+        <ul class="list clearFix" v-for="good in goodList" :key="good.skuId">
           <li>
-            <img :src="good.imgUrl" alt="" title="good.skuName" style="width:100px;height:100px;border-radius:7px">
+            <img :src="good.imgUrl" alt="" style="width: 100px;height:100px">
           </li>
           <li>
-            <p>
-              {{good.skuName}}</p>
+            <p>{{good.skuName}}</p>
             <h4>7天无理由退货</h4>
           </li>
           <li>
-            <h3>￥{{ good.orderPrice }}.00</h3>
+            <h3>￥{{good.orderPrice}}.00</h3>
           </li>
           <li>X{{good.skuNum}}</li>
           <li>有货</li>
@@ -76,12 +73,12 @@
       </ul>
     </div>
     <div class="trade">
-      <div class="price">应付金额:<span>¥{{totalPrice}}.00</span></div>
+      <div class="price">应付金额:　<span>¥{{totalPrice}}.00</span></div>
       <div class="receiveInfo">
         寄送至:
-        <span>{{checkedUser.fullAddress}}</span>
-        收货人：<span>{{checkedUser.consignee}}</span>
-        <span>{{checkedUser.phoneNum}}</span>
+        <span>{{SelectUser.fullAddress}}</span>
+        收货人：<span>{{SelectUser.consignee}}</span>
+        <span>{{SelectUser.phoneNum}}</span>
       </div>
     </div>
     <div class="sub clearFix">
@@ -91,38 +88,39 @@
 </template>
 
 <script>
+import { reqUserOrder } from '@/api';
+
   export default {
     name: 'Trade',
     data() {
       return {
-        shopArr: [],
-        userArr: []
+        goodList: [],
+        userList: []
       }
     },
     mounted() {
       this.getTrade();
     },
     computed: {
-      checkedUser() {
-        return this.userArr.find(user => user.isDefault == '1') || {}
+      SelectUser() {
+        return this.userList.find(user => user.isDefault == '1') || {};
       },
       total() {
-        return this.shopArr.length;
+        return this.goodList.length;
       },
       totalPrice() {
-        return this.shopArr.reduce((pre, cur) => pre + cur.orderPrice * cur.skuNum, 0)
+        return this.goodList.reduce((pre, cur) => pre + cur.skuNum * cur.orderPrice, 0);
       }
     },
     methods: {
       changeUser(user) {
-        this.userArr.forEach(item => item.isDefault = '0');
+        this.userList.forEach(user => user.isDefault = '0');
         user.isDefault = '1';
       },
-     async getTrade() {
-       let result = await this.$ajax.reqUserTrad();
-       this.shopArr = result.data.detailArrayList;
-       this.userArr = result.data.userAddressList;
-       console.log(result);
+      async getTrade() {
+        let result = await reqUserOrder();
+        this.goodList = result.data.detailArrayList;
+        this.userList = result.data.userAddressList;
       }
     },
   }
@@ -153,17 +151,7 @@
       .address {
         padding-left: 20px;
         margin-bottom: 15px;
-        .s3-enter {
-          opacity: 1;
-          transform: scale(1);
-        }
-        .s3-enter-active {
-          transition: all .4s;
-        }
-        .s3-enter-to {
-          opacity: 0.7;
-          transform: scale(.8);
-        }
+
         .username {
           float: left;
           width: 100px;
