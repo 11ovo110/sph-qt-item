@@ -76,10 +76,10 @@ export default {
             query: this.$route.query
         })
     },
-    async loginOut() {
-      await this.$store.dispatch('loginOut');
+    loginOut() {
+        this.$store.dispatch('loginOut');
     }
-    },
+  },
 }
 </script>
 

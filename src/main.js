@@ -8,7 +8,7 @@ import { SwiperSlide, Swiper } from 'vue-awesome-swiper';
 import Pagination from '@/components/Pagination';
 import 'swiper/css/swiper.min.css';
 import '@/mock';
-import {router} from './router';
+import router from './router';
 import store from './store';
 import './permission';
 import * as ajax from '@/api';

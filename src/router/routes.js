@@ -6,7 +6,7 @@ import Detail from '@/pages/Detail';
 import ShopCart from '@/pages/ShopCart';
 import AddCartSuccess from '@/pages/AddCartSuccess';
 import Center from '@/pages/Center';
-import Pay from '@/pages/Login';
+import Pay from '@/pages/Pay';
 import PaySuccess from '@/pages/PaySuccess';
 import Trade from '@/pages/Trade';
 
@@ -49,28 +49,28 @@ export const routes = [
     meta: {flag: true}
   },
   {
-    path: '/center',
-    component: Center,
-    meta: {flag: true},
-    name: '个人中心'
-  },
-  {
     path: '/pay',
     component: Pay,
     meta: {flag: true},
     name: '支付'
   },
   {
-    path: '/paysuccess',
-    name: '支付成功',
+    path: '/center',
+    component: Center,
     meta: {flag: true},
-    component: PaySuccess
+    name: '个人中心'
+  },
+  {
+    path: '/paysuccess',
+    component: PaySuccess,
+    meta: {flag: true},
+    name: '支付成功'
   },
   {
     path: '/trade',
-    name: '用户订单',
+    component: Trade,
     meta: {flag: true},
-    component: Trade
+    name: '用户订单页'
   },
   {
     path: '/',

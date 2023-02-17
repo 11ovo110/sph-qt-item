@@ -1,6 +1,5 @@
 import { reqGetCode, reqGetUserInfo, reqLogin, reqLoginOut, reqRegister } from "@/api"
-import { REMOVE_TOKEN, GET_TOKEN, SET_TOKEN } from "@/utils/auth-token";
-
+import { GET_TOKEN, REMOVE_TOKEN, SET_TOKEN } from "@/utils/auth-token";
 
 const state = {
   token: GET_TOKEN(),
@@ -44,6 +43,12 @@ const actions = {
       return Promise.reject(new Error(result.message));
     }
   },
+  async loginOut({dispatch, state, commit, getters}) {
+    let result = await reqLoginOut();
+    if(result.code == 200) {
+      commit('LOGINOUT');
+    }
+  },
   async getUserInfo({dispatch, state, commit, getters},) {
     let result = await reqGetUserInfo();
     if(result.code == 200) {
@@ -51,12 +56,6 @@ const actions = {
       return;
     }else {
       return Promise.reject(new Error(result.message));
-    }
-  },
-  async loginOut({dispatch, state, commit, getters}) {
-    let result = await reqLoginOut();
-    if(result.code == 200) {
-      commit('LOGINOUT');
     }
   }
 }
