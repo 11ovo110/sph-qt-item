@@ -118,7 +118,7 @@
         return this.goodList.reduce((pre, cur) => pre + cur.skuNum * cur.orderPrice, 0);
       },
       seleteUser() {
-        return this.userList.find(user => user.isDefault == '1');
+        return this.userList.find(user => user.isDefault == '1') || {};
       }
     },
   }
