@@ -27,6 +27,10 @@ export const reqLoginOut = () => request.get("/user/passport/logout");
 
 export const reqGetTrade = () => request.get("/order/auth/trade");
 
+export const reqOnsumitOrder = (tradeNo, data) => request.post(`/order/auth/submitOrder?tradeNo=${tradeNo}`, data);
+
+export const reqGetPayInfo = (orderId) => request.get(`/payment/weixin/createNative/${orderId}`);
+
 export const reqBanner = () => mockRequest.get("/banner");
 
 export const reqFloor = () => mockRequest.get("/floor");

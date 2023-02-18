@@ -7,8 +7,8 @@
           <span class="success-info">订单提交成功，请您及时付款，以便尽快为您发货~~</span>
         </h4>
         <div class="paymark">
-          <span class="fl">请您在提交订单<em class="orange time">4小时</em>之内完成支付，超时订单会自动取消。订单号：<em>145687</em></span>
-          <span class="fr"><em class="lead">应付金额：</em><em class="orange money">￥17,654</em></span>
+          <span class="fl">请您在提交订单<em class="orange time">4小时</em>之内完成支付，超时订单会自动取消。订单号：<em>{{payInfo.orderId}}</em></span>
+          <span class="fr"><em class="lead">应付金额：</em><em class="orange money">￥{{payInfo.totalFee}}</em></span>
         </div>
       </div>
       <div class="checkout-info">
@@ -84,6 +84,21 @@
 <script>
   export default {
     name: 'Pay',
+    data() {
+      return {
+        payInfo: {}
+      }
+    },
+    mounted() {
+      this.getPayInfo();
+    },
+    methods: {
+     async getPayInfo() {
+      let {orderId} = this.$route.query;
+      let result = await this.$ajax.reqGetPayInfo(orderId);
+      this.payInfo =  result.data;
+    }
+    },
   }
 </script>
 

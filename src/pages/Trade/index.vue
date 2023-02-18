@@ -46,7 +46,7 @@
       </div>
       <div class="bbs">
         <h5>买家留言：</h5>
-        <textarea placeholder="建议留言前先与商家沟通确认" class="remarks-cont"></textarea>
+        <textarea placeholder="建议留言前先与商家沟通确认" class="remarks-cont" v-model="orderComment"></textarea>
 
       </div>
       <div class="line"></div>
@@ -82,7 +82,7 @@
       </div>
     </div>
     <div class="sub clearFix">
-      <router-link class="subBtn" to="/pay">提交订单</router-link>
+      <a class="subBtn" @click="OnsumitOrder">提交订单</a>
     </div>
   </div>
 </template>
@@ -93,7 +93,9 @@
     data() {
       return {
         goodList: [],
-        userList: []
+        userList: [],
+        orderComment: '',
+        tradeNo: ''
       }
     },
     mounted() {
@@ -102,12 +104,35 @@
     methods: {
       async getTrade() {
         let result = await this.$ajax.reqGetTrade();
-        this.goodList = result.data.detailArrayList;
-        this.userList = result.data.userAddressList;
+        this.goodList = result.data.detailArrayList || [];
+        this.userList = result.data.userAddressList || [];
+        this.tradeNo = result.data.tradeNo;
       },
       changeUser(user) {
         this.userList.forEach(user => user.isDefault = '0');
         user.isDefault = '1';
+      },
+      async OnsumitOrder() {
+        let orderInfo = {
+        "consignee": this.seleteUser.consignee,
+        "consigneeTel": this.seleteUser.phoneNum,
+        "deliveryAddress": this.seleteUser.fullAddress,
+        "paymentWay": "ONLINE",
+        "orderComment": this.orderComment,
+        "orderDetailList": this.goodList
+      }
+      let tradeNo = this.tradeNo;
+      let result = await this.$ajax.reqOnsumitOrder(tradeNo, orderInfo);
+      console.log(result);
+      if(result.code == 200) {
+        alert('提交订单成功');
+        this.$router.push({
+          path: '/pay',
+          query: {
+            orderId: result.data
+          }
+        })
+      }
       }
     },
     computed: {
