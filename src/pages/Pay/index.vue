@@ -65,7 +65,7 @@
         <div class="hr"></div>
 
         <div class="submit">
-          <router-link class="btn" to="/paysuccess">立即支付</router-link>
+          <a class="btn" @click="Pay">立即支付</a>
         </div>
         <div class="otherpay">
           <div class="step-tit">
@@ -82,11 +82,14 @@
 </template>
 
 <script>
+import qrcode from 'qrcode';
+
   export default {
     name: 'Pay',
     data() {
       return {
-        payInfo: {}
+        payInfo: {},
+        code: ''
       }
     },
     mounted() {
@@ -97,6 +100,46 @@
       let {orderId} = this.$route.query;
       let result = await this.$ajax.reqGetPayInfo(orderId);
       this.payInfo =  result.data;
+    },
+    async Pay() {
+      let url = await qrcode.toDataURL(this.payInfo.codeUrl);
+      this.$alert(`<img src=${url} />`, '请输入微信支付', {
+          dangerouslyUseHTMLString: true,
+          showClose: false,
+          showCancelButton: true,
+          cancelButtonText: '支付遇到问题',
+          confirmButtonText: '我已支付成功',
+          center: true,
+          beforeClose: (action, instance, done) => {
+            if(action == 'cancel') {
+              clearInterval(timer);
+              this.$msgbox.close();
+              this.$message.error('出现问题请找ling');
+            }else {
+              clearInterval(timer);
+              this.$msgbox.close();
+              this.$router.push({path: '/paysuccess'});
+              // if(this.code == 200) {
+              //   clearInterval(timer);
+              //   this.$msgbox.close();
+              //   this.$router.push({path: '/paysuccess'});
+              // }
+            }
+          }
+        });
+       let timer = setInterval(async () => {
+        let result = await this.$ajax.reqPayState(this.$route.query.orderId);
+        this.code = result.code;
+        if (result.code == 200) {
+          this.$router.push({
+            path: '/paysuccess'
+          });
+          clearInterval(timer);
+          this.$msgbox.close();
+        } else {
+          console.log('未支付');
+        }
+      }, 2000)
     }
     },
   }

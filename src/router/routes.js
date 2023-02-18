@@ -1,76 +1,114 @@
-import Home from '@/pages/Home/Home.vue';
-import Login from '@/pages/Login';
-import Register from '@/pages/Register';
-import Search from '@/pages/Search';
-import Detail from '@/pages/Detail';
-import ShopCart from '@/pages/ShopCart';
-import AddCartSuccess from '@/pages/AddCartSuccess';
-import Center from '@/pages/Center';
-import Pay from '@/pages/Pay';
-import PaySuccess from '@/pages/PaySuccess';
-import Trade from '@/pages/Trade';
+// import Home from '@/pages/Home/Home.vue';
+// import Login from '@/pages/Login';
+// import Register from '@/pages/Register';
+// import Search from '@/pages/Search';
+// import Detail from '@/pages/Detail';
+// import ShopCart from '@/pages/ShopCart';
+// import AddCartSuccess from '@/pages/AddCartSuccess';
+// import Center from '@/pages/Center';
+// import Pay from '@/pages/Pay';
+// import PaySuccess from '@/pages/PaySuccess';
+// import Trade from '@/pages/Trade';
+// import MyOrder from '@/pages/Center/MyOrder/MyOrder.vue';
+// import TeamOrder from '@/pages/Center/TeamOrder/TeamOrder.vue';
 
 export const routes = [
   {
     path: '/home',
-    component: Home,
+    component: () =>  import('@/pages/Home/Home.vue'),
     meta: {flag: true}
   },
   {
     path: '/login',
-    component: Login,
+    component: () =>  import('@/pages/Login'),
     meta: {flag: false}
   },
   {
     path: '/register',
-    component: Register,
+    component: () =>  import('@/pages/Register'),
     meta: {flag: false}
   },
   {
     path: '/search/:keyword?',
-    component: Search,
+    component: () =>  import('@/pages/Search'),
     meta: {flag: true},
     name: 'search'
   },
   {
     path: '/detail/:skuId',
-    component: Detail,
+    component: () =>  import('@/pages/Detail'),
     meta: {flag: true}
   },
   {
-    path: '/addcartsuccesss/:skuNum',
-    component: AddCartSuccess,
+    path: '/addcarsuccess/:skuNum',
+    component: () =>  import('@/pages/AddCartSuccess'),
     meta: {flag: true},
     name: 'success'
   },
   {
     path: '/shopcar',
-    component: ShopCart,
+    component: () =>  import('@/pages/ShopCart'),
     meta: {flag: true}
   },
   {
     path: '/center',
-    component: Center,
+    component: () =>  import('@/pages/Center'),
     meta: {flag: true},
-    name: '个人中心'
+    children: [
+      {
+        path: 'myorder',
+        component: () =>  import('@/pages/Center/MyOrder/MyOrder.vue'),
+        meta: {flag: true}
+      },
+      {
+        path: 'teamorder',
+        component: () =>  import('@/pages/Center/TeamOrder/TeamOrder.vue'),
+        meta: {flag: true}
+      },
+      {
+        path: '/',
+        redirect: '/center/myorder'
+      }
+    ]
   },
   {
     path: '/pay',
-    component: Pay,
+    component: () =>  import('@/pages/Pay'),
     meta: {flag: true},
-    name: '支付'
+    name: '支付',
+    beforeEnter: (to, from, next) => {
+      if(from.path == '/trade') {
+        next();
+      }else {
+        next(false);
+      }
+    }
   },
   {
     path: '/paysuccess',
-    component: PaySuccess,
+    component: () =>  import('@/pages/PaySuccess'),
     meta: {flag: true},
-    name: '支付成功'
+    name: '支付成功',
+    beforeEnter: (to, from, next) => {
+      if(from.path == '/pay') {
+        next();
+      }else {
+        next(false);
+      }
+    }
   },
   {
     path: '/trade',
-    component: Trade,
+    component: () =>  import('@/pages/Trade'),
     meta: {flag: true},
-    name: '用户订单页'
+    name: '用户订单页',
+    beforeEnter: (to, from, next) => {
+      if(from.path == '/shopcar') {
+        next();
+      }else {
+        next(false);
+      }
+    }
   },
   {
     path: '/',

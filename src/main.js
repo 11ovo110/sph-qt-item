@@ -12,9 +12,24 @@ import router from './router';
 import store from './store';
 import './permission';
 import * as ajax from '@/api';
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+import VueLazyload from 'vue-lazyload'
+import enter from '@/assets/enter.gif';
+import leave from '@/assets/leave.gif';
+
+Vue.use(VueLazyload, {
+  preLoad: 1.3,
+  error: leave,
+  loading: enter,
+  attempt: 1
+})
 
 Vue.prototype.$ajax = ajax;
 
+Vue.use(ElementUI);
+
+Vue.use(VueLazyload);
 Vue.component(Footer.name, Footer);
 Vue.component(Header.name, Header);
 Vue.component(TypeNav.name, TypeNav);

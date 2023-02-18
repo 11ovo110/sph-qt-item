@@ -31,6 +31,10 @@ export const reqOnsumitOrder = (tradeNo, data) => request.post(`/order/auth/subm
 
 export const reqGetPayInfo = (orderId) => request.get(`/payment/weixin/createNative/${orderId}`);
 
+export const reqPayState = (orderId) => request.get(`/payment/weixin/queryPayStatus/${orderId}`);
+
+export const reqGetOrderList = (page, limit) => request.get(`/order/auth/${page}/${limit}`);
+
 export const reqBanner = () => mockRequest.get("/banner");
 
 export const reqFloor = () => mockRequest.get("/floor");

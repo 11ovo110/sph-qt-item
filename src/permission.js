@@ -1,13 +1,17 @@
 import store from "./store";
 import router from "./router";
 
+let Whitelist = ['/pay', '/paysuccess', '/trade', '/addcarsuccess', '/center', '/center/myorder', '/center/teamorder'];
+
 router.beforeEach(async (to, from, next) => {
   let {token, nickName} = store.state.user;
   if(token) {
     if(to.path == '/login') {
       next({path: '/home'});
     }else {
+      console.log(111);
       if(nickName) {
+        console.log(111);
         next();
       }else {
        try {
@@ -21,6 +25,10 @@ router.beforeEach(async (to, from, next) => {
       }
     }
   }else {
-    next();
+    if(Whitelist.includes(to.path)) {
+      next(false);
+    }else {
+      next();
+    }
   }
 })

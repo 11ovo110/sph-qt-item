@@ -104,10 +104,12 @@
     methods: {
       async getTrade() {
         let result = await this.$ajax.reqGetTrade();
-        this.goodList = result.data.detailArrayList || [];
-        this.userList = result.data.userAddressList || [];
+        if (result.code == 200) {
+        this.goodList = result.data.detailArrayList;
+        this.userList = result.data.userAddressList;
         this.tradeNo = result.data.tradeNo;
-      },
+      }
+    },
       changeUser(user) {
         this.userList.forEach(user => user.isDefault = '0');
         user.isDefault = '1';
