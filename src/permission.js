@@ -26,7 +26,7 @@ router.beforeEach(async (to, from, next) => {
     }
   }else {
     if(Whitelist.includes(to.path)) {
-      next(false);
+      next({path: '/login', query: {redirect: to.path}});
     }else {
       next();
     }

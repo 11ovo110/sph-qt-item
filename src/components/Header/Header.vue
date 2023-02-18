@@ -18,14 +18,14 @@
                   </p>
               </div>
               <div class="typeList">
-                  <router-link to="/trade">我的订单</router-link>
+                  <router-link to="/center">我的订单</router-link>
                   <router-link to="/shopcar">我的购物车</router-link>
-                  <router-link to="/center">历史订单</router-link>
-                  <a href="###">尚品汇会员</a>
-                  <a href="###">企业采购</a>
-                  <a href="###">关注尚品汇</a>
-                  <a href="###">合作招商</a>
-                  <a href="###">商家后台</a>
+                  <a href="#">我的尚品汇</a>
+                  <a href="#">尚品汇会员</a>
+                  <a href="#">企业采购</a>
+                  <a href="#">关注尚品汇</a>
+                  <a href="#">合作招商</a>
+                  <a href="#">商家后台</a>
               </div>
           </div>
       </div>
@@ -76,8 +76,9 @@ export default {
             query: this.$route.query
         })
     },
-    loginOut() {
+   async loginOut() {
         this.$store.dispatch('loginOut');
+        this.$router.push('/home');
     }
   },
 }
