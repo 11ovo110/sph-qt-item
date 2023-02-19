@@ -57,8 +57,6 @@ const actions = {
     if(result.code == 200) {
       commit('LOGINOUT');
       return;
-    }else {
-      return Promise.reject(new Error(result.message));
     }
   }
 }

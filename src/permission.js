@@ -1,7 +1,7 @@
 import store from "./store";
 import router from "./router";
 
-let whitelist = ['/pay', '/shopcar', '/paysuccess', '/trade', '/center', '/center/myorder', '/center/teamorder'];
+let whitelist = ['/center', '/center/myorder', '/center/teamorder', '/shopcar', '/pay', '/paysuccess', '/trade'];
 
 router.beforeEach(async (to, from, next) => {
   let {token, nickName} = store.state.user;

@@ -1,86 +1,86 @@
 <template>
-    <div>
-        <!-- 头部 -->
-        <header class="header">
-            <!-- 头部的第一行 -->
-            <div class="top">
-                <div class="container">
-                    <div class="loginList">
-                        <p>尚品汇欢迎您！</p>
-                        <p v-show="!nickName">
-                            <span>请</span>
-                            <router-link to="/login">登录</router-link>
-                            <router-link to="register" class="register">免费注册</router-link>
-                        </p>
-                        <p v-show="nickName">
-                            <a>{{ nickName }}</a>
-                            <a class="register" @click="loginOut">退出登录</a>
-                        </p>
-                    </div>
-                    <div class="typeList">
-                        <router-link to="/center">我的订单</router-link>
-                        <router-link to="/shopcar">我的购物车</router-link>
-                        <a href="###">我的尚品汇</a>
-                        <a href="###">尚品汇会员</a>
-                        <a href="###">企业采购</a>
-                        <a href="###">关注尚品汇</a>
-                        <a href="###">合作招商</a>
-                        <a href="###">商家后台</a>
-                    </div>
-                </div>
-            </div>
-            <!--头部第二行 搜索区域-->
-            <div class="bottom">
-                <h1 class="logoArea">
-                    <router-link class="logo" title="尚品汇" to="/home">
-                        <img src="./images/logo.png" alt="">
-                    </router-link>
-                </h1>
-                <div class="searchArea">
-                    <form action="###" class="searchForm">
-                        <input type="text" id="autocomplete" class="input-error input-xxlarge" v-model="keyword" />
-                        <button class="sui-btn btn-xlarge btn-danger" type="button" @click="goSearch">搜索</button>
-                    </form>
-                </div>
-            </div>
-        </header>
-    </div>
+  <div>
+    <!-- 头部 -->
+    <header class="header">
+      <!-- 头部的第一行 -->
+      <div class="top">
+          <div class="container">
+              <div class="loginList">
+                  <p>尚品汇欢迎您！</p>
+                  <p v-show="!nickName">
+                      <span>请</span>
+                      <router-link to="/login">登录</router-link>
+                      <router-link to="register" class="register">免费注册</router-link>
+                  </p>
+                  <p v-show="nickName">
+                      <a>{{nickName}}</a>
+                      <a class="register" @click="loginOut">退出登录</a>
+                  </p>
+              </div>
+              <div class="typeList">
+                  <router-link to="/center">我的订单</router-link>
+                  <router-link to="/shopcar">我的购物车</router-link>
+                  <a href="###">我的尚品汇</a>
+                  <a href="###">尚品汇会员</a>
+                  <a href="###">企业采购</a>
+                  <a href="###">关注尚品汇</a>
+                  <a href="###">合作招商</a>
+                  <a href="###">商家后台</a>
+              </div>
+          </div>
+      </div>
+      <!--头部第二行 搜索区域-->
+      <div class="bottom">
+          <h1 class="logoArea">
+              <router-link class="logo" title="尚品汇" to="/home">
+                  <img src="./images/logo.png" alt="">
+              </router-link>
+          </h1>
+          <div class="searchArea">
+              <form action="###" class="searchForm">
+                  <input type="text" id="autocomplete" class="input-error input-xxlarge" v-model="keyword" />
+                  <button class="sui-btn btn-xlarge btn-danger" type="button" @click="goSearch">搜索</button>
+              </form>
+          </div>
+      </div>
+  </header>
+  </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
 export default {
-    name: 'Header',
-    data() {
-        return {
-            keyword: ''
-        }
-    },
-    mounted() {
-        this.$bus.$on('keyword', (keyword) => {
-            this.keyword = keyword;
+  name: 'Header',
+  data() {
+    return {
+        keyword: ''
+    }
+  },
+  mounted() {
+    this.$bus.$on('keyword', (keyword) => {
+        this.keyword = keyword;
+    })
+  },
+  computed: {
+    ...mapState({
+        nickName: state => state.user.nickName
+    })
+  },
+  methods: {
+    goSearch() {
+        this.$router.push({
+            name: 'search',
+            params: {
+                keyword: this.keyword || undefined
+            },
+            query: this.$route.query
         })
     },
-    computed: {
-        ...mapState({
-            nickName: state => state.user.nickName
-        })
-    },
-    methods: {
-        goSearch() {
-            this.$router.push({
-                name: 'search',
-                params: {
-                    keyword: this.keyword || undefined
-                },
-                query: this.$route.query
-            })
-        },
-        async loginOut() {
-            await this.$store.dispatch('loginOut');
-            this.$router.push('/home');
-        }
-    },
+    async loginOut() {
+       await this.$store.dispatch('loginOut');
+       this.$router.push('/home');
+    }
+  },
 }
 </script>
 

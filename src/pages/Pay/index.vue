@@ -7,8 +7,8 @@
           <span class="success-info">订单提交成功，请您及时付款，以便尽快为您发货~~</span>
         </h4>
         <div class="paymark">
-          <span class="fl">请您在提交订单<em class="orange time">4小时</em>之内完成支付，超时订单会自动取消。订单号：<em>{{orderId}}</em></span>
-          <span class="fr"><em class="lead">应付金额：</em><em class="orange money">￥{{totalFee}}</em></span>
+          <span class="fl">请您在提交订单<em class="orange time">4小时</em>之内完成支付，超时订单会自动取消。订单号：<em>{{payInfo.orderId}}</em></span>
+          <span class="fr"><em class="lead">应付金额：</em><em class="orange money">￥{{payInfo.totalFee}}</em></span>
         </div>
       </div>
       <div class="checkout-info">
@@ -83,31 +83,25 @@
 
 <script>
   import qrcode from 'qrcode';
+
   export default {
     name: 'Pay',
     data() {
       return {
-        orderId: '',
-        codeUrl: '',
-        totalFee: '',
+        payInfo: '',
         code: ''
       }
     },
-    mounted() {
-      this.getOrder();
-    },
     methods: {
-      async getOrder() {
-        let result = await this.$ajax.reqGetOrder(this.$route.query.orderId);
+      async getPayInfo() {
+        let result = await this.$ajax.reqGetPay(this.$route.query.orderId);
         if(result.code == 200) {
-          this.orderId = result.data.orderId;
-          this.codeUrl = result.data.codeUrl;
-          this.totalFee = result.data.totalFee;
+          this.payInfo = result.data;
         }
       },
       async Pay() {
-        let url = await qrcode.toDataURL(this.codeUrl);
-        this.$alert(`<img src=${url} />`,'使用微信支付', {
+        let url = await qrcode.toDataURL(this.payInfo.codeUrl);
+        this.$alert(`<img src=${url} />`, '请使用微信支付', {
           dangerouslyUseHTMLString: true,
           showClose: false,
           showCancelButton: true,
@@ -117,26 +111,31 @@
           center: true,
           beforeClose: (action, instance, done) => {
             if(action == 'cancel') {
-              this.$message.error('出现问题, 请联系ling');
+              this.$message.error('出现问题，请联系ling');
             }else {
-                  this.$router.push({path: '/paysuccess'});
-                  clearInterval(timer);
-                  this.$msgbox.close();
-              // if(this.code == 200) {
-              //   this.$router.push({path: '/paysuccess'});
+            clearInterval(timer);
+            this.$msgbox.close();
+            this.$router.push({ path: '/paysuccess' });
+              // if(code == 200) {
               //   clearInterval(timer);
               //   this.$msgbox.close();
-              // }else {
-              //   alert('支付未成功')
+              //   this.$router.push({path: '/paysuccess'});
               // }
             }
           }
         });
         let timer = setInterval(async () => {
           let result = await this.$ajax.reqGetState(this.$route.orderId);
-          console.log(result);
+          if(result.code == 200) {
+            clearInterval(timer);
+            this.$msgbox.close();
+            this.$router.push({path: '/paysuccess'});
+          }
         }, 2000);
       }
+    },
+    mounted() {
+    this.getPayInfo();
     },
   }
 </script>

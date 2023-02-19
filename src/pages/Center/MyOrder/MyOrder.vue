@@ -24,8 +24,8 @@
           <thead>
             <tr>
               <th colspan="5">
-                <span class="ordertitle">{{order.createTime}} 订单编号：{{order.outTradeNo}} <span
-                    class="pull-right delete"><img src="./images/delete.png"></span></span>
+                <span class="ordertitle">{{order.createTime}} 订单编号：{{order.outTradeNo}} <span class="pull-right delete"><img
+                      src="./images/delete.png"></span></span>
               </th>
             </tr>
           </thead>
@@ -39,18 +39,18 @@
                   <a href="#" class="service">售后申请</a>
                 </div>
               </td>
-              <td v-if="index==0" :rowspan="order.orderDetailList.length" width="8%" class="center">{{order.consignee}}</td>
-              <td v-if="index==0" :rowspan="order.orderDetailList.length" width="13%" class="center">
+              <td v-if="index == 0" :rowspan="order.orderDetailList.length" width="8%" class="center">{{order.consignee}}</td>
+              <td v-if="index == 0" :rowspan="order.orderDetailList.length" width="13%" class="center">
                 <ul class="unstyled">
                   <li>总金额¥{{good.orderPrice}}.00</li>
                   <li>在线支付</li>
 
                 </ul>
               </td>
-              <td v-if="index==0" :rowspan="order.orderDetailList.length" width="8%" class="center">
+              <td v-if="index == 0" :rowspan="order.orderDetailList.length" width="8%" class="center">
                 <a href="#" class="btn">已完成 </a>
               </td>
-              <td v-if="index==0" :rowspan="order.orderDetailList.length" width="13%" class="center">
+              <td v-if="index == 0" :rowspan="order.orderDetailList.length" width="13%" class="center">
                 <ul class="unstyled">
                   <li>
                     <a href="mycomment.html" target="_blank">评价|晒单</a>
@@ -61,10 +61,9 @@
             </tr>
           </tbody>
         </table>
-
       </div>
       <div class="choose-order">
-        <Pagination :total="total" :current="page" :limit="limit" :pageCount="5" @getCurrent="getCurrent" @getLimit="getLimit"></Pagination>
+       <Pagination :total="total" :limit="limit" :current="page" :pageCount="5" @getCurrent="getCurrent" @getLimit="getLimit"></Pagination>
       </div>
     </div>
     <!--猜你喜欢-->
@@ -141,31 +140,29 @@ export default {
       total: ''
     }
   },
-  mounted() {
-    this.getHistoryOrder();
-  },
   methods: {
-   async getHistoryOrder() {
+    async getOrder() {
       let { page, limit } = this;
-      let result = await this.$ajax.reqGetHistoryOrder(page, limit);
+      let result = await this.$ajax.reqGetOrder(page, limit);
       if(result.code == 200) {
-        this.total = result.data.total;
         this.orderList = result.data.records;
+        this.total = result.data.total;
       }
-    },
-    getLimit(limit) {
-      this.page = 1;
-      this.limit = limit;
-      this.getHistoryOrder();
     },
     getCurrent(current) {
       this.page = current;
-      this.getHistoryOrder();
+      this.getOrder();
+    },
+    getLimit(limit) {
+      this.limit = limit;
+      this.page = 1;
+      this.getOrder();
     }
+  },
+  mounted() {
+    this.getOrder();
   },
 }
 </script>
 
-<style>
-
-</style>
+<style scoped></style>

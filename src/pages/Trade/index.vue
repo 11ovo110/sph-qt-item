@@ -95,7 +95,7 @@
         goodList: [],
         userList: [],
         msg: '',
-        tradeNo: '' 
+        tradeNo: ''
       }
     },
     mounted() {
@@ -104,11 +104,12 @@
     methods: {
       async getTrade() {
         let result = await this.$ajax.reqGetTrade();
-        if (result.code == 200) {
-        this.goodList = result.data.detailArrayList;
-        this.userList = result.data.userAddressList;
-        this.tradeNo = result.data.tradeNo;
-      }
+        console.log(result);
+        if(result.code == 200) {
+          this.goodList = result.data.detailArrayList;
+          this.userList = result.data.userAddressList;
+          this.tradeNo = result.data.tradeNo;
+        }
       },
       changeUser(user) {
         this.userList.forEach(user => user.isDefault = '0');
@@ -121,12 +122,13 @@
         "deliveryAddress": this.seleteUser.fullAddress,
         "paymentWay": "ONLINE",
         "orderComment": this.msg,
-        "orderDetailList": this.goodList,
+        "orderDetailList": this.goodList
       }
-      let tradeNo = this.tradeNo;
-      let result = await this.$ajax.reqSubmitOrder(tradeNo, data);
+      let result = await this.$ajax.reqSubmit(this.tradeNo, data);
       if(result.code == 200) {
-        this.$router.push({path: '/pay', query: {orderId: result.data}})
+        this.$router.push({path: '/pay', query: {
+          orderId: result.data 
+        }});
       }
       }
     },
