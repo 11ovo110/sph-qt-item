@@ -20,12 +20,12 @@
       </div>
       <div class="orders">
 
-        <table class="order-item" v-for="order in dataList.records" :key="order.id">
+        <table class="order-item" v-for="order in orderList" :key="order.id">
           <thead>
             <tr>
               <th colspan="5">
-                <span class="ordertitle">{{order.createTime}} 订单编号：{{order.outTradeNo}} <span class="pull-right delete">
-                  <img src="./images/delete.png"></span></span>
+                <span class="ordertitle">{{order.createTime}} 订单编号：{{order.outTradeNo}} <span
+                    class="pull-right delete"><img src="./images/delete.png"></span></span>
               </th>
             </tr>
           </thead>
@@ -61,9 +61,10 @@
             </tr>
           </tbody>
         </table>
+
       </div>
       <div class="choose-order">
-       <Pagination :total="total" :current="page" :limit="limit" :pageCount="5" @getCurrent="getCurrent" @getLimit="getLimit"></Pagination>
+        <Pagination :total="total" :current="page" :limit="limit" :pageCount="5" @getCurrent="getCurrent" @getLimit="getLimit"></Pagination>
       </div>
     </div>
     <!--猜你喜欢-->
@@ -136,31 +137,35 @@ export default {
     return {
       page: 1,
       limit: 3,
-      total: '',
-      dataList: {}
-    }
-  },
-  methods: {
-    async getOrder() {
-      let { page, limit } = this;
-      let result = await this.$ajax.reqGetOrder(page, limit);
-      this.dataList = result.data;
-      this.total = result.data.total;
-    },
-    getCurrent(current) {
-      this.page = current;
-      this.getOrder();
-    },
-    getLimit(limit) {
-      this.limit = limit;
-      this.page = 1;
-      this.getOrder();
+      orderList: [],
+      total: ''
     }
   },
   mounted() {
-    this.getOrder();
+    this.getHistoryOrder();
+  },
+  methods: {
+   async getHistoryOrder() {
+      let { page, limit } = this;
+      let result = await this.$ajax.reqGetHistoryOrder(page, limit);
+      if(result.code == 200) {
+        this.total = result.data.total;
+        this.orderList = result.data.records;
+      }
+    },
+    getLimit(limit) {
+      this.page = 1;
+      this.limit = limit;
+      this.getHistoryOrder();
+    },
+    getCurrent(current) {
+      this.page = current;
+      this.getHistoryOrder();
+    }
   },
 }
 </script>
 
-<style scoped></style>
+<style>
+
+</style>

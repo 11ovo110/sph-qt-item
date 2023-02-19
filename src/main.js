@@ -14,20 +14,11 @@ import './permission';
 import * as ajax from '@/api';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
-import VueLazyload from 'vue-lazyload'
 
-import loadimage from '@/assets/enter.gif';
-import errorimage from '@/assets/leave.gif';
-
-
-Vue.use(VueLazyload, {
-  error: errorimage,
-  loading: loadimage,
-})
+Vue.use(ElementUI);
 
 Vue.prototype.$ajax = ajax;
 
-Vue.use(ElementUI);
 Vue.component(Footer.name, Footer);
 Vue.component(Header.name, Header);
 Vue.component(TypeNav.name, TypeNav);

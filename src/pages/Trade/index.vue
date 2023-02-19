@@ -82,7 +82,7 @@
       </div>
     </div>
     <div class="sub clearFix">
-      <a class="subBtn" to="/pay" @click="submitOrder">提交订单</a>
+      <a class="subBtn" @click="SubmitOrder">提交订单</a>
     </div>
   </div>
 </template>
@@ -94,8 +94,8 @@
       return {
         goodList: [],
         userList: [],
-        tradeNo: '',
-        msg: ''
+        msg: '',
+        tradeNo: '' 
       }
     },
     mounted() {
@@ -104,31 +104,30 @@
     methods: {
       async getTrade() {
         let result = await this.$ajax.reqGetTrade();
-        this.tradeNo = result.data.tradeNo;
+        if (result.code == 200) {
         this.goodList = result.data.detailArrayList;
         this.userList = result.data.userAddressList;
+        this.tradeNo = result.data.tradeNo;
+      }
       },
       changeUser(user) {
         this.userList.forEach(user => user.isDefault = '0');
         user.isDefault = '1';
       },
-     async submitOrder() {
+      async SubmitOrder() {
         let data = {
         "consignee": this.seleteUser.consignee,
         "consigneeTel": this.seleteUser.phoneNum,
         "deliveryAddress": this.seleteUser.fullAddress,
         "paymentWay": "ONLINE",
         "orderComment": this.msg,
-        "orderDetailList": this.goodList
-        };
-        let result = await this.$ajax.reqSubmitOrder(this.tradeNo, data);
-        if(result.code == 200) {
-          this.$router.push({path: '/pay', query: {
-            orderId: result.data
-          }});
-        }else {
-          alert('提交订单失败')
-        }
+        "orderDetailList": this.goodList,
+      }
+      let tradeNo = this.tradeNo;
+      let result = await this.$ajax.reqSubmitOrder(tradeNo, data);
+      if(result.code == 200) {
+        this.$router.push({path: '/pay', query: {orderId: result.data}})
+      }
       }
     },
     computed: {

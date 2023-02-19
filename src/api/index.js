@@ -29,11 +29,11 @@ export const reqGetTrade = () => request.get("/order/auth/trade");
 
 export const reqSubmitOrder = (tradeNo, data) => request.post(`/order/auth/submitOrder?tradeNo=${tradeNo}`, data);
 
-export const reqGetPay = (orderId) => request.get(`/payment/weixin/createNative/${orderId}`);
+export const reqGetOrder = (orderId) => request.get(`/payment/weixin/createNative/${orderId}`);
 
 export const reqGetState = (orderId) => request.get(`/payment/weixin/queryPayStatus/${orderId}`);
 
-export const reqGetOrder = (page, limit) => request.get(`/order/auth/${page}/${limit}`);
+export const reqGetHistoryOrder = (page, limit) => request.get(`/order/auth/${page}/${limit}`)
 
 export const reqBanner = () => mockRequest.get("/banner");
 

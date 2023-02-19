@@ -8,7 +8,7 @@
         </h4>
         <div class="paymark">
           <span class="fl">请您在提交订单<em class="orange time">4小时</em>之内完成支付，超时订单会自动取消。订单号：<em>{{orderId}}</em></span>
-          <span class="fr"><em class="lead">应付金额：</em><em class="orange money">￥{{totalPrice}}</em></span>
+          <span class="fr"><em class="lead">应付金额：</em><em class="orange money">￥{{totalFee}}</em></span>
         </div>
       </div>
       <div class="checkout-info">
@@ -65,14 +65,14 @@
         <div class="hr"></div>
 
         <div class="submit">
-          <a @click="Pay" class="btn" to="/paysuccess">立即支付</a>
+          <a class="btn" @click="Pay">立即支付</a>
         </div>
         <div class="otherpay">
           <div class="step-tit">
             <h5>其他支付方式</h5>
           </div>
           <div class="step-cont">
-            <span><a href="weixinpay.html" target="_blank">微信支付</a></span>
+            <span><a>微信支付</a></span>
             <span>中国银联</span>
           </div>
         </div>
@@ -82,62 +82,59 @@
 </template>
 
 <script>
-import qrcode from 'qrcode';
+  import qrcode from 'qrcode';
   export default {
     name: 'Pay',
     data() {
       return {
         orderId: '',
-        totalPrice: '',
         codeUrl: '',
+        totalFee: '',
         code: ''
       }
     },
     mounted() {
-      this.getPay();
+      this.getOrder();
     },
     methods: {
-      async getPay() {
-        let result = await this.$ajax.reqGetPay(this.$route.query.orderId);
-        this.orderId = result.data.orderId;
-        this.totalPrice = result.data.totalFee;
-        this.codeUrl = result.data.codeUrl;
+      async getOrder() {
+        let result = await this.$ajax.reqGetOrder(this.$route.query.orderId);
+        if(result.code == 200) {
+          this.orderId = result.data.orderId;
+          this.codeUrl = result.data.codeUrl;
+          this.totalFee = result.data.totalFee;
+        }
       },
       async Pay() {
-        let imgUrl = await qrcode.toDataURL(this.codeUrl);
-        this.$alert(`<img src=${imgUrl} />`, '使用微信支付', {
+        let url = await qrcode.toDataURL(this.codeUrl);
+        this.$alert(`<img src=${url} />`,'使用微信支付', {
           dangerouslyUseHTMLString: true,
-          center: true,
           showClose: false,
+          showCancelButton: true,
           showConfirmButton: true,
           cancelButtonText: '支付遇到问题',
-          showCancelButton: true,
           confirmButtonText: '我已支付成功',
-          beforeClose: (action, options, done) => {
+          center: true,
+          beforeClose: (action, instance, done) => {
             if(action == 'cancel') {
-              this.$message.error('有问题, 请联系ling');
+              this.$message.error('出现问题, 请联系ling');
             }else {
-            this.$router.push({ path: '/paysuccess' })
-            clearInterval(timer);
-            this.$msgbox.close();
+                  this.$router.push({path: '/paysuccess'});
+                  clearInterval(timer);
+                  this.$msgbox.close();
               // if(this.code == 200) {
-              //   this.$router.push({path: '/paysuccess'})
+              //   this.$router.push({path: '/paysuccess'});
               //   clearInterval(timer);
               //   this.$msgbox.close();
+              // }else {
+              //   alert('支付未成功')
               // }
             }
           }
         });
         let timer = setInterval(async () => {
-            let result = await this.$ajax.reqGetState(this.$route.orderId);
-            if(result.code == 200) {
-              this.code = 200;
-              this.$router.push({path: '/paysuccess'});
-              clearInterval(timer);
-              this.$msgbox.close();
-            }else {
-              console.log('留下买路财');
-            }
+          let result = await this.$ajax.reqGetState(this.$route.orderId);
+          console.log(result);
         }, 2000);
       }
     },

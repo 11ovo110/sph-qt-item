@@ -1,4 +1,14 @@
-
+import Home from '@/pages/Home/Home.vue';
+import Login from '@/pages/Login';
+import Register from '@/pages/Register';
+import Search from '@/pages/Search';
+import Detail from '@/pages/Detail';
+import ShopCart from '@/pages/ShopCart';
+import AddCartSuccess from '@/pages/AddCartSuccess';
+import Center from '@/pages/Center';
+import Pay from '@/pages/Pay';
+import PaySuccess from '@/pages/PaySuccess';
+import Trade from '@/pages/Trade';
 
 export const routes = [
   {
@@ -48,13 +58,13 @@ export const routes = [
         path: 'myorder',
         component: () => import('@/pages/Center/MyOrder/MyOrder.vue'),
         meta: {flag: true},
-        name: '我的订单'
+        name: '个人订单'
       },
       {
         path: 'teamorder',
         component: () => import('@/pages/Center/TeamOrder/TeamOrder.vue'),
-        name: '团队订单',
-        meta: {flag: true}
+        meta: {flag: true},
+        name: '团购订单'
       },
       {
         path: '/center',
