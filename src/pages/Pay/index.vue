@@ -7,8 +7,8 @@
           <span class="success-info">订单提交成功，请您及时付款，以便尽快为您发货~~</span>
         </h4>
         <div class="paymark">
-          <span class="fl">请您在提交订单<em class="orange time">4小时</em>之内完成支付，超时订单会自动取消。订单号：<em>{{payInfo.orderId}}</em></span>
-          <span class="fr"><em class="lead">应付金额：</em><em class="orange money">￥{{payInfo.totalFee}}</em></span>
+          <span class="fl">请您在提交订单<em class="orange time">4小时</em>之内完成支付，超时订单会自动取消。订单号：<em>{{orderId}}</em></span>
+          <span class="fr"><em class="lead">应付金额：</em><em class="orange money">￥{{totalPrice}}</em></span>
         </div>
       </div>
       <div class="checkout-info">
@@ -65,7 +65,7 @@
         <div class="hr"></div>
 
         <div class="submit">
-          <a class="btn" @click="Pay">立即支付</a>
+          <a @click="Pay" class="btn" to="/paysuccess">立即支付</a>
         </div>
         <div class="otherpay">
           <div class="step-tit">
@@ -83,64 +83,63 @@
 
 <script>
 import qrcode from 'qrcode';
-
   export default {
     name: 'Pay',
     data() {
       return {
-        payInfo: {},
+        orderId: '',
+        totalPrice: '',
+        codeUrl: '',
         code: ''
       }
     },
     mounted() {
-      this.getPayInfo();
+      this.getPay();
     },
     methods: {
-     async getPayInfo() {
-      let {orderId} = this.$route.query;
-      let result = await this.$ajax.reqGetPayInfo(orderId);
-      this.payInfo =  result.data;
-    },
-    async Pay() {
-      let url = await qrcode.toDataURL(this.payInfo.codeUrl);
-      this.$alert(`<img src=${url} />`, '请输入微信支付', {
+      async getPay() {
+        let result = await this.$ajax.reqGetPay(this.$route.query.orderId);
+        this.orderId = result.data.orderId;
+        this.totalPrice = result.data.totalFee;
+        this.codeUrl = result.data.codeUrl;
+      },
+      async Pay() {
+        let imgUrl = await qrcode.toDataURL(this.codeUrl);
+        this.$alert(`<img src=${imgUrl} />`, '使用微信支付', {
           dangerouslyUseHTMLString: true,
-          showClose: false,
-          showCancelButton: true,
-          cancelButtonText: '支付遇到问题',
-          confirmButtonText: '我已支付成功',
           center: true,
-          beforeClose: (action, instance, done) => {
+          showClose: false,
+          showConfirmButton: true,
+          cancelButtonText: '支付遇到问题',
+          showCancelButton: true,
+          confirmButtonText: '我已支付成功',
+          beforeClose: (action, options, done) => {
             if(action == 'cancel') {
-              clearInterval(timer);
-              this.$msgbox.close();
-              this.$message.error('出现问题请找ling');
+              this.$message.error('有问题, 请联系ling');
             }else {
-              clearInterval(timer);
-              this.$msgbox.close();
-              this.$router.push({path: '/paysuccess'});
+            this.$router.push({ path: '/paysuccess' })
+            clearInterval(timer);
+            this.$msgbox.close();
               // if(this.code == 200) {
+              //   this.$router.push({path: '/paysuccess'})
               //   clearInterval(timer);
               //   this.$msgbox.close();
-              //   this.$router.push({path: '/paysuccess'});
               // }
             }
           }
         });
-       let timer = setInterval(async () => {
-        let result = await this.$ajax.reqPayState(this.$route.query.orderId);
-        this.code = result.code;
-        if (result.code == 200) {
-          this.$router.push({
-            path: '/paysuccess'
-          });
-          clearInterval(timer);
-          this.$msgbox.close();
-        } else {
-          console.log('未支付');
-        }
-      }, 2000)
-    }
+        let timer = setInterval(async () => {
+            let result = await this.$ajax.reqGetState(this.$route.orderId);
+            if(result.code == 200) {
+              this.code = 200;
+              this.$router.push({path: '/paysuccess'});
+              clearInterval(timer);
+              this.$msgbox.close();
+            }else {
+              console.log('留下买路财');
+            }
+        }, 2000);
+      }
     },
   }
 </script>

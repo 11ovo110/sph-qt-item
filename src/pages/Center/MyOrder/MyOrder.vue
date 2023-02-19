@@ -20,37 +20,37 @@
       </div>
       <div class="orders">
 
-        <table class="order-item" v-for="(trade, index) in orderList.records" :key="trade.id">
+        <table class="order-item" v-for="order in dataList.records" :key="order.id">
           <thead>
             <tr>
               <th colspan="5">
-                <span class="ordertitle">{{trade.createTime}}订单编号:{{trade.outTradeNo}} <span
-                    class="pull-right delete"><img src="./images/delete.png"></span></span>
+                <span class="ordertitle">{{order.createTime}} 订单编号：{{order.outTradeNo}} <span class="pull-right delete">
+                  <img src="./images/delete.png"></span></span>
               </th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(good, index) in trade.orderDetailList" :key="good.skuId">
+            <tr v-for="(good, index) in order.orderDetailList" :key="good.id">
               <td width="60%">
                 <div class="typographic">
                   <img :src="good.imgUrl" style="width:100px;height:100px">
-                  <a class="block-text">{{good.skuName}}</a>
+                  <a href="#" class="block-text">{{good.skuName}}</a>
                   <span>x{{good.skuNum}}</span>
                   <a href="#" class="service">售后申请</a>
                 </div>
               </td>
-              <td :rowspan="trade.orderDetailList.length" v-if="index==0" width="8%" class="center">{{trade.consignee}}</td>
-              <td :rowspan="trade.orderDetailList.length" v-if="index==0" width="13%" class="center">
+              <td v-if="index==0" :rowspan="order.orderDetailList.length" width="8%" class="center">{{order.consignee}}</td>
+              <td v-if="index==0" :rowspan="order.orderDetailList.length" width="13%" class="center">
                 <ul class="unstyled">
-                  <li>总金额¥{{trade.totalAmount}}</li>
+                  <li>总金额¥{{good.orderPrice}}.00</li>
                   <li>在线支付</li>
 
                 </ul>
               </td>
-              <td :rowspan="trade.orderDetailList.length" v-if="index==0" width="8%" class="center">
+              <td v-if="index==0" :rowspan="order.orderDetailList.length" width="8%" class="center">
                 <a href="#" class="btn">已完成 </a>
               </td>
-              <td :rowspan="trade.orderDetailList.length" v-if="index==0" width="13%" class="center">
+              <td v-if="index==0" :rowspan="order.orderDetailList.length" width="13%" class="center">
                 <ul class="unstyled">
                   <li>
                     <a href="mycomment.html" target="_blank">评价|晒单</a>
@@ -63,7 +63,7 @@
         </table>
       </div>
       <div class="choose-order">
-        <Pagination :current="page" :limit="limit" :total="orderList.total" :pageCount="5" @getCurrent="getCurrent" @getLimit="getLimit"></Pagination>
+       <Pagination :total="total" :current="page" :limit="limit" :pageCount="5" @getCurrent="getCurrent" @getLimit="getLimit"></Pagination>
       </div>
     </div>
     <!--猜你喜欢-->
@@ -136,31 +136,31 @@ export default {
     return {
       page: 1,
       limit: 3,
-      orderList: []
+      total: '',
+      dataList: {}
     }
   },
-  mounted() {
-    this.getOrderList();
-  },
   methods: {
-    async getOrderList() {
-      let {page, limit} = this;
-      let result = await this.$ajax.reqGetOrderList(page, limit);
-      this.orderList = result.data;
+    async getOrder() {
+      let { page, limit } = this;
+      let result = await this.$ajax.reqGetOrder(page, limit);
+      this.dataList = result.data;
+      this.total = result.data.total;
     },
     getCurrent(current) {
       this.page = current;
-      this.getOrderList();
+      this.getOrder();
     },
     getLimit(limit) {
       this.limit = limit;
       this.page = 1;
-      this.getOrderList();
+      this.getOrder();
     }
+  },
+  mounted() {
+    this.getOrder();
   },
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

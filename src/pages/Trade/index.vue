@@ -46,7 +46,7 @@
       </div>
       <div class="bbs">
         <h5>买家留言：</h5>
-        <textarea placeholder="建议留言前先与商家沟通确认" class="remarks-cont" v-model="orderComment"></textarea>
+        <textarea placeholder="建议留言前先与商家沟通确认" class="remarks-cont" v-model="msg"></textarea>
 
       </div>
       <div class="line"></div>
@@ -82,7 +82,7 @@
       </div>
     </div>
     <div class="sub clearFix">
-      <a class="subBtn" @click="OnsumitOrder">提交订单</a>
+      <a class="subBtn" to="/pay" @click="submitOrder">提交订单</a>
     </div>
   </div>
 </template>
@@ -94,8 +94,8 @@
       return {
         goodList: [],
         userList: [],
-        orderComment: '',
-        tradeNo: ''
+        tradeNo: '',
+        msg: ''
       }
     },
     mounted() {
@@ -104,37 +104,31 @@
     methods: {
       async getTrade() {
         let result = await this.$ajax.reqGetTrade();
-        if (result.code == 200) {
+        this.tradeNo = result.data.tradeNo;
         this.goodList = result.data.detailArrayList;
         this.userList = result.data.userAddressList;
-        this.tradeNo = result.data.tradeNo;
-      }
-    },
+      },
       changeUser(user) {
         this.userList.forEach(user => user.isDefault = '0');
         user.isDefault = '1';
       },
-      async OnsumitOrder() {
-        let orderInfo = {
+     async submitOrder() {
+        let data = {
         "consignee": this.seleteUser.consignee,
         "consigneeTel": this.seleteUser.phoneNum,
         "deliveryAddress": this.seleteUser.fullAddress,
         "paymentWay": "ONLINE",
-        "orderComment": this.orderComment,
+        "orderComment": this.msg,
         "orderDetailList": this.goodList
-      }
-      let tradeNo = this.tradeNo;
-      let result = await this.$ajax.reqOnsumitOrder(tradeNo, orderInfo);
-      console.log(result);
-      if(result.code == 200) {
-        alert('提交订单成功');
-        this.$router.push({
-          path: '/pay',
-          query: {
+        };
+        let result = await this.$ajax.reqSubmitOrder(this.tradeNo, data);
+        if(result.code == 200) {
+          this.$router.push({path: '/pay', query: {
             orderId: result.data
-          }
-        })
-      }
+          }});
+        }else {
+          alert('提交订单失败')
+        }
       }
     },
     computed: {
