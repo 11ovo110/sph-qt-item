@@ -15,6 +15,7 @@ import * as ajax from '@/api';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import VueLazyload from 'vue-lazyload';
+import '@/utils/fromValidate'
 
 import enter from '@/assets/enter.gif';
 import leave from '@/assets/leave.gif';
