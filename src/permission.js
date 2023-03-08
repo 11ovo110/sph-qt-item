@@ -4,6 +4,10 @@ import router from "./router";
 let whitelist = ['/center', '/center/myorder', '/center/teamorder', '/shopcar', '/pay', '/paysuccess', '/trade'];
 
 router.beforeEach(async (to, from, next) => {
+  let num = Math.floor(Math.random() * 4);
+  let number = Math.floor(Math.random() * 4);
+  let str = ['🤔', '😎', '🤨', '🫠'];
+  document.title = '尚品汇' + '-' + to.path + str[num] + str[number];
   let {token, nickName} = store.state.user;
   if(token) {
     if(to.path == '/login') {
